@@ -1,0 +1,57 @@
+<mujoco model="vention">
+  <option integrator="implicitfast"/>
+
+  <compiler angle="radian" meshdir="assets"/>
+
+  <default>
+    <default class="vention">
+      <default class="visual">
+        <geom type="mesh" group="2" contype="0" conaffinity="0"/>
+      </default>
+      <default class="collision">
+        <geom type="mesh" group="3" rgba="0.7 0.7 0.7 0.9"/>
+      </default>
+    </default>
+  </default>
+
+  <asset>
+    <material name="blue" rgba="0.05 0.05 0.9 1"/>
+    <material name="red" rgba="1 0.072272 0.039546 1"/>
+
+    <mesh file="vention_frame_visual_model.stl"/>
+  </asset>
+
+  <worldbody>
+    <body name="vention_base" childclass="vention">
+      <geom mesh="vention_frame_visual_model" material="blue" class="visual"/>
+
+      <!-- Exact dimensions of the vention table are: x: 1.26, y: 1.12, z: 0.755 -->
+      <!-- To add padding to the Vention table, increase the z-direction offset -->
+      <geom type="box" pos="0 -0.475 0.3825" size="0.65 0.6 0.371" class="collision"/>
+      <!-- Exact dimensions of the vention actuator frame are: x: 1.26, y: 0.18, z: 1.29 -->
+      <geom type="box" pos="0 -0.96 1.41" size="0.55 0.125 0.66" class="collision"/>
+
+      <!-- Collision for side box -->
+      <geom name="box" class="collision" type="box" size="0.037 0.045 0.072" pos="-0.66 -0.1 0.72"/>
+
+
+      <body name="left_arm_vention_base" pos="-0.330 -0.8480 1.620" quat="0 0 0 1">
+        <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
+        <!-- NOTE: uncomment this joint to use the linear rail -->
+        <!--
+        <joint name="left_arm_linear_vention" type="slide" range="-0.5 0"/>
+        -->
+        <site name="left_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
+      </body>
+
+      <body name="right_arm_vention_base" pos="0.330 -0.8480 1.620" quat="0 0 0 1">
+        <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
+        <!-- NOTE: uncomment this joint to use the linear rail -->
+        <!--
+        <joint name="right_arm_linear_vention" type="slide" range="-0.5 0"/>
+        -->
+        <site name="right_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>
