@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+mj_geodude.egg-info/PKG-INFO
+mj_geodude.egg-info/SOURCES.txt
+mj_geodude.egg-info/dependency_links.txt
+mj_geodude.egg-info/requires.txt
+mj_geodude.egg-info/top_level.txt

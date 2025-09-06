@@ -164,8 +164,7 @@
     hence scale = 0.8 * 100 / 255
   -->
   <actuator>
-    <general class="2f140" name="fingers_actuator" tendon="split" forcerange="-5 5" ctrlrange="0 255"
-      gainprm="0.3137255 0 0" biasprm="0 -100 -10"/>
+    <position name="fingers_actuator" joint="right_driver_joint" kp="200" ctrlrange="-0.8 0.0"/>
   </actuator>
 
   <keyframe>

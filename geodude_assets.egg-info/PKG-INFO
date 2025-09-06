@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: geodude_assets
+Version: 0.1.0
+Project-URL: Source, https://github.com/personalrobotics/geodude_assets
+Project-URL: Tracker, https://github.com/personalrobotics/geodude_assets/issues
+Requires-Python: >=3.10
+License-File: LICENSE
+Requires-Dist: dm_control
+Requires-Dist: loop_rate_limiters
+Requires-Dist: mujoco
+Requires-Dist: mink
+Requires-Dist: ruff
+Dynamic: license-file

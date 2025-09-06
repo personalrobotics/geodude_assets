@@ -147,14 +147,13 @@
   <worldbody>
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
-      <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.37500000000000002" pos="0 -0.47499999999999998 0.38250000000000001"/>
-      <geom name="geom_2" class="collision" type="box" size="0.53700000000000002 0.10000000000000001 0.64500000000000002" pos="0 -0.95999999999999996 1.3999999999999999"/>
-      <geom name="box" class="collision" type="box" size="0.037 0.045 0.072" pos="-0.66 -0.1 0.72"/>
-      
-      <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.6200000000000001">
-        <geom name="geom_3" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
-        <site name="left_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5"/>
-        <body pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5" name="left_ur5e/">
+      <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
+      <geom name="geom_2" class="collision" type="box" size="0.55000000000000004 0.125 0.66000000000000003" pos="0 -0.95999999999999996 1.4099999999999999"/>
+      <geom name="geom_3" class="collision" type="box" size="0.036999999999999998 0.044999999999999998 0.071999999999999995" pos="-0.66000000000000003 -0.10000000000000001 0.71999999999999997"/>
+      <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.6200000000000001" quat="0 0 0 1">
+        <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
+        <site name="left_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5"/>
+        <body pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" name="left_ur5e/">
           <light name="left_ur5e/spotlight" class="left_ur5e/" mode="targetbodycom" target="left_ur5e/wrist_2_link" pos="0 -1 2"/>
           <body name="left_ur5e/base" childclass="left_ur5e/ur5e" quat="0 0 0 -1">
             <inertial pos="0 0 0" mass="4" diaginertia="0.0044333315599999999 0.0044333315599999999 0.0071999999999999998"/>
@@ -215,10 +214,10 @@
           </body>
         </body>
       </body>
-      <body name="right_arm_vention_base" pos="0.33000000000000002 -0.84799999999999998 1.6200000000000001">
-        <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
-        <site name="right_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5"/>
-        <body pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5" name="right_ur5e/">
+      <body name="right_arm_vention_base" pos="0.33000000000000002 -0.84799999999999998 1.6200000000000001" quat="0 0 0 1">
+        <geom name="geom_5" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
+        <site name="right_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5"/>
+        <body pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" name="right_ur5e/">
           <light name="right_ur5e/spotlight" class="right_ur5e/" mode="targetbodycom" target="right_ur5e/wrist_2_link" pos="0 -1 2"/>
           <body name="right_ur5e/base" childclass="right_ur5e/ur5e" quat="0 0 0 -1">
             <inertial pos="0 0 0" mass="4" diaginertia="0.0044333315599999999 0.0044333315599999999 0.0071999999999999998"/>
@@ -382,9 +381,9 @@
     <general name="right_ur5e/wrist_1" class="right_ur5e/size1" joint="right_ur5e/wrist_1_joint"/>
     <general name="right_ur5e/wrist_2" class="right_ur5e/size1" joint="right_ur5e/wrist_2_joint"/>
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
-    <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="right_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
+    <position name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/" ctrlrange="-0.80000000000000004 0" joint="right_ur5e/gripper/right_driver_joint" kp="200"/>
   </actuator>
-  <keyframe>
+  <!-- <keyframe>
     <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
-  </keyframe>
+  </keyframe> -->
 </mujoco>

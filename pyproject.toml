@@ -3,7 +3,7 @@ requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mj_geodude"
+name = "geodude_assets"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
@@ -15,8 +15,8 @@ dependencies = [
 ]
 
 [project.urls]
-Source = "https://github.com/personalrobotics/mj_geodude"
-Tracker = "https://github.com/personalrobotics/mj_geodude/issues"
+Source = "https://github.com/personalrobotics/geodude_assets"
+Tracker = "https://github.com/personalrobotics/geodude_assets/issues"
 
 # Don't look for packages or modules within this repo (just install dependencies)
 [tool.setuptools]

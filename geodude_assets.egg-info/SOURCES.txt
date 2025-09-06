@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+geodude_assets.egg-info/PKG-INFO
+geodude_assets.egg-info/SOURCES.txt
+geodude_assets.egg-info/dependency_links.txt
+geodude_assets.egg-info/requires.txt
+geodude_assets.egg-info/top_level.txt

@@ -11,6 +11,7 @@ _2F140_XML = _HERE / "robotiq_2f140" / "2f140.xml"
 _ABHL_XML = _HERE / "abh_left_small" / "abh_left_small.xml"
 _ABHR_XML = _HERE / "abh_right_small" / "abh_right_small.xml"
 _VENTION_XML = _HERE / "vention" / "vention.xml"
+_TABLE_XML = _HERE / "miscellaneous" / "table.xml"
 
 _LEFT_ARM_ATTACHMENT_SITE_NAME = "left_arm_attachment_site"
 _RIGHT_ARM_ATTACHMENT_SITE_NAME = "right_arm_attachment_site"
@@ -71,12 +72,24 @@ def load_gripper(
     return gripper_model, gripper_qpos, gripper_ctrl
 
 
+def load_table(table_xml_path: str, pos: np.ndarray = None) -> mjcf.RootElement:
+    """Load table MJCF and set its position."""
+    table_model = mjcf.from_path(_TABLE_XML.as_posix())
+    if pos is not None:
+        table_body = table_model.find("body", "table")
+        if table_body is not None:
+            table_body.pos = pos
+    return table_model
+
+
 def attach_arms_to_vention(
     save_file: bool,
     dir: str,
     filename: str,
     left_gripper_type: str | None,
     right_gripper_type: str | None = None,
+    table_xml_path: str | None = None,
+    table_pos: np.ndarray = None,
 ) -> mujoco.MjModel:
     """Create a MuJoCo model with ur5es attached to each vention rail.
 
@@ -88,6 +101,8 @@ def attach_arms_to_vention(
                            Select from: 2f140, none.
         right_gripper_type: Type of gripper to use for right arm.
                             Select from: 2f140, none.
+        table_xml_path: Path to table MJCF XML file to attach.
+        table_pos: Position [x y z] for table body in vention_base frame.
 
     Returns:
         A MuJoCo model of two ur5es attached to the vention frame.
@@ -121,6 +136,14 @@ def attach_arms_to_vention(
         "right_ur5e", right_gripper_type
     )
     right_arm_attachment_site.attach(right_ur5e)
+
+    # Attach table if requested
+    if table_xml_path is not None:
+        table_model = load_table(table_xml_path, table_pos)
+        vention_base = geodude_model.find("body", "vention_base")
+        if vention_base is None:
+            raise ValueError("vention_base body not found in geodude model.")
+        vention_base.attach(table_model)
 
     # The ur5e model has a "home" keyframe defined.
     # Remove the keyframes for each arm and redefine a bimanual "home" keyframe.
@@ -217,6 +240,19 @@ if __name__ == "__main__":
         default=None,
         help="Type of gripper to use for right arm. Leave out flag for no gripper.",
     )
+    parser.add_argument(
+        "--table-xml",
+        type=str,
+        default=None,
+        help="Path to table MJCF XML file to attach."
+    )
+    parser.add_argument(
+        "--table-pos",
+        type=float,
+        nargs=3,
+        default=None,
+        help="Position [x y z] for table body in vention_base frame."
+    )
     args = parser.parse_args()
     if args.left_gripper_type is not None:
         args.left_gripper_type = args.left_gripper_type.lower()
@@ -228,4 +264,6 @@ if __name__ == "__main__":
         args.filename,
         args.left_gripper_type,
         args.right_gripper_type,
+        table_xml_path=args.table_xml,
+        table_pos=np.array(args.table_pos) if args.table_pos is not None else None,
     )
