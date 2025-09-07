@@ -89,7 +89,7 @@ def attach_arms_to_vention(
     left_gripper_type: str | None,
     right_gripper_type: str | None = None,
     table_xml_path: str | None = None,
-    table_pos: np.ndarray = None,
+    table_pos: np.ndarray = np.array([0, -0.175, 0.795]),
 ) -> mujoco.MjModel:
     """Create a MuJoCo model with ur5es attached to each vention rail.
 
@@ -107,7 +107,14 @@ def attach_arms_to_vention(
     Returns:
         A MuJoCo model of two ur5es attached to the vention frame.
     """
-    geodude_model = mjcf.from_path(_VENTION_XML.as_posix())
+    geodude_model : mjcf.RootElement = mjcf.from_path(_VENTION_XML.as_posix())
+    world_site = geodude_model.worldbody.add(
+        "site",
+        name="world_site",
+        pos=[0, 0, 0],  # or any position you want
+        size=[0.05],
+        rgba=[0.2, 0.2, 0.8, 0.5]
+    )
     for i, g in enumerate(geodude_model.worldbody.find_all("geom")):
         g.name = f"geom_{i}"
 
@@ -138,12 +145,12 @@ def attach_arms_to_vention(
     right_arm_attachment_site.attach(right_ur5e)
 
     # Attach table if requested
-    if table_xml_path is not None:
+    if table_xml_path is None:
+        table_xml_path = _TABLE_XML.as_posix()
+        print(f"Attaching table from {table_xml_path}")
         table_model = load_table(table_xml_path, table_pos)
-        vention_base = geodude_model.find("body", "vention_base")
-        if vention_base is None:
-            raise ValueError("vention_base body not found in geodude model.")
-        vention_base.attach(table_model)
+        table_model.compiler.angle = "radian"
+        world_site.attach(table_model)
 
     # The ur5e model has a "home" keyframe defined.
     # Remove the keyframes for each arm and redefine a bimanual "home" keyframe.
@@ -240,19 +247,6 @@ if __name__ == "__main__":
         default=None,
         help="Type of gripper to use for right arm. Leave out flag for no gripper.",
     )
-    parser.add_argument(
-        "--table-xml",
-        type=str,
-        default=None,
-        help="Path to table MJCF XML file to attach."
-    )
-    parser.add_argument(
-        "--table-pos",
-        type=float,
-        nargs=3,
-        default=None,
-        help="Position [x y z] for table body in vention_base frame."
-    )
     args = parser.parse_args()
     if args.left_gripper_type is not None:
         args.left_gripper_type = args.left_gripper_type.lower()
@@ -264,6 +258,4 @@ if __name__ == "__main__":
         args.filename,
         args.left_gripper_type,
         args.right_gripper_type,
-        table_xml_path=args.table_xml,
-        table_pos=np.array(args.table_pos) if args.table_pos is not None else None,
     )

@@ -1,6 +1,6 @@
 <mujoco model="vention">
-  <compiler autolimits="true" angle="radian"/>
-  <option impratio="10" integrator="implicitfast" cone="elliptic"/>
+  <compiler autolimits="true" coordinate="local" angle="radian"/>
+  <option timestep="0.002" gravity="0 0 -9.8100000000000005" impratio="10" integrator="implicitfast" cone="elliptic"/>
   <default>
     <default class="/">
       <default class="vention">
@@ -78,6 +78,9 @@
           </default>
         </default>
       </default>
+    </default>
+    <default class="table_178x53x7cm_legs76cm/">
+      <geom rgba="0.71999999999999997 0.52000000000000002 0.29999999999999999 1" friction="0.80000000000000004 0.10000000000000001 0.01" density="700"/>
     </default>
   </default>
   <asset>
@@ -346,6 +349,18 @@
         </body>
       </body>
     </body>
+    <site name="world_site" class="/" rgba="0.20000000000000001 0.20000000000000001 0.80000000000000004 0.5" size="0.050000000000000003" pos="0 0 0"/>
+    <body pos="0 0 0" name="table_178x53x7cm_legs76cm/">
+      <geom name="table_178x53x7cm_legs76cm/floor" class="table_178x53x7cm_legs76cm/" type="plane" size="10 10 0.10000000000000001" rgba="0.80000000000000004 0.90000000000000002 1 1"/>
+      <body name="table_178x53x7cm_legs76cm/table" pos="0 -0.17499999999999999 0.79500000000000004">
+        <geom name="table_178x53x7cm_legs76cm/tabletop" class="table_178x53x7cm_legs76cm/" type="box" size="0.89000000000000001 0.26500000000000001 0.035000000000000003"/>
+        <site name="table_178x53x7cm_legs76cm/tabletop_top_center" class="table_178x53x7cm_legs76cm/" type="sphere" rgba="0.10000000000000001 0.59999999999999998 0.10000000000000001 1" size="0.01" pos="0 0 0.035000000000000003"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_fr" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="0.86499999999999999 0.23999999999999999 -0.41499999999999998"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_fl" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="-0.86499999999999999 0.23999999999999999 -0.41499999999999998"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_br" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="0.86499999999999999 -0.23999999999999999 -0.41499999999999998"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_bl" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="-0.86499999999999999 -0.23999999999999999 -0.41499999999999998"/>
+      </body>
+    </body>
   </worldbody>
   <contact>
     <exclude name="right_ur5e/gripper//unnamed_contact_0" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/left_driver"/>
@@ -383,7 +398,7 @@
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
     <position name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/" ctrlrange="-0.80000000000000004 0" joint="right_ur5e/gripper/right_driver_joint" kp="200"/>
   </actuator>
-  <!-- <keyframe>
+  <keyframe>
     <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
-  </keyframe> -->
+  </keyframe>
 </mujoco>

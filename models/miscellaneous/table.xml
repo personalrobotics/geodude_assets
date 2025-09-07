@@ -39,13 +39,13 @@
 
       <!-- Legs (LEG_W = 0.05 m -> half = 0.025) -->
       <!-- Front-right leg (+x, +y) -->
-      <geom name="leg_fr" type="box" size="0.025 0.025 0.38" pos="0.865 0.24 -0.415" />
+  <geom name="leg_fr" type="box" size="0.025 0.025 0.38" pos="0.865 0.24 -0.415" rgba="0 0 0 1" />
       <!-- Front-left leg (-x, +y) -->
-      <geom name="leg_fl" type="box" size="0.025 0.025 0.38" pos="-0.865 0.24 -0.415" />
+  <geom name="leg_fl" type="box" size="0.025 0.025 0.38" pos="-0.865 0.24 -0.415" rgba="0 0 0 1" />
       <!-- Back-right leg (+x, -y) -->
-      <geom name="leg_br" type="box" size="0.025 0.025 0.38" pos="0.865 -0.24 -0.415" />
+  <geom name="leg_br" type="box" size="0.025 0.025 0.38" pos="0.865 -0.24 -0.415" rgba="0 0 0 1" />
       <!-- Back-left leg (-x, -y) -->
-      <geom name="leg_bl" type="box" size="0.025 0.025 0.38" pos="-0.865 -0.24 -0.415" />
+  <geom name="leg_bl" type="box" size="0.025 0.025 0.38" pos="-0.865 -0.24 -0.415" rgba="0 0 0 1" />
     </body>
   </worldbody>
 
