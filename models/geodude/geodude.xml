@@ -396,6 +396,5 @@
     <general name="right_ur5e/wrist_2" class="right_ur5e/size1" joint="right_ur5e/wrist_2_joint"/>
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
     <position name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/" ctrlrange="-0.80000000000000004 0" joint="right_ur5e/gripper/right_driver_joint" kp="200"/>
-
   </actuator>
 </mujoco>
