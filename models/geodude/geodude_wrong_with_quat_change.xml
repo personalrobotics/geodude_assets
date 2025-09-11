@@ -151,9 +151,9 @@
       <geom name="geom_2" class="collision" type="box" size="0.53700000000000002 0.10000000000000001 0.64500000000000002" pos="0 -0.95999999999999996 1.3999999999999999"/>
       <geom name="box" class="collision" type="box" size="0.037 0.045 0.072" pos="-0.66 -0.1 0.72"/>
       
-      <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.6200000000000001">
+      <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.6200000000000001" quat="0 0 0 1">
         <geom name="geom_3" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
-        <site name="left_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5"/>
+        <site name="left_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5"/>
         <body pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5" name="left_ur5e/">
           <light name="left_ur5e/spotlight" class="left_ur5e/" mode="targetbodycom" target="left_ur5e/wrist_2_link" pos="0 -1 2"/>
           <body name="left_ur5e/base" childclass="left_ur5e/ur5e" quat="0 0 0 -1">
@@ -215,9 +215,9 @@
           </body>
         </body>
       </body>
-      <body name="right_arm_vention_base" pos="0.33000000000000002 -0.84799999999999998 1.6200000000000001">
+      <body name="right_arm_vention_base" pos="0.33000000000000002 -0.84799999999999998 1.6200000000000001" quat="0 0 0 1">
         <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
-        <site name="right_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5"/>
+        <site name="right_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5"/>
         <body pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5" name="right_ur5e/">
           <light name="right_ur5e/spotlight" class="right_ur5e/" mode="targetbodycom" target="right_ur5e/wrist_2_link" pos="0 -1 2"/>
           <body name="right_ur5e/base" childclass="right_ur5e/ur5e" quat="0 0 0 -1">

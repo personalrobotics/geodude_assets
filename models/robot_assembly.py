@@ -23,8 +23,8 @@ def load_ur5e_arm(
     """Load a ur5e arm with gripper with a named prefix."""
     ur5e_model = mjcf.from_path(_UR5_XML.as_posix())
     ur5e_model.model = prefix
-    for i, g in enumerate(ur5e_model.worldbody.find_all("geom")):
-        g.name = f"geom_{i}"
+    # for i, g in enumerate(ur5e_model.worldbody.find_all("geom")):
+    #     g.name = f"geom_{i}"
     if gripper_type is None:
         return ur5e_model, None, None
     else:
@@ -66,8 +66,8 @@ def load_gripper(
     gripper_qpos = gripper_key.qpos
     gripper_ctrl = gripper_key.ctrl
     gripper_key.remove()
-    for i, g in enumerate(gripper_model.worldbody.find_all("geom")):
-        g.name = f"geom_{i}"
+    # for i, g in enumerate(gripper_model.worldbody.find_all("geom")):
+    #     g.name = f"geom_{i}"
     return gripper_model, gripper_qpos, gripper_ctrl
 
 
@@ -93,8 +93,8 @@ def attach_arms_to_vention(
         A MuJoCo model of two ur5es attached to the vention frame.
     """
     geodude_model = mjcf.from_path(_VENTION_XML.as_posix())
-    for i, g in enumerate(geodude_model.worldbody.find_all("geom")):
-        g.name = f"geom_{i}"
+    # for i, g in enumerate(geodude_model.worldbody.find_all("geom")):
+    #     g.name = f"geom_{i}"
 
     left_arm_attachment_site = geodude_model.find(
         "site", _LEFT_ARM_ATTACHMENT_SITE_NAME
