@@ -11,6 +11,7 @@ _2F140_XML = _HERE / "robotiq_2f140" / "2f140.xml"
 _ABHL_XML = _HERE / "abh_left_small" / "abh_left_small.xml"
 _ABHR_XML = _HERE / "abh_right_small" / "abh_right_small.xml"
 _VENTION_XML = _HERE / "vention" / "vention.xml"
+_TABLE_XML = _HERE / "miscellaneous" / "table.xml"
 
 _LEFT_ARM_ATTACHMENT_SITE_NAME = "left_arm_attachment_site"
 _RIGHT_ARM_ATTACHMENT_SITE_NAME = "right_arm_attachment_site"
@@ -66,9 +67,19 @@ def load_gripper(
     gripper_qpos = gripper_key.qpos
     gripper_ctrl = gripper_key.ctrl
     gripper_key.remove()
-    # for i, g in enumerate(gripper_model.worldbody.find_all("geom")):
-    #     g.name = f"geom_{i}"
+    for i, g in enumerate(gripper_model.worldbody.find_all("geom")):
+        g.name = f"geom_{i}"
     return gripper_model, gripper_qpos, gripper_ctrl
+
+
+def load_table(table_xml_path: str, pos: np.ndarray = None) -> mjcf.RootElement:
+    """Load table MJCF and set its position."""
+    table_model = mjcf.from_path(_TABLE_XML.as_posix())
+    if pos is not None:
+        table_body = table_model.find("body", "table")
+        if table_body is not None:
+            table_body.pos = pos
+    return table_model
 
 
 def attach_arms_to_vention(
@@ -77,6 +88,8 @@ def attach_arms_to_vention(
     filename: str,
     left_gripper_type: str | None,
     right_gripper_type: str | None = None,
+    table_xml_path: str | None = None,
+    table_pos: np.ndarray = np.array([0, -0.175, 0.795]),
 ) -> mujoco.MjModel:
     """Create a MuJoCo model with ur5es attached to each vention rail.
 
@@ -88,11 +101,20 @@ def attach_arms_to_vention(
                            Select from: 2f140, none.
         right_gripper_type: Type of gripper to use for right arm.
                             Select from: 2f140, none.
+        table_xml_path: Path to table MJCF XML file to attach.
+        table_pos: Position [x y z] for table body in vention_base frame.
 
     Returns:
         A MuJoCo model of two ur5es attached to the vention frame.
     """
-    geodude_model = mjcf.from_path(_VENTION_XML.as_posix())
+    geodude_model : mjcf.RootElement = mjcf.from_path(_VENTION_XML.as_posix())
+    world_site = geodude_model.worldbody.add(
+        "site",
+        name="world_site",
+        pos=[0, 0, 0],  # or any position you want
+        size=[0.05],
+        rgba=[0.2, 0.2, 0.8, 0.5]
+    )
     for i, g in enumerate(geodude_model.worldbody.find_all("geom")):
         g.name = f"geom_{i}"
 
@@ -121,6 +143,14 @@ def attach_arms_to_vention(
         "right_ur5e", right_gripper_type
     )
     right_arm_attachment_site.attach(right_ur5e)
+
+    # Attach table if requested
+    if table_xml_path is None:
+        table_xml_path = _TABLE_XML.as_posix()
+        print(f"Attaching table from {table_xml_path}")
+        table_model = load_table(table_xml_path, table_pos)
+        table_model.compiler.angle = "radian"
+        world_site.attach(table_model)
 
     # The ur5e model has a "home" keyframe defined.
     # Remove the keyframes for each arm and redefine a bimanual "home" keyframe.

@@ -1,6 +1,6 @@
 <mujoco model="vention">
-  <compiler autolimits="true" angle="radian"/>
-  <option impratio="10" integrator="implicitfast" cone="elliptic"/>
+  <compiler autolimits="true" coordinate="local" angle="radian"/>
+  <option timestep="0.002" gravity="0 0 -9.8100000000000005" impratio="10" integrator="implicitfast" cone="elliptic"/>
   <default>
     <default class="/">
       <default class="vention">
@@ -78,6 +78,9 @@
           </default>
         </default>
       </default>
+    </default>
+    <default class="table_178x53x7cm_legs76cm/">
+      <geom rgba="0.71999999999999997 0.52000000000000002 0.29999999999999999 1" friction="0.80000000000000004 0.10000000000000001 0.01" density="700"/>
     </default>
   </default>
   <asset>
@@ -271,66 +274,66 @@
                         <site name="right_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="right_ur5e/gripper/">
                           <body name="right_ur5e/gripper/base_mount" childclass="right_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
-                            <geom name="right_ur5e/gripper//unnamed_geom_0" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/base_mount"/>
-                            <geom name="right_ur5e/gripper//unnamed_geom_1" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/base_mount"/>
+                            <geom name="right_ur5e/gripper/geom_0" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/base_mount"/>
+                            <geom name="right_ur5e/gripper/geom_1" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/base_mount"/>
                             <body name="right_ur5e/gripper/base" pos="0 0 0.0038" quat="1 0 0 -1">
                               <inertial pos="0 -2.7039400000000001e-05 0.035467499999999999" quat="1 -0.00152849 0 0" mass="0.77744100000000005" diaginertia="0.00026028500000000002 0.000225381 0.00015270799999999999"/>
-                              <geom name="right_ur5e/gripper//unnamed_geom_2" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/base"/>
-                              <geom name="right_ur5e/gripper//unnamed_geom_3" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/base"/>
+                              <geom name="right_ur5e/gripper/geom_2" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/base"/>
+                              <geom name="right_ur5e/gripper/geom_3" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/base"/>
                               <body name="right_ur5e/gripper/right_driver" pos="0 0.030601 0.054905000000000002" quat="0 0 0.91190300000000002 0.41040500000000002">
                                 <joint name="right_ur5e/gripper/right_driver_joint" class="right_ur5e/gripper/driver"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_4" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/gray" mesh="right_ur5e/gripper/driver"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_5" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/driver"/>
+                                <geom name="right_ur5e/gripper/geom_4" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/gray" mesh="right_ur5e/gripper/driver"/>
+                                <geom name="right_ur5e/gripper/geom_5" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/driver"/>
                                 <body name="right_ur5e/gripper/right_coupler" pos="0 0.01822 0.026001" quat="1 0 0 0">
                                   <inertial pos="0.00016387500000000001 0.045840400000000003 -0.0117804" quat="0.88136800000000004 0.47242299999999998 -0.0024451 -0.00099612199999999989" mass="0.031146199999999999" diaginertia="2.9602299999999999e-05 2.7981399999999999e-05 4.3901700000000004e-06"/>
                                   <joint name="right_ur5e/gripper/right_coupler_joint" class="right_ur5e/gripper/coupler"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_6" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/coupler"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_7" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/coupler"/>
+                                  <geom name="right_ur5e/gripper/geom_6" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/coupler"/>
+                                  <geom name="right_ur5e/gripper/geom_7" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/coupler"/>
                                 </body>
                               </body>
                               <body name="right_ur5e/gripper/right_spring_link" pos="0 0.012699999999999999 0.061420000000000002" quat="0 0 -0.91354550000000001 -0.40673599999999999">
                                 <inertial pos="0.00012301200000000001 0.0507851 0.00103969" quat="0.49720300000000001 0.50249600000000005 -0.50794300000000003 0.49222100000000002" mass="0.027117700000000002" diaginertia="2.8380900000000001e-05 2.6193599999999999e-05 2.8131900000000002e-06"/>
                                 <joint name="right_ur5e/gripper/right_spring_link_joint" class="right_ur5e/gripper/spring_link"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_8" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/spring_link"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_9" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/spring_link"/>
+                                <geom name="right_ur5e/gripper/geom_8" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/spring_link"/>
+                                <geom name="right_ur5e/gripper/geom_9" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/spring_link"/>
                                 <body name="right_ur5e/gripper/right_follower" pos="0 0.10745399999999999 0.01451853" quat="0.93501299999999998 -0.35461300000000001 0 0">
                                   <inertial pos="0.000119314 0.0339244 -0.021840999999999999" quat="0.54543699999999995 0.430197 -0.442938 0.56677599999999995" mass="0.026150300000000001" diaginertia="1.6240799999999999e-05 1.5913099999999998e-05 2.3893600000000001e-06"/>
                                   <joint name="right_ur5e/gripper/right_follower_joint" class="right_ur5e/gripper/follower"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_10" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/follower"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_11" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/follower"/>
+                                  <geom name="right_ur5e/gripper/geom_10" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/follower"/>
+                                  <geom name="right_ur5e/gripper/geom_11" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/follower"/>
                                   <body name="right_ur5e/gripper/right_pad" pos="0 0.012 -0.0276" quat="0.70710700000000004 -0.70710700000000004 0 0">
                                     <inertial pos="0 -0.0025000000000000001 0.018499999999999999" quat="0.70710700000000004 0 0 0.70710700000000004" mass="0.0035000000000000001" diaginertia="4.7395799999999999e-07 3.6458299999999998e-07 1.23958e-07"/>
-                                    <geom name="right_ur5e/gripper//unnamed_geom_12" class="right_ur5e/gripper/visual" mesh="right_ur5e/gripper/pad"/>
+                                    <geom name="right_ur5e/gripper/geom_12" class="right_ur5e/gripper/visual" mesh="right_ur5e/gripper/pad"/>
                                   </body>
-                                  <geom name="right_ur5e/gripper/right_pad1" class="right_ur5e/gripper/pad_box1"/>
+                                  <geom name="right_ur5e/gripper/geom_13" class="right_ur5e/gripper/pad_box1"/>
                                 </body>
                               </body>
                               <body name="right_ur5e/gripper/left_driver" pos="0 -0.030601099999999999 0.054904000000000001" quat="0.41040500000000002 0.91190300000000002 0 0">
                                 <joint name="right_ur5e/gripper/left_driver_joint" class="right_ur5e/gripper/driver"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_14" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/gray" mesh="right_ur5e/gripper/driver"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_15" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/driver"/>
+                                <geom name="right_ur5e/gripper/geom_14" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/gray" mesh="right_ur5e/gripper/driver"/>
+                                <geom name="right_ur5e/gripper/geom_15" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/driver"/>
                                 <body name="right_ur5e/gripper/left_coupler" pos="0 0.01822 0.026001" quat="1 0 0 0">
                                   <inertial pos="0.00016387500000000001 0.045840400000000003 -0.0117804" quat="0.88136800000000004 0.47242299999999998 -0.0024451 -0.00099612199999999989" mass="0.031146199999999999" diaginertia="2.9602299999999999e-05 2.7981399999999999e-05 4.3901700000000004e-06"/>
                                   <joint name="right_ur5e/gripper/left_coupler_joint" class="right_ur5e/gripper/coupler"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_16" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/coupler"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_17" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/coupler"/>
+                                  <geom name="right_ur5e/gripper/geom_16" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/coupler"/>
+                                  <geom name="right_ur5e/gripper/geom_17" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/coupler"/>
                                 </body>
                               </body>
                               <body name="right_ur5e/gripper/left_spring_link" pos="0 -0.012699999999999999 0.061420000000000002" quat="0.41040500000000002 0.91190300000000002 0 0">
                                 <inertial pos="0.00012301200000000001 0.0507851 0.00103969" quat="0.49720300000000001 0.50249600000000005 -0.50794300000000003 0.49222100000000002" mass="0.027117700000000002" diaginertia="2.8380900000000001e-05 2.6193599999999999e-05 2.8131900000000002e-06"/>
                                 <joint name="right_ur5e/gripper/left_spring_link_joint" class="right_ur5e/gripper/spring_link"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_18" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/spring_link"/>
-                                <geom name="right_ur5e/gripper//unnamed_geom_19" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/spring_link"/>
+                                <geom name="right_ur5e/gripper/geom_18" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/spring_link"/>
+                                <geom name="right_ur5e/gripper/geom_19" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/spring_link"/>
                                 <body name="right_ur5e/gripper/left_follower" pos="0 0.10745399999999999 0.01451853" quat="0.93501299999999998 -0.35461300000000001 0 0">
                                   <inertial pos="0.000119314 0.0339244 -0.021840999999999999" quat="0.54543699999999995 0.430197 -0.442938 0.56677599999999995" mass="0.026150300000000001" diaginertia="1.6240799999999999e-05 1.5913099999999998e-05 2.3893600000000001e-06"/>
                                   <joint name="right_ur5e/gripper/left_follower_joint" class="right_ur5e/gripper/follower"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_20" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/follower"/>
-                                  <geom name="right_ur5e/gripper//unnamed_geom_21" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/follower"/>
+                                  <geom name="right_ur5e/gripper/geom_20" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/follower"/>
+                                  <geom name="right_ur5e/gripper/geom_21" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/follower"/>
                                   <body name="right_ur5e/gripper/left_pad" pos="0 0.012 -0.0276" quat="0.70710700000000004 -0.70710700000000004 0 0">
                                     <inertial pos="0 -0.0025000000000000001 0.018499999999999999" quat="1 0 0 1" mass="0.0035000000000000001" diaginertia="4.7395799999999999e-07 3.6458299999999998e-07 1.23958e-07"/>
-                                    <geom name="right_ur5e/gripper//unnamed_geom_22" class="right_ur5e/gripper/visual" mesh="right_ur5e/gripper/pad"/>
+                                    <geom name="right_ur5e/gripper/geom_22" class="right_ur5e/gripper/visual" mesh="right_ur5e/gripper/pad"/>
                                   </body>
-                                  <geom name="right_ur5e/gripper/left_pad1" class="right_ur5e/gripper/pad_box1"/>
+                                  <geom name="right_ur5e/gripper/geom_23" class="right_ur5e/gripper/pad_box1"/>
                                 </body>
                               </body>
                             </body>
@@ -344,6 +347,17 @@
             </body>
           </body>
         </body>
+      </body>
+    </body>
+    <site name="world_site" class="/" rgba="0.20000000000000001 0.20000000000000001 0.80000000000000004 0.5" size="0.050000000000000003" pos="0 0 0"/>
+    <body pos="0 0 0" name="table_178x53x7cm_legs76cm/">
+      <body name="table_178x53x7cm_legs76cm/table" pos="0 -0.17499999999999999 0.79500000000000004">
+        <geom name="table_178x53x7cm_legs76cm/tabletop" class="table_178x53x7cm_legs76cm/" type="box" size="0.89000000000000001 0.26500000000000001 0.035000000000000003"/>
+        <site name="table_178x53x7cm_legs76cm/tabletop_top_center" class="table_178x53x7cm_legs76cm/" type="sphere" rgba="0.10000000000000001 0.59999999999999998 0.10000000000000001 1" size="0.01" pos="0 0 0.035000000000000003"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_fr" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="0.86499999999999999 0.23999999999999999 -0.41499999999999998"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_fl" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="-0.86499999999999999 0.23999999999999999 -0.41499999999999998"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_br" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="0.86499999999999999 -0.23999999999999999 -0.41499999999999998"/>
+        <geom name="table_178x53x7cm_legs76cm/leg_bl" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="-0.86499999999999999 -0.23999999999999999 -0.41499999999999998"/>
       </body>
     </body>
   </worldbody>
@@ -382,8 +396,6 @@
     <general name="right_ur5e/wrist_2" class="right_ur5e/size1" joint="right_ur5e/wrist_2_joint"/>
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
     <position name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/" ctrlrange="-0.80000000000000004 0" joint="right_ur5e/gripper/right_driver_joint" kp="200"/>
+
   </actuator>
-  <!-- <keyframe>
-    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
-  </keyframe> -->
 </mujoco>
