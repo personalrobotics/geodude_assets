@@ -1,6 +1,6 @@
 <mujoco model="vention">
-  <compiler autolimits="true" coordinate="local" angle="radian"/>
-  <option timestep="0.002" gravity="0 0 -9.8100000000000005" impratio="10" integrator="implicitfast" cone="elliptic"/>
+  <compiler autolimits="true" angle="radian"/>
+  <option impratio="10" integrator="implicitfast" cone="elliptic"/>
   <default>
     <default class="/">
       <default class="vention">
@@ -79,9 +79,7 @@
         </default>
       </default>
     </default>
-    <default class="table_178x53x7cm_legs76cm/">
-      <geom rgba="0.71999999999999997 0.52000000000000002 0.29999999999999999 1" friction="0.80000000000000004 0.10000000000000001 0.01" density="700"/>
-    </default>
+    <default class="camera_with_mount/"/>
   </default>
   <asset>
     <material name="blue" class="/" rgba="0.050000000000000003 0.050000000000000003 0.90000000000000002 1"/>
@@ -350,14 +348,18 @@
       </body>
     </body>
     <site name="world_site" class="/" rgba="0.20000000000000001 0.20000000000000001 0.80000000000000004 0.5" size="0.050000000000000003" pos="0 0 0"/>
-    <body pos="0 0 0" name="table_178x53x7cm_legs76cm/">
-      <body name="table_178x53x7cm_legs76cm/table" pos="0 -0.17499999999999999 0.79500000000000004">
-        <geom name="table_178x53x7cm_legs76cm/tabletop" class="table_178x53x7cm_legs76cm/" type="box" size="0.89000000000000001 0.26500000000000001 0.035000000000000003"/>
-        <site name="table_178x53x7cm_legs76cm/tabletop_top_center" class="table_178x53x7cm_legs76cm/" type="sphere" rgba="0.10000000000000001 0.59999999999999998 0.10000000000000001 1" size="0.01" pos="0 0 0.035000000000000003"/>
-        <geom name="table_178x53x7cm_legs76cm/leg_fr" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="0.86499999999999999 0.23999999999999999 -0.41499999999999998"/>
-        <geom name="table_178x53x7cm_legs76cm/leg_fl" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="-0.86499999999999999 0.23999999999999999 -0.41499999999999998"/>
-        <geom name="table_178x53x7cm_legs76cm/leg_br" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="0.86499999999999999 -0.23999999999999999 -0.41499999999999998"/>
-        <geom name="table_178x53x7cm_legs76cm/leg_bl" class="table_178x53x7cm_legs76cm/" type="box" size="0.025000000000000001 0.025000000000000001 0.38" rgba="0 0 0 1" pos="-0.86499999999999999 -0.23999999999999999 -0.41499999999999998"/>
+    <body pos="0 0 0" name="camera_with_mount/">
+      <body name="camera_with_mount/camera_mount_front_horizontal" pos="0 0.17000000000000001 0.72999999999999998" euler="-1.57079632679 0 0">
+        <geom name="camera_with_mount/cmfh_visual" class="camera_with_mount/" type="box" size="0.022499999999999999 0.022499999999999999 0.089999999999999997" rgba="0.10000000000000001 0.16 0.23999999999999999 1"/>
+        <geom name="camera_with_mount/cmfh_collision" class="camera_with_mount/" type="box" contype="1" conaffinity="1" size="0.037499999999999999 0.037499999999999999 0.089999999999999997" rgba="0.69999999999999996 0.69999999999999996 0.69999999999999996 1"/>
+        <body name="camera_with_mount/camera_mount_front_vertical" pos="0 -0.17749999999999999 0.1125" euler="1.57079632679 0 0">
+          <geom name="camera_with_mount/cmfv_visual" class="camera_with_mount/" type="box" size="0.022499999999999999 0.022499999999999999 0.20000000000000001" rgba="0.10000000000000001 0.16 0.23999999999999999 1"/>
+          <geom name="camera_with_mount/cmfv_collision" class="camera_with_mount/" type="box" contype="1" conaffinity="1" size="0.037499999999999999 0.037499999999999999 0.20000000000000001" rgba="0.69999999999999996 0.69999999999999996 0.69999999999999996 1"/>
+          <body name="camera_with_mount/front_print" pos="0 0 0.20000000000000001" euler="1.57079632679 0 3.1415926535900001">
+            <geom name="camera_with_mount/front_print_collision" class="camera_with_mount/" type="box" contype="1" conaffinity="1" size="0.14999999999999999 0.14999999999999999 0.14999999999999999" rgba="0.69999999999999996 0.69999999999999996 0.69999999999999996 0.25"/>
+            <geom name="camera_with_mount/front_print_visual" class="camera_with_mount/" type="box" size="0.14999999999999999 0.14999999999999999 0.14999999999999999" rgba="0.69999999999999996 0.69999999999999996 0.69999999999999996 0.25"/>
+          </body>
+        </body>
       </body>
     </body>
   </worldbody>

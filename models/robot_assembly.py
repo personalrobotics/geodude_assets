@@ -12,11 +12,17 @@ _ABHL_XML = _HERE / "abh_left_small" / "abh_left_small.xml"
 _ABHR_XML = _HERE / "abh_right_small" / "abh_right_small.xml"
 _VENTION_XML = _HERE / "vention" / "vention.xml"
 _TABLE_XML = _HERE / "miscellaneous" / "table.xml"
+_CAMERA_XML = _HERE / "miscellaneous" / "camera_with_mount.xml"
 
 _LEFT_ARM_ATTACHMENT_SITE_NAME = "left_arm_attachment_site"
 _RIGHT_ARM_ATTACHMENT_SITE_NAME = "right_arm_attachment_site"
 _GRIPPER_ATTACHMENT_SITE_NAME = "gripper_attachment_site"
 
+def load_cameras(camera_xml_path: str | None = None) -> mjcf.RootElement:
+    """Load cameras MJCF (mount + two cameras)."""
+    path = camera_xml_path or _CAMERA_XML.as_posix()
+    cam_model = mjcf.from_path(path)
+    return cam_model
 
 def load_ur5e_arm(
     prefix: str, gripper_type: str | None
@@ -145,12 +151,19 @@ def attach_arms_to_vention(
     right_arm_attachment_site.attach(right_ur5e)
 
     # Attach table if requested
-    if table_xml_path is None:
-        table_xml_path = _TABLE_XML.as_posix()
-        print(f"Attaching table from {table_xml_path}")
-        table_model = load_table(table_xml_path, table_pos)
-        table_model.compiler.angle = "radian"
-        world_site.attach(table_model)
+    # if table_xml_path is None:
+    #     table_xml_path = _TABLE_XML.as_posix()
+    #     print(f"Attaching table from {table_xml_path}")
+    #     table_model = load_table(table_xml_path, table_pos)
+    #     table_model.compiler.angle = "radian"
+    #     world_site.attach(table_model)
+
+    # Attach cameras (world-fixed MJCF)
+    print(f"Attaching cameras from {_CAMERA_XML.as_posix()}")
+    camera_model = load_cameras(_CAMERA_XML.as_posix())
+    camera_model.compiler.angle = "radian"
+    world_site.attach(camera_model)
+
 
     # The ur5e model has a "home" keyframe defined.
     # Remove the keyframes for each arm and redefine a bimanual "home" keyframe.

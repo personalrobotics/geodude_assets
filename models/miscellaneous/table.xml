@@ -26,7 +26,7 @@
     <!-- Table assembly -->
     <body name="table" pos="0 0 0.795">
       <!-- Tabletop -->
-      <geom name="tabletop" type="box" size="0.89 0.265 0.035" />
+      <geom name="tabletop" type="box" size="0.89 0.265 0.04" />
 
       <!-- Useful site at tabletop center (top surface) -->
       <site name="tabletop_top_center" pos="0 0 0.035" size="0.01" type="sphere" rgba="0.1 0.6 0.1 1"/>
