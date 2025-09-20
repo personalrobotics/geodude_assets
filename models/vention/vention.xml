@@ -44,7 +44,8 @@
         <site name="left_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="0.5 -0.5 -0.5 -0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
       </body>
 
-      <body name="right_arm_vention_base" pos="0.330 -0.8480 1.620" quat="0 0 1 0">
+  <!-- Rotated -90deg about Y (pitch): quat = [cos(45deg), 0, -sin(45deg), 0] -->
+  <body name="right_arm_vention_base" pos="0.330 -0.8480 1.620" quat="0.7071068 0 0.7071068 0">
         <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
         <!-- NOTE: uncomment this joint to use the linear rail -->
         <!--
