@@ -51,7 +51,8 @@
     <body name="base_mount" pos="0 0 0.007" childclass="2f140">
       <geom class="visual" mesh="base_mount" material="black"/>
       <geom class="collision" mesh="base_mount"/>
-      <body name="base" pos="0 0 0.0038" quat="1 0 0 -1">
+  <!-- Zero rotation (identity quaternion) -->
+  <body name="base" pos="0 0 0.0038" quat="1 0 0 -1">
         <inertial mass="0.777441" pos="0 -2.70394e-05 0.0354675" quat="1 -0.00152849 0 0"
           diaginertia="0.000260285 0.000225381 0.000152708"/>
         <geom class="visual" mesh="base" material="black"/>
