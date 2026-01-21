@@ -5,14 +5,14 @@ MuJoCo models for the Geodude bimanual robot.
 ## Installation
 
 ```bash
-pip install geodude_assets
+uv add geodude_assets
 ```
 
 Or from source:
 ```bash
 git clone https://github.com/personalrobotics/geodude_assets.git
 cd geodude_assets
-pip install -e .
+uv sync
 ```
 
 ## Quick Start
@@ -58,7 +58,7 @@ gripper_path = get_model_path("robotiq_2f140")
 To build custom robot configurations (e.g., different gripper combinations), install with the assembly extra:
 
 ```bash
-pip install geodude_assets[assembly]
+uv add geodude_assets[assembly]
 ```
 
 Then use the assembly module:
@@ -79,7 +79,7 @@ model = attach_arms_to_vention(
 Or use the CLI:
 
 ```bash
-python -m geodude_assets.assembly --save-mjcf --left-gripper-type abhl --right-gripper-type 2f140
+uv run python -m geodude_assets.assembly --save-mjcf --left-gripper-type abhl --right-gripper-type 2f140
 ```
 
 ## Robot Configuration
@@ -123,21 +123,21 @@ The `geodude` model is programmatically generated from component models using `d
 To regenerate the geodude model:
 
 ```bash
-pip install geodude_assets[assembly]
-python -m geodude_assets.assembly --save-mjcf -d src/geodude_assets/models/geodude -l 2f140 -r 2f140
+uv sync --extra assembly
+uv run python -m geodude_assets.assembly --save-mjcf -d src/geodude_assets/models/geodude -l 2f140 -r 2f140
 ```
 
 ## Development
 
 ```bash
-pip install -e ".[dev]"
+uv sync --dev
 
 # Lint
-ruff check .
-ruff format .
+uv run ruff check .
+uv run ruff format .
 
 # Test
-pytest
+uv run pytest
 ```
 
 ## License
