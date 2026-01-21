@@ -1,17 +1,17 @@
-# mj_geodude
+# geodude_assets
 
 MuJoCo models for the Geodude bimanual robot.
 
 ## Installation
 
 ```bash
-pip install mj_geodude
+pip install geodude_assets
 ```
 
 Or from source:
 ```bash
-git clone https://github.com/personalrobotics/mj_geodude.git
-cd mj_geodude
+git clone https://github.com/personalrobotics/geodude_assets.git
+cd geodude_assets
 pip install -e .
 ```
 
@@ -19,7 +19,7 @@ pip install -e .
 
 ```bash
 # View the robot in MuJoCo's viewer
-uv run python -m mujoco.viewer --mjcf="$(uv run python -c 'from mj_geodude import get_model_path; print(get_model_path())')"
+uv run python -m mujoco.viewer --mjcf="$(uv run python -c 'from geodude_assets import get_model_path; print(get_model_path())')"
 ```
 
 This opens the MuJoCo viewer with the robot.
@@ -30,7 +30,7 @@ This opens the MuJoCo viewer with the robot.
 
 ```python
 import mujoco
-from mj_geodude import get_model_path
+from geodude_assets import get_model_path
 
 # Load the full geodude model (two UR5e arms on Vention base)
 model = mujoco.MjModel.from_xml_path(str(get_model_path("geodude")))
@@ -43,7 +43,7 @@ mujoco.mj_step(model, data)
 ### Available models
 
 ```python
-from mj_geodude import get_model_path, AVAILABLE_MODELS
+from geodude_assets import get_model_path, AVAILABLE_MODELS
 
 print(AVAILABLE_MODELS)
 # ['geodude', 'universal_robots_ur5e', 'robotiq_2f140', 'vention', 'abh_left_small', 'abh_right_small']
@@ -58,13 +58,13 @@ gripper_path = get_model_path("robotiq_2f140")
 To build custom robot configurations (e.g., different gripper combinations), install with the assembly extra:
 
 ```bash
-pip install mj_geodude[assembly]
+pip install geodude_assets[assembly]
 ```
 
 Then use the assembly module:
 
 ```python
-from mj_geodude.assembly import attach_arms_to_vention
+from geodude_assets.assembly import attach_arms_to_vention
 
 # Build a model with Robotiq gripper on right arm, Ability Hand on left
 model = attach_arms_to_vention(
@@ -79,7 +79,7 @@ model = attach_arms_to_vention(
 Or use the CLI:
 
 ```bash
-python -m mj_geodude.assembly --save-mjcf --left-gripper-type abhl --right-gripper-type 2f140
+python -m geodude_assets.assembly --save-mjcf --left-gripper-type abhl --right-gripper-type 2f140
 ```
 
 ## Robot Configuration
@@ -123,8 +123,8 @@ The `geodude` model is programmatically generated from component models using `d
 To regenerate the geodude model:
 
 ```bash
-pip install mj_geodude[assembly]
-python -m mj_geodude.assembly --save-mjcf -d src/mj_geodude/models/geodude -l 2f140 -r 2f140
+pip install geodude_assets[assembly]
+python -m geodude_assets.assembly --save-mjcf -d src/geodude_assets/models/geodude -l 2f140 -r 2f140
 ```
 
 ## Development

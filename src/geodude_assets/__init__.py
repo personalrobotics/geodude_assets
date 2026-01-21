@@ -9,7 +9,7 @@ This package provides MuJoCo model files for the Geodude robot, including:
 
 Example:
     >>> import mujoco
-    >>> from mj_geodude import get_model_path
+    >>> from geodude_assets import get_model_path
     >>> model = mujoco.MjModel.from_xml_path(str(get_model_path("geodude")))
 """
 

@@ -8,7 +8,7 @@ Usage:
 import mujoco
 import mujoco.viewer
 
-from mj_geodude import get_model_path
+from geodude_assets import get_model_path
 
 model = mujoco.MjModel.from_xml_path(str(get_model_path()))
 data = mujoco.MjData(model)

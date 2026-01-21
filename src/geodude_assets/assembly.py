@@ -3,8 +3,8 @@
 This module uses dm_control.mjcf to programmatically combine component models
 (UR5e arms, grippers, Vention base) into complete robot assemblies.
 
-Requires the 'examples' optional dependency:
-    pip install mj_geodude[examples]
+Requires the 'assembly' optional dependency:
+    pip install geodude_assets[assembly]
 """
 
 import argparse
@@ -14,7 +14,7 @@ import mujoco
 import numpy as np
 from dm_control import mjcf
 
-from mj_geodude import MODELS_DIR
+from geodude_assets import MODELS_DIR
 
 _UR5_XML = MODELS_DIR / "universal_robots_ur5e" / "ur5e.xml"
 _2F140_XML = MODELS_DIR / "robotiq_2f140" / "2f140.xml"

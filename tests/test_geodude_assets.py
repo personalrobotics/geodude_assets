@@ -1,9 +1,9 @@
-"""Tests for mj_geodude package."""
+"""Tests for geodude_assets package."""
 
 import mujoco
 import pytest
 
-from mj_geodude import (
+from geodude_assets import (
     AVAILABLE_MODELS,
     MODELS_DIR,
     get_component_path,
