@@ -12,6 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --dev
-      - run: uv run pytest
-      - run: uv run ruff check .
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Run tests
+        run: uv run pytest
+      - name: Run linter
+        run: uv run ruff check .
