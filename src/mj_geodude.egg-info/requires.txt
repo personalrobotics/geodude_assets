@@ -1,0 +1,9 @@
+mujoco
+
+[assembly]
+dm_control
+numpy
+
+[dev]
+pytest
+ruff

@@ -1,3 +1,22 @@
+Metadata-Version: 2.4
+Name: mj_geodude
+Version: 0.1.0
+Summary: MuJoCo models for the Geodude bimanual robot
+License: MIT
+Project-URL: Repository, https://github.com/personalrobotics/mj_geodude
+Project-URL: Issues, https://github.com/personalrobotics/mj_geodude/issues
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: mujoco
+Provides-Extra: assembly
+Requires-Dist: dm_control; extra == "assembly"
+Requires-Dist: numpy; extra == "assembly"
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Dynamic: license-file
+
 # mj_geodude
 
 MuJoCo models for the Geodude bimanual robot.
@@ -14,15 +33,6 @@ git clone https://github.com/personalrobotics/mj_geodude.git
 cd mj_geodude
 pip install -e .
 ```
-
-## Quick Start
-
-```bash
-# View the robot in MuJoCo's viewer
-uv run python -m mujoco.viewer --mjcf="$(uv run python -c 'from mj_geodude import get_model_path; print(get_model_path())')"
-```
-
-This opens the MuJoCo viewer with the robot.
 
 ## Usage
 
@@ -82,33 +92,14 @@ Or use the CLI:
 python -m mj_geodude.assembly --save-mjcf --left-gripper-type abhl --right-gripper-type 2f140
 ```
 
-## Robot Configuration
-
-The Geodude robot consists of:
-- **Vention frame** with vertical linear rails (enclosed lead screw actuators)
-- **Two UR5e arms** mounted on the rails
-- **Robotiq 2F-140 grippers** on both arms
-
-### Actuators
-
-| Actuator | Joint | Range | Description |
-|----------|-------|-------|-------------|
-| `left_linear_actuator` | `left_arm_linear_vention` | 0-0.5m | Left arm vertical position (0=bottom, 0.5=top) |
-| `right_linear_actuator` | `right_arm_linear_vention` | 0-0.5m | Right arm vertical position |
-| `left_ur5e/shoulder_pan` | ... | ±π | Left arm joint 1 |
-| `left_ur5e/shoulder_lift` | ... | ±π | Left arm joint 2 |
-| ... | ... | ... | ... |
-| `left_ur5e/gripper/fingers_actuator` | | 0-255 | Left gripper (0=open, 255=closed) |
-| `right_ur5e/gripper/fingers_actuator` | | 0-255 | Right gripper |
-
 ## Models
 
 | Model | Description |
 |-------|-------------|
-| `geodude` | Full robot: two UR5e arms on Vention base with Robotiq 2F-140 grippers |
+| `geodude` | Full robot: two UR5e arms on Vention base (right arm has Robotiq 2F-140) |
 | `universal_robots_ur5e` | Single UR5e arm |
 | `robotiq_2f140` | Robotiq 2F-140 parallel jaw gripper |
-| `vention` | Vention aluminum frame base with linear rails |
+| `vention` | Vention aluminum frame base |
 | `abh_left_small` | Psyonic Ability Hand (left, small) |
 | `abh_right_small` | Psyonic Ability Hand (right, small) |
 
@@ -124,7 +115,7 @@ To regenerate the geodude model:
 
 ```bash
 pip install mj_geodude[assembly]
-python -m mj_geodude.assembly --save-mjcf -d src/mj_geodude/models/geodude -l 2f140 -r 2f140
+python -m mj_geodude.assembly --save-mjcf -d src/mj_geodude/models/geodude -r 2f140
 ```
 
 ## Development

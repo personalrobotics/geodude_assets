@@ -1,34 +1,45 @@
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mj_geodude"
 version = "0.1.0"
+description = "MuJoCo models for the Geodude bimanual robot"
+readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "MIT"}
 dependencies = [
-    "dm_control",
-    "loop_rate_limiters",
     "mujoco",
-    "mink",
+]
+
+[project.optional-dependencies]
+# For running robot_assembly.py to build custom configurations
+assembly = [
+    "dm_control",
+    "numpy",
+]
+dev = [
+    "pytest",
     "ruff",
 ]
 
 [project.urls]
-Source = "https://github.com/personalrobotics/mj_geodude"
-Tracker = "https://github.com/personalrobotics/mj_geodude/issues"
+Repository = "https://github.com/personalrobotics/mj_geodude"
+Issues = "https://github.com/personalrobotics/mj_geodude/issues"
 
-# Don't look for packages or modules within this repo (just install dependencies)
-[tool.setuptools]
-packages = []
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mj_geodude = [
+    "models/**/*.xml",
+    "models/**/*.stl",
+    "models/**/*.obj",
+    "models/**/*.png",
+    "models/**/*.mtl",
+    "models/**/README.md",
+]
 
 [tool.ruff]
-lint.select = [
-  # pyflakes
-  "F",
-  # pycodestyle
-  "E",
-  "W",
-  # isort
-  "I"
-]
+lint.select = ["F", "E", "W", "I"]

@@ -1,3 +1,12 @@
+"""Robot assembly utilities for building custom Geodude configurations.
+
+This module uses dm_control.mjcf to programmatically combine component models
+(UR5e arms, grippers, Vention base) into complete robot assemblies.
+
+Requires the 'examples' optional dependency:
+    pip install mj_geodude[examples]
+"""
+
 import argparse
 from pathlib import Path
 
@@ -5,12 +14,13 @@ import mujoco
 import numpy as np
 from dm_control import mjcf
 
-_HERE = Path(__file__).parent
-_UR5_XML = _HERE / "universal_robots_ur5e" / "ur5e.xml"
-_2F140_XML = _HERE / "robotiq_2f140" / "2f140.xml"
-_ABHL_XML = _HERE / "abh_left_small" / "abh_left_small.xml"
-_ABHR_XML = _HERE / "abh_right_small" / "abh_right_small.xml"
-_VENTION_XML = _HERE / "vention" / "vention.xml"
+from mj_geodude import MODELS_DIR
+
+_UR5_XML = MODELS_DIR / "universal_robots_ur5e" / "ur5e.xml"
+_2F140_XML = MODELS_DIR / "robotiq_2f140" / "2f140.xml"
+_ABHL_XML = MODELS_DIR / "abh_left_small" / "abh_left_small.xml"
+_ABHR_XML = MODELS_DIR / "abh_right_small" / "abh_right_small.xml"
+_VENTION_XML = MODELS_DIR / "vention" / "vention.xml"
 
 _LEFT_ARM_ATTACHMENT_SITE_NAME = "left_arm_attachment_site"
 _RIGHT_ARM_ATTACHMENT_SITE_NAME = "right_arm_attachment_site"

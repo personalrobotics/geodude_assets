@@ -3,6 +3,11 @@
 
   <compiler angle="radian" meshdir="assets"/>
 
+  <contact>
+    <exclude body1="vention_base" body2="left_arm_vention_base"/>
+    <exclude body1="vention_base" body2="right_arm_vention_base"/>
+  </contact>
+
   <default>
     <default class="vention">
       <default class="visual">
@@ -29,29 +34,33 @@
       <!-- To add padding to the Vention table, increase the z-direction offset -->
       <geom type="box" pos="0 -0.475 0.3825" size="0.65 0.6 0.371" class="collision"/>
       <!-- Exact dimensions of the vention actuator frame are: x: 1.26, y: 0.18, z: 1.29 -->
-      <geom type="box" pos="0 -0.96 1.41" size="0.55 0.125 0.66" class="collision"/>
+      <!-- Disabled collision to allow arm movement on linear rails -->
+      <geom type="box" pos="0 -0.96 1.41" size="0.55 0.125 0.66" class="collision" contype="0" conaffinity="0"/>
 
       <!-- Collision for side box -->
       <geom name="box" class="collision" type="box" size="0.037 0.045 0.072" pos="-0.66 -0.1 0.72"/>
 
 
-      <body name="left_arm_vention_base" pos="-0.330 -0.8480 1.620" quat="0 0 0 1">
+      <!-- Arms start at bottom of rail travel, can raise up to 0.5m -->
+      <body name="left_arm_vention_base" pos="-0.330 -0.8480 1.120" quat="0 0 0 1">
         <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
-        <!-- NOTE: uncomment this joint to use the linear rail -->
-        <!--
-        <joint name="left_arm_linear_vention" type="slide" range="-0.5 0"/>
-        -->
+        <joint name="left_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>
         <site name="left_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
       </body>
 
-      <body name="right_arm_vention_base" pos="0.330 -0.8480 1.620" quat="0 0 0 1">
+      <body name="right_arm_vention_base" pos="0.330 -0.8480 1.120" quat="0 0 0 1">
         <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
-        <!-- NOTE: uncomment this joint to use the linear rail -->
-        <!--
-        <joint name="right_arm_linear_vention" type="slide" range="-0.5 0"/>
-        -->
+        <joint name="right_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>
         <site name="right_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
       </body>
     </body>
   </worldbody>
+
+  <actuator>
+    <!-- Position-controlled lead screw actuators: 0=bottom, 0.5=top (raised 0.5m) -->
+    <position name="left_linear_actuator" joint="left_arm_linear_vention"
+              ctrlrange="0 0.5" kp="100000"/>
+    <position name="right_linear_actuator" joint="right_arm_linear_vention"
+              ctrlrange="0 0.5" kp="100000"/>
+  </actuator>
 </mujoco>
