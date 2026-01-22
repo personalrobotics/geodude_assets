@@ -186,7 +186,8 @@
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
-      <geom name="geom_2" class="collision" type="box" contype="0" conaffinity="0" size="0.55000000000000004 0.125 0.66000000000000003" pos="0 -0.95999999999999996 1.4099999999999999"/>
+      <!-- Vention actuator frame back panel - contact exclusion prevents arm base collision -->
+      <geom name="vention_back_panel" class="collision" type="box" size="0.55 0.1 0.66" pos="0 -0.96 1.41"/>
       <geom name="geom_3" class="collision" type="box" size="0.036999999999999998 0.044999999999999998 0.071999999999999995" pos="-0.66000000000000003 -0.10000000000000001 0.71999999999999997"/>
       <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.1200000000000001" quat="0 0 0 1">
         <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
@@ -457,6 +458,30 @@
   <contact>
     <exclude name="//unnamed_contact_0" body1="vention_base" body2="left_arm_vention_base"/>
     <exclude name="//unnamed_contact_1" body1="vention_base" body2="right_arm_vention_base"/>
+
+    <!-- Left UR5e adjacent link exclusions (kinematic chain) -->
+    <exclude name="left_ur5e/adjacent_0" body1="left_ur5e/base" body2="left_ur5e/shoulder_link"/>
+    <exclude name="left_ur5e/adjacent_1" body1="left_ur5e/shoulder_link" body2="left_ur5e/upper_arm_link"/>
+    <exclude name="left_ur5e/adjacent_2" body1="left_ur5e/upper_arm_link" body2="left_ur5e/forearm_link"/>
+    <exclude name="left_ur5e/adjacent_3" body1="left_ur5e/forearm_link" body2="left_ur5e/wrist_1_link"/>
+    <exclude name="left_ur5e/adjacent_4" body1="left_ur5e/wrist_1_link" body2="left_ur5e/wrist_2_link"/>
+    <exclude name="left_ur5e/adjacent_5" body1="left_ur5e/wrist_2_link" body2="left_ur5e/wrist_3_link"/>
+    <exclude name="left_ur5e/adjacent_6" body1="left_ur5e/wrist_3_link" body2="left_ur5e/gripper/"/>
+    <exclude name="left_ur5e/adjacent_7" body1="left_ur5e/gripper/" body2="left_ur5e/gripper/base_mount"/>
+    <exclude name="left_ur5e/adjacent_8" body1="left_ur5e/gripper/base_mount" body2="left_ur5e/gripper/base"/>
+
+    <!-- Right UR5e adjacent link exclusions (kinematic chain) -->
+    <exclude name="right_ur5e/adjacent_0" body1="right_ur5e/base" body2="right_ur5e/shoulder_link"/>
+    <exclude name="right_ur5e/adjacent_1" body1="right_ur5e/shoulder_link" body2="right_ur5e/upper_arm_link"/>
+    <exclude name="right_ur5e/adjacent_2" body1="right_ur5e/upper_arm_link" body2="right_ur5e/forearm_link"/>
+    <exclude name="right_ur5e/adjacent_3" body1="right_ur5e/forearm_link" body2="right_ur5e/wrist_1_link"/>
+    <exclude name="right_ur5e/adjacent_4" body1="right_ur5e/wrist_1_link" body2="right_ur5e/wrist_2_link"/>
+    <exclude name="right_ur5e/adjacent_5" body1="right_ur5e/wrist_2_link" body2="right_ur5e/wrist_3_link"/>
+    <exclude name="right_ur5e/adjacent_6" body1="right_ur5e/wrist_3_link" body2="right_ur5e/gripper/"/>
+    <exclude name="right_ur5e/adjacent_7" body1="right_ur5e/gripper/" body2="right_ur5e/gripper/base_mount"/>
+    <exclude name="right_ur5e/adjacent_8" body1="right_ur5e/gripper/base_mount" body2="right_ur5e/gripper/base"/>
+
+    <!-- Gripper internal exclusions (left) -->
     <exclude name="left_ur5e/gripper//unnamed_contact_0" body1="left_ur5e/gripper/base" body2="left_ur5e/gripper/left_driver"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_1" body1="left_ur5e/gripper/base" body2="left_ur5e/gripper/right_driver"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_2" body1="left_ur5e/gripper/base" body2="left_ur5e/gripper/left_spring_link"/>
@@ -465,6 +490,9 @@
     <exclude name="left_ur5e/gripper//unnamed_contact_5" body1="left_ur5e/gripper/right_driver" body2="left_ur5e/gripper/right_spring_link"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_6" body1="left_ur5e/gripper/right_coupler" body2="left_ur5e/gripper/right_follower"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_7" body1="left_ur5e/gripper/left_coupler" body2="left_ur5e/gripper/left_follower"/>
+    <exclude name="left_ur5e/gripper/finger_contact" body1="left_ur5e/gripper/left_follower" body2="left_ur5e/gripper/right_follower"/>
+
+    <!-- Gripper internal exclusions (right) -->
     <exclude name="right_ur5e/gripper//unnamed_contact_0" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/left_driver"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_1" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/right_driver"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_2" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/left_spring_link"/>
@@ -473,6 +501,7 @@
     <exclude name="right_ur5e/gripper//unnamed_contact_5" body1="right_ur5e/gripper/right_driver" body2="right_ur5e/gripper/right_spring_link"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_6" body1="right_ur5e/gripper/right_coupler" body2="right_ur5e/gripper/right_follower"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_7" body1="right_ur5e/gripper/left_coupler" body2="right_ur5e/gripper/left_follower"/>
+    <exclude name="right_ur5e/gripper/finger_contact" body1="right_ur5e/gripper/left_follower" body2="right_ur5e/gripper/right_follower"/>
   </contact>
   <equality>
     <connect name="left_ur5e/gripper//unnamed_equality_0" class="left_ur5e/gripper/" solref="0.0050000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" body1="left_ur5e/gripper/right_follower" body2="left_ur5e/gripper/right_coupler" anchor="0 0 0"/>
@@ -511,6 +540,10 @@
     <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="right_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
   </actuator>
   <keyframe>
-    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
+    <!-- qpos: left_vention, left_arm(6), left_gripper(8), right_vention, right_arm(6), right_gripper(8) = 30 total -->
+    <!-- ctrl: left_vention, right_vention, left_arm(6), left_gripper, right_arm(6), right_gripper = 16 total -->
+    <key name="home"
+         qpos="0.2 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0 0.2 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0"
+         ctrl="0.2 0.2 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
   </keyframe>
 </mujoco>

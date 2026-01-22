@@ -33,9 +33,8 @@
       <!-- Exact dimensions of the vention table are: x: 1.26, y: 1.12, z: 0.755 -->
       <!-- To add padding to the Vention table, increase the z-direction offset -->
       <geom type="box" pos="0 -0.475 0.3825" size="0.65 0.6 0.371" class="collision"/>
-      <!-- Exact dimensions of the vention actuator frame are: x: 1.26, y: 0.18, z: 1.29 -->
-      <!-- Disabled collision to allow arm movement on linear rails -->
-      <geom type="box" pos="0 -0.96 1.41" size="0.55 0.125 0.66" class="collision" contype="0" conaffinity="0"/>
+      <!-- Vention actuator frame back panel - contact exclusion prevents arm base collision -->
+      <geom name="vention_back_panel" type="box" pos="0 -0.96 1.41" size="0.55 0.1 0.66" class="collision"/>
 
       <!-- Collision for side box -->
       <geom name="box" class="collision" type="box" size="0.037 0.045 0.072" pos="-0.66 -0.1 0.72"/>

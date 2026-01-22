@@ -37,6 +37,19 @@ View the robot in MuJoCo's interactive viewer:
 uv run python -m mujoco.viewer --mjcf="$(uv run python -c 'from geodude_assets import get_model_path; print(get_model_path())')"
 ```
 
+### Collision Viewer
+
+An interactive collision viewer is available to visualize collision geometry and contact detection:
+```bash
+uv run mjpython examples/view_collisions.py
+```
+
+- Use joint sliders to move the robot (Tab to show/hide control panel)
+- Colliding bodies turn **red**
+- Press `3` to toggle collision geometry visibility
+- Press `C` to toggle contact point visualization
+- Press `R` to reset to home position
+
 ## Swapping End Effectors
 
 The default Geodude model has Robotiq 2F-140 grippers on both arms. To use different end effectors (e.g., Ability Hands), use the assembly module:
