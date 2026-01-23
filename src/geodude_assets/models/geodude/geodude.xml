@@ -17,9 +17,13 @@
         <material specular="0.5" shininess="0.25"/>
         <joint axis="0 1 0" range="-3.1415000000000002 3.1415000000000002" armature="0.10000000000000001"/>
         <site group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01"/>
-        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-150 150" gaintype="fixed" biastype="affine" gainprm="2000" biasprm="0 -2000 -400"/>
+        <!-- Actuator gains tuned for balance between realism and stability
+             Real UR5e has ~50-65 Hz bandwidth, but MuJoCo position control with fixed gains
+             cannot fully replicate UR's sophisticated servo system. Current gains give ~5 Hz
+             bandwidth. Use 10% speed scaling to ensure trajectory tracking in simulation. -->
+        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-150 150" gaintype="fixed" biastype="affine" gainprm="25000" biasprm="0 -25000 -5000"/>
         <default class="left_ur5e/size1">
-          <general forcerange="-28 28" gainprm="500" biasprm="0 -500 -100"/>
+          <general forcerange="-28 28" gainprm="6250" biasprm="0 -6250 -1250"/>
         </default>
         <default class="left_ur5e/visual">
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
@@ -64,9 +68,13 @@
         <material specular="0.5" shininess="0.25"/>
         <joint axis="0 1 0" range="-3.1415000000000002 3.1415000000000002" armature="0.10000000000000001"/>
         <site group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01"/>
-        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-150 150" gaintype="fixed" biastype="affine" gainprm="2000" biasprm="0 -2000 -400"/>
+        <!-- Actuator gains tuned for balance between realism and stability
+             Real UR5e has ~50-65 Hz bandwidth, but MuJoCo position control with fixed gains
+             cannot fully replicate UR's sophisticated servo system. Current gains give ~5 Hz
+             bandwidth. Use 10% speed scaling to ensure trajectory tracking in simulation. -->
+        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-150 150" gaintype="fixed" biastype="affine" gainprm="25000" biasprm="0 -25000 -5000"/>
         <default class="right_ur5e/size1">
-          <general forcerange="-28 28" gainprm="500" biasprm="0 -500 -100"/>
+          <general forcerange="-28 28" gainprm="6250" biasprm="0 -6250 -1250"/>
         </default>
         <default class="right_ur5e/visual">
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
