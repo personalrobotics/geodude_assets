@@ -29,7 +29,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="left_ur5e/collision">
-          <geom type="capsule" group="3"/>
+          <geom type="capsule" group="3" margin="0.005"/>
           <default class="left_ur5e/eef_collision">
             <geom type="cylinder"/>
           </default>
@@ -56,7 +56,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="left_ur5e/gripper/collision">
-          <geom type="mesh" group="3"/>
+          <geom type="mesh" group="3" margin="0.005"/>
           <default class="left_ur5e/gripper/pad_box1">
             <geom type="box" priority="1" size="0.0135 0.032500000000000001 0.0037499999999999999" rgba="0.55000000000000004 0.55000000000000004 0.55000000000000004 1" friction="0.69999999999999996" mass="0" solref="0.0040000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" pos="0 0.045755400000000002 -0.027220299999999999"/>
           </default>
@@ -80,7 +80,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="right_ur5e/collision">
-          <geom type="capsule" group="3"/>
+          <geom type="capsule" group="3" margin="0.005"/>
           <default class="right_ur5e/eef_collision">
             <geom type="cylinder"/>
           </default>
@@ -107,7 +107,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="right_ur5e/gripper/collision">
-          <geom type="mesh" group="3"/>
+          <geom type="mesh" group="3" margin="0.005"/>
           <default class="right_ur5e/gripper/pad_box1">
             <geom type="box" priority="1" size="0.0135 0.032500000000000001 0.0037499999999999999" rgba="0.55000000000000004 0.55000000000000004 0.55000000000000004 1" friction="0.69999999999999996" mass="0" solref="0.0040000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" pos="0 0.045755400000000002 -0.027220299999999999"/>
           </default>
