@@ -122,6 +122,25 @@ The Geodude robot consists of:
 - **Vention frame** with vertical linear rails (enclosed lead screw actuators)
 - **Two UR5e arms** mounted on the linear rails
 - **End effectors** on each arm (configurable)
+- **Worktop** - a named site marking the usable work surface
+
+### Named Sites
+
+| Site | Position | Size | Description |
+|------|----------|------|-------------|
+| `worktop` | (0, -0.35, 0.755) | 1.2m × 0.8m | Usable work surface on the Vention base |
+
+The worktop site is visualized as a semi-transparent green box and can be used by planners to define placement regions:
+
+```python
+import mujoco
+from geodude_assets import get_model_path
+
+model = mujoco.MjModel.from_xml_path(str(get_model_path()))
+site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "worktop")
+worktop_pos = model.site_pos[site_id]   # [0, -0.35, 0.755]
+worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
+```
 
 ### Actuators
 

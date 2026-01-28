@@ -195,6 +195,14 @@
     <!-- Default viewing camera: side view from left, slightly elevated -->
     <camera name="main" pos="0.085 -2.31 0.25" xyaxes="1 0 0 0 0.446 0.895"/>
 
+    <!-- Worktop: usable work surface on vention base (1.2m x 0.8m) -->
+    <site name="worktop"
+          type="box"
+          pos="0 -0.35 0.755"
+          size="0.6 0.4 0.005"
+          rgba="0.2 0.8 0.2 0.3"
+          group="2"/>
+
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
