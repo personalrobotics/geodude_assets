@@ -1,6 +1,8 @@
 <mujoco model="vention">
   <compiler autolimits="true" angle="radian"/>
   <option impratio="10" integrator="implicitfast" cone="elliptic"/>
+
+
   <default>
     <default class="/">
       <default class="vention">
@@ -114,6 +116,7 @@
     </default>
   </default>
   <asset>
+
     <material name="blue" class="/" rgba="0.050000000000000003 0.050000000000000003 0.90000000000000002 1"/>
     <material name="red" class="/" rgba="1 0.072272000000000003 0.039545999999999998 1"/>
     <mesh name="vention_frame_visual_model" class="/" file="vention_frame_visual_model-3ad6025d0633a8c49789e10339a2c0fb6855dd81.stl"/>
@@ -189,6 +192,9 @@
     <mesh name="right_ur5e/gripper/spring_link" class="right_ur5e/gripper/2f140" file="spring_link-17f0474146ce54aa2f0c0b0518c7403758e2f513.stl"/>
   </asset>
   <worldbody>
+    <!-- Default viewing camera: side view from left, slightly elevated -->
+    <camera name="main" pos="0.085 -2.31 0.25" xyaxes="1 0 0 0 0.446 0.895"/>
+
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
