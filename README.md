@@ -2,6 +2,8 @@
 
 MuJoCo models for the Geodude bimanual robot.
 
+![Geodude Robot](geodude.png)
+
 ## Installation
 
 ```bash

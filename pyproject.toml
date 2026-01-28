@@ -43,3 +43,8 @@ geodude_assets = [
 
 [tool.ruff]
 lint.select = ["F", "E", "W", "I"]
+
+[dependency-groups]
+dev = [
+    "pillow>=12.1.0",
+]
