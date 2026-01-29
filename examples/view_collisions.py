@@ -160,12 +160,9 @@ def main():
     # Fall back to blocking launch() if that fails
     use_passive = True
     if sys.platform == "darwin":
-        # Check if we're running under mjpython by testing launch_passive
-        try:
-            # Quick test - this will fail immediately if not mjpython
-            viewer = mujoco.viewer.launch_passive(model, data)
-            viewer.close()
-        except Exception:
+        # Check if we're running under mjpython by checking for the _MJPYTHON attribute
+        # (Can't test with launch_passive because mjpython only allows one viewer per session)
+        if not hasattr(mujoco.viewer, "_MJPYTHON") or mujoco.viewer._MJPYTHON is None:
             use_passive = False
             print("\nNote: Using blocking viewer (close window to exit).", flush=True)
             print(
@@ -193,7 +190,11 @@ def main():
             # Enable contact visualization
             viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_CONTACTPOINT] = True
 
-            # Camera defaults come from model (statistic/visual elements)
+            # Set camera: front view looking at workspace
+            viewer.cam.azimuth = -90
+            viewer.cam.elevation = -25
+            viewer.cam.lookat[:] = [0, -0.4, 1.1]
+            viewer.cam.distance = 3.0
 
             while viewer.is_running():
                 # Step physics so actuators respond to control sliders
