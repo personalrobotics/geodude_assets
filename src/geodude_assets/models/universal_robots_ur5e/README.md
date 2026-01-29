@@ -27,7 +27,7 @@ description](https://github.com/ros-industrial/universal_robot/tree/kinetic-deve
 6. Manually edited the MJCF to extract common properties into the `<default>` section.
 7. Added position-controlled actuators. Max joint torque values were taken from
    [here](https://www.universal-robots.com/articles/ur/robot-care-maintenance/max-joint-torques/).
-8. Added home joint configuration as a `keyframe`.
+8. Added ready joint configuration as a `keyframe`.
 9. Manually designed collision geometries.
 10. Added `scene.xml` which includes the robot, with a textured ground plane, skybox and haze.
 

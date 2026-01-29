@@ -15,7 +15,7 @@ Viewer tips:
     - Use joint sliders to move the robot
     - Press '0' to toggle collision geometry view
     - Press 'C' to toggle contact points
-    - Press 'R' to reset to home
+    - Press 'R' to reset to ready
 """
 
 import sys
@@ -41,9 +41,9 @@ def main():
     # Color for colliding geoms
     COLLISION_COLOR = np.array([1.0, 0.0, 0.0, 1.0])  # Red
 
-    # Start at home
-    home_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
-    mujoco.mj_resetDataKeyframe(model, data, home_key)
+    # Start at ready
+    ready_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "ready")
+    mujoco.mj_resetDataKeyframe(model, data, ready_key)
 
     print("\nCollision Viewer", flush=True)
     print("=" * 40, flush=True)
@@ -141,7 +141,7 @@ def main():
 
     def key_callback(keycode):
         if keycode == ord("R") or keycode == ord("r"):
-            mujoco.mj_resetDataKeyframe(model, data, home_key)
+            mujoco.mj_resetDataKeyframe(model, data, ready_key)
         elif keycode == ord("P") or keycode == ord("p"):
             print_collision_geoms()
         elif keycode == ord("V") or keycode == ord("v"):
@@ -179,7 +179,7 @@ def main():
         print("  Tab  - show/hide control panel", flush=True)
         print("  0    - toggle collision geometry", flush=True)
         print("  C    - toggle contact points", flush=True)
-        print("  R    - reset to home", flush=True)
+        print("  R    - reset to ready", flush=True)
         print("  V    - print camera parameters", flush=True)
         print(flush=True)
         with mujoco.viewer.launch_passive(

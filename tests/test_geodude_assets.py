@@ -136,9 +136,9 @@ class TestGeodueModelStructure:
         )
         assert aid != -1
 
-    def test_has_home_keyframe(self, geodude_model):
-        """Geodude has home keyframe."""
-        kid = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_KEY, "home")
+    def test_has_ready_keyframe(self, geodude_model):
+        """Geodude has ready keyframe."""
+        kid = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_KEY, "ready")
         assert kid != -1
 
     def test_has_linear_actuators(self, geodude_model):
@@ -191,9 +191,9 @@ class TestContactExclusions:
 
     @pytest.fixture
     def geodude_data(self, geodude_model):
-        """Create data and reset to home keyframe."""
+        """Create data and reset to ready keyframe."""
         data = mujoco.MjData(geodude_model)
-        mujoco.mj_resetDataKeyframe(geodude_model, data, 0)  # home
+        mujoco.mj_resetDataKeyframe(geodude_model, data, 0)  # ready
         return data
 
     def test_has_contact_exclusions(self, geodude_model):
@@ -201,10 +201,10 @@ class TestContactExclusions:
         # nexclude counts the number of body pairs excluded from contact
         assert geodude_model.nexclude > 0, "Model should have contact exclusions"
 
-    def test_no_contacts_at_home_pose(self, geodude_model, geodude_data):
-        """No contacts at home pose after physics step.
+    def test_no_contacts_at_ready_pose(self, geodude_model, geodude_data):
+        """No contacts at ready pose after physics step.
 
-        At home pose, there should be no self-collision contacts. This verifies
+        At ready pose, there should be no self-collision contacts. This verifies
         that the contact exclusions for adjacent arm links and gripper internal
         mechanism are working correctly.
         """
@@ -213,7 +213,7 @@ class TestContactExclusions:
 
         # Check for any contacts
         assert geodude_data.ncon == 0, (
-            f"Expected no contacts at home pose, but found {geodude_data.ncon}. "
+            f"Expected no contacts at ready pose, but found {geodude_data.ncon}. "
             "This may indicate missing contact exclusions."
         )
 

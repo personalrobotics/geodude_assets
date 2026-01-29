@@ -72,7 +72,7 @@ def load_gripper(
             f"got {gripper_type}"
         )
     gripper_model.model = prefix
-    gripper_key = gripper_model.find("key", "home")
+    gripper_key = gripper_model.find("key", "ready")
     gripper_qpos = gripper_key.qpos
     gripper_ctrl = gripper_key.ctrl
     gripper_key.remove()
@@ -132,15 +132,15 @@ def attach_arms_to_vention(
     )
     right_arm_attachment_site.attach(right_ur5e)
 
-    # Build the combined "home" keyframe from component keyframes.
-    # The vention has linear actuators, and each arm has its own home pose.
+    # Build the combined "ready" keyframe from component keyframes.
+    # The vention has linear actuators, and each arm has its own ready pose.
     # Joint order: left_linear, left_arm, left_gripper,
     #              right_linear, right_arm, right_gripper
     # Ctrl order: left_linear, right_linear, left_arm,
     #             left_gripper, right_arm, right_gripper
 
     # Get vention keyframe (linear actuator positions)
-    vention_key = geodude_model.find("key", "home")
+    vention_key = geodude_model.find("key", "ready")
     if vention_key is not None:
         vention_qpos = vention_key.qpos.copy()  # [left_linear, right_linear]
         vention_ctrl = vention_key.ctrl.copy()  # [left_linear, right_linear]
@@ -151,15 +151,15 @@ def attach_arms_to_vention(
         vention_ctrl = np.array([0.25, 0.25])
 
     # Get arm keyframes
-    left_key = geodude_model.find("key", "left_ur5e/home")
-    right_key = geodude_model.find("key", "right_ur5e/home")
+    left_key = geodude_model.find("key", "left_ur5e/ready")
+    right_key = geodude_model.find("key", "right_ur5e/ready")
 
     if left_key is not None:
         left_arm_qpos = left_key.qpos.copy()
         left_arm_ctrl = left_key.ctrl.copy()
         left_key.remove()
     else:
-        print("Keyframe left_ur5e/home not found.")
+        print("Keyframe left_ur5e/ready not found.")
         left_arm_qpos = np.array([])
         left_arm_ctrl = np.array([])
 
@@ -171,7 +171,7 @@ def attach_arms_to_vention(
         right_arm_qpos[0] = -right_arm_qpos[0]  # shoulder_pan: -1.5708 -> +1.5708
         right_arm_ctrl[0] = -right_arm_ctrl[0]
     else:
-        print("Keyframe right_ur5e/home not found.")
+        print("Keyframe right_ur5e/ready not found.")
         right_arm_qpos = np.array([])
         right_arm_ctrl = np.array([])
 
@@ -200,7 +200,7 @@ def attach_arms_to_vention(
 
     geodude_model.keyframe.add(
         "key",
-        name="home",
+        name="ready",
         qpos=res_qpos,
         ctrl=res_ctrl,
     )

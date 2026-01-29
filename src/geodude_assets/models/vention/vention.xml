@@ -70,7 +70,7 @@
   </actuator>
 
   <keyframe>
-    <!-- Home position: arms at middle of rail (0.25m) -->
-    <key name="home" qpos="0.25 0.25" ctrl="0.25 0.25"/>
+    <!-- Ready position: arms at middle of rail (0.25m) -->
+    <key name="ready" qpos="0.25 0.25" ctrl="0.25 0.25"/>
   </keyframe>
 </mujoco>

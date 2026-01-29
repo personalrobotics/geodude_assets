@@ -7,14 +7,14 @@
   Instructions to import a new hand model to use with Geodude: 
   1. Copy the XML file to the models directory.
   2. Comment out <joint type="free" name="base joint"/> to remove the free joint.
-  3. Set default keyframes for the home position
+  3. Set default keyframes for the ready position
   With free joint, use:
   <keyframe>
-    <key name="home" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <key name="ready" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
   </keyframe>
   Without free joint, use:
   <keyframe>
-    <key name="home" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <key name="ready" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
   </keyframe>
 -->
 
@@ -316,10 +316,10 @@
 
   <!--(Default) With free joint: use -->
   <!-- <keyframe>
-    <key name="home" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <key name="ready" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
   </keyframe> -->
   <!-- Without free joint (when used with robot): use -->
   <keyframe>
-    <key name="home" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <key name="ready" qpos="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrl="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
   </keyframe>
 </mujoco>

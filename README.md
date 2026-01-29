@@ -27,9 +27,9 @@ from geodude_assets import get_model_path
 model = mujoco.MjModel.from_xml_path(str(get_model_path()))
 data = mujoco.MjData(model)
 
-# Reset to home pose
-home_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
-mujoco.mj_resetDataKeyframe(model, data, home_key)
+# Reset to ready pose
+ready_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "ready")
+mujoco.mj_resetDataKeyframe(model, data, ready_key)
 
 # Step simulation
 mujoco.mj_step(model, data)
