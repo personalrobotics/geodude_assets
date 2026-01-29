@@ -1,8 +1,10 @@
 <mujoco model="vention">
   <compiler autolimits="true" angle="radian"/>
   <option impratio="10" integrator="implicitfast" cone="elliptic"/>
-
-
+  <visual>
+    <global azimuth="-90" elevation="-25"/>
+  </visual>
+  <statistic extent="1.5" center="0 -0.40000000000000002 1.1000000000000001"/>
   <default>
     <default class="/">
       <default class="vention">
@@ -19,18 +21,15 @@
         <material specular="0.5" shininess="0.25"/>
         <joint axis="0 1 0" range="-3.1415000000000002 3.1415000000000002" armature="0.10000000000000001"/>
         <site group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01"/>
-        <!-- Actuator gains tuned for balance between tracking and stability.
-             2x base gains tested stable, gives ~18% improvement in tracking error.
-             Real UR5e has ~50-65 Hz bandwidth; these gains give ~10 Hz bandwidth. -->
-        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-150 150" gaintype="fixed" biastype="affine" gainprm="50000" biasprm="0 -50000 -10000"/>
+        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-300 300" gaintype="fixed" biastype="affine" gainprm="8000" biasprm="0 -8000 -800"/>
         <default class="left_ur5e/size1">
-          <general forcerange="-28 28" gainprm="12500" biasprm="0 -12500 -2500"/>
+          <general forcerange="-56 56" gainprm="2000" biasprm="0 -2000 -200"/>
         </default>
         <default class="left_ur5e/visual">
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="left_ur5e/collision">
-          <geom type="capsule" group="3" margin="0.005"/>
+          <geom type="capsule" group="3"/>
           <default class="left_ur5e/eef_collision">
             <geom type="cylinder"/>
           </default>
@@ -57,7 +56,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="left_ur5e/gripper/collision">
-          <geom type="mesh" group="3" margin="0.005"/>
+          <geom type="mesh" group="3"/>
           <default class="left_ur5e/gripper/pad_box1">
             <geom type="box" priority="1" size="0.0135 0.032500000000000001 0.0037499999999999999" rgba="0.55000000000000004 0.55000000000000004 0.55000000000000004 1" friction="0.69999999999999996" mass="0" solref="0.0040000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" pos="0 0.045755400000000002 -0.027220299999999999"/>
           </default>
@@ -69,18 +68,15 @@
         <material specular="0.5" shininess="0.25"/>
         <joint axis="0 1 0" range="-3.1415000000000002 3.1415000000000002" armature="0.10000000000000001"/>
         <site group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01"/>
-        <!-- Actuator gains tuned for balance between tracking and stability.
-             2x base gains tested stable, gives ~18% improvement in tracking error.
-             Real UR5e has ~50-65 Hz bandwidth; these gains give ~10 Hz bandwidth. -->
-        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-150 150" gaintype="fixed" biastype="affine" gainprm="50000" biasprm="0 -50000 -10000"/>
+        <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-300 300" gaintype="fixed" biastype="affine" gainprm="8000" biasprm="0 -8000 -800"/>
         <default class="right_ur5e/size1">
-          <general forcerange="-28 28" gainprm="12500" biasprm="0 -12500 -2500"/>
+          <general forcerange="-56 56" gainprm="2000" biasprm="0 -2000 -200"/>
         </default>
         <default class="right_ur5e/visual">
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="right_ur5e/collision">
-          <geom type="capsule" group="3" margin="0.005"/>
+          <geom type="capsule" group="3"/>
           <default class="right_ur5e/eef_collision">
             <geom type="cylinder"/>
           </default>
@@ -107,7 +103,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
         <default class="right_ur5e/gripper/collision">
-          <geom type="mesh" group="3" margin="0.005"/>
+          <geom type="mesh" group="3"/>
           <default class="right_ur5e/gripper/pad_box1">
             <geom type="box" priority="1" size="0.0135 0.032500000000000001 0.0037499999999999999" rgba="0.55000000000000004 0.55000000000000004 0.55000000000000004 1" friction="0.69999999999999996" mass="0" solref="0.0040000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" pos="0 0.045755400000000002 -0.027220299999999999"/>
           </default>
@@ -116,7 +112,6 @@
     </default>
   </default>
   <asset>
-
     <material name="blue" class="/" rgba="0.050000000000000003 0.050000000000000003 0.90000000000000002 1"/>
     <material name="red" class="/" rgba="1 0.072272000000000003 0.039545999999999998 1"/>
     <mesh name="vention_frame_visual_model" class="/" file="vention_frame_visual_model-3ad6025d0633a8c49789e10339a2c0fb6855dd81.stl"/>
@@ -148,13 +143,13 @@
     <material name="left_ur5e/gripper/silicone" class="left_ur5e/gripper/" rgba="0.18820000000000001 0.18820000000000001 0.18820000000000001 1"/>
     <material name="left_ur5e/gripper/gray" class="left_ur5e/gripper/" rgba="0.4627 0.4627 0.4627 1"/>
     <material name="left_ur5e/gripper/black" class="left_ur5e/gripper/" rgba="0.14899999999999999 0.14899999999999999 0.14899999999999999 1"/>
-    <mesh name="left_ur5e/gripper/base_mount" class="left_ur5e/gripper/2f140" file="base_mount-37df51ceff1f5ba8141ffa5df4de2a9d9153a32c.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="left_ur5e/gripper/base" class="left_ur5e/gripper/2f140" file="base-42fe8832279fe72b3e5a9646845bae0aa01f30de.stl"/>
-    <mesh name="left_ur5e/gripper/driver" class="left_ur5e/gripper/2f140" file="driver-23d09a5cdb42c23c510639985a63bcb1bfc67ae6.stl"/>
-    <mesh name="left_ur5e/gripper/follower" class="left_ur5e/gripper/2f140" file="follower-f5f821e98b5292ecb13f9e0e91eb41ea73e64aac.stl"/>
-    <mesh name="left_ur5e/gripper/coupler" class="left_ur5e/gripper/2f140" file="coupler-cc5b48743e92b0ae5d13d5ab9d2e23459ad8404c.stl"/>
-    <mesh name="left_ur5e/gripper/pad" class="left_ur5e/gripper/2f140" file="pad-fe590c82ef16af878177e7dca8f9f69edd7773ad.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="left_ur5e/gripper/spring_link" class="left_ur5e/gripper/2f140" file="spring_link-17f0474146ce54aa2f0c0b0518c7403758e2f513.stl"/>
+    <mesh name="left_ur5e/gripper/base_mount" class="left_ur5e/gripper/2f140" file="base_mount-492692230394a1ebdce431c652d89a9c9a4211b5.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="left_ur5e/gripper/base" class="left_ur5e/gripper/2f140" file="base-89a0661a7293371ffe78c9605d5b7ccef2a78430.stl"/>
+    <mesh name="left_ur5e/gripper/driver" class="left_ur5e/gripper/2f140" file="driver-a0c14c2ec91c3e05ccc3e9499456623628d28b1a.stl"/>
+    <mesh name="left_ur5e/gripper/follower" class="left_ur5e/gripper/2f140" file="follower-90ac7cc434d804e958140d6f37fcc14bdbf74f5b.stl"/>
+    <mesh name="left_ur5e/gripper/coupler" class="left_ur5e/gripper/2f140" file="coupler-e866eb8db5bf2b3f0922658edc8dd3dff1e96529.stl"/>
+    <mesh name="left_ur5e/gripper/pad" class="left_ur5e/gripper/2f140" file="pad-0fb7d7243a94c9e197e05a09dc9b6de5c126cdfc.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="left_ur5e/gripper/spring_link" class="left_ur5e/gripper/2f140" file="spring_link-3730a0af47afa032388b26d12d24919377c589c7.stl"/>
     <material name="right_ur5e/black" class="right_ur5e/ur5e" rgba="0.033000000000000002 0.033000000000000002 0.033000000000000002 1"/>
     <material name="right_ur5e/jointgray" class="right_ur5e/ur5e" rgba="0.27800000000000002 0.27800000000000002 0.27800000000000002 1"/>
     <material name="right_ur5e/linkgray" class="right_ur5e/ur5e" rgba="0.81999999999999995 0.81999999999999995 0.81999999999999995 1"/>
@@ -183,31 +178,19 @@
     <material name="right_ur5e/gripper/silicone" class="right_ur5e/gripper/" rgba="0.18820000000000001 0.18820000000000001 0.18820000000000001 1"/>
     <material name="right_ur5e/gripper/gray" class="right_ur5e/gripper/" rgba="0.4627 0.4627 0.4627 1"/>
     <material name="right_ur5e/gripper/black" class="right_ur5e/gripper/" rgba="0.14899999999999999 0.14899999999999999 0.14899999999999999 1"/>
-    <mesh name="right_ur5e/gripper/base_mount" class="right_ur5e/gripper/2f140" file="base_mount-37df51ceff1f5ba8141ffa5df4de2a9d9153a32c.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_ur5e/gripper/base" class="right_ur5e/gripper/2f140" file="base-42fe8832279fe72b3e5a9646845bae0aa01f30de.stl"/>
-    <mesh name="right_ur5e/gripper/driver" class="right_ur5e/gripper/2f140" file="driver-23d09a5cdb42c23c510639985a63bcb1bfc67ae6.stl"/>
-    <mesh name="right_ur5e/gripper/follower" class="right_ur5e/gripper/2f140" file="follower-f5f821e98b5292ecb13f9e0e91eb41ea73e64aac.stl"/>
-    <mesh name="right_ur5e/gripper/coupler" class="right_ur5e/gripper/2f140" file="coupler-cc5b48743e92b0ae5d13d5ab9d2e23459ad8404c.stl"/>
-    <mesh name="right_ur5e/gripper/pad" class="right_ur5e/gripper/2f140" file="pad-fe590c82ef16af878177e7dca8f9f69edd7773ad.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="right_ur5e/gripper/spring_link" class="right_ur5e/gripper/2f140" file="spring_link-17f0474146ce54aa2f0c0b0518c7403758e2f513.stl"/>
+    <mesh name="right_ur5e/gripper/base_mount" class="right_ur5e/gripper/2f140" file="base_mount-492692230394a1ebdce431c652d89a9c9a4211b5.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_ur5e/gripper/base" class="right_ur5e/gripper/2f140" file="base-89a0661a7293371ffe78c9605d5b7ccef2a78430.stl"/>
+    <mesh name="right_ur5e/gripper/driver" class="right_ur5e/gripper/2f140" file="driver-a0c14c2ec91c3e05ccc3e9499456623628d28b1a.stl"/>
+    <mesh name="right_ur5e/gripper/follower" class="right_ur5e/gripper/2f140" file="follower-90ac7cc434d804e958140d6f37fcc14bdbf74f5b.stl"/>
+    <mesh name="right_ur5e/gripper/coupler" class="right_ur5e/gripper/2f140" file="coupler-e866eb8db5bf2b3f0922658edc8dd3dff1e96529.stl"/>
+    <mesh name="right_ur5e/gripper/pad" class="right_ur5e/gripper/2f140" file="pad-0fb7d7243a94c9e197e05a09dc9b6de5c126cdfc.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="right_ur5e/gripper/spring_link" class="right_ur5e/gripper/2f140" file="spring_link-3730a0af47afa032388b26d12d24919377c589c7.stl"/>
   </asset>
   <worldbody>
-    <!-- Default viewing camera: side view from left, slightly elevated -->
-    <camera name="main" pos="0.085 -2.31 0.25" xyaxes="1 0 0 0 0.446 0.895"/>
-
-    <!-- Worktop: usable work surface on vention base (1.2m x 0.8m) -->
-    <site name="worktop"
-          type="box"
-          pos="0 -0.35 0.755"
-          size="0.6 0.4 0.005"
-          rgba="0.2 0.8 0.2 0.3"
-          group="2"/>
-
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
-      <!-- Vention actuator frame back panel - contact exclusion prevents arm base collision -->
-      <geom name="vention_back_panel" class="collision" type="box" size="0.55 0.1 0.66" pos="0 -0.96 1.41"/>
+      <geom name="geom_2" class="collision" type="box" size="0.55000000000000004 0.10000000000000001 0.66000000000000003" pos="0 -0.95999999999999996 1.4099999999999999"/>
       <geom name="geom_3" class="collision" type="box" size="0.036999999999999998 0.044999999999999998 0.071999999999999995" pos="-0.66000000000000003 -0.10000000000000001 0.71999999999999997"/>
       <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.1200000000000001" quat="0 0 0 1">
         <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
@@ -478,30 +461,12 @@
   <contact>
     <exclude name="//unnamed_contact_0" body1="vention_base" body2="left_arm_vention_base"/>
     <exclude name="//unnamed_contact_1" body1="vention_base" body2="right_arm_vention_base"/>
-
-    <!-- Left UR5e adjacent link exclusions (kinematic chain) -->
-    <exclude name="left_ur5e/adjacent_0" body1="left_ur5e/base" body2="left_ur5e/shoulder_link"/>
-    <exclude name="left_ur5e/adjacent_1" body1="left_ur5e/shoulder_link" body2="left_ur5e/upper_arm_link"/>
-    <exclude name="left_ur5e/adjacent_2" body1="left_ur5e/upper_arm_link" body2="left_ur5e/forearm_link"/>
-    <exclude name="left_ur5e/adjacent_3" body1="left_ur5e/forearm_link" body2="left_ur5e/wrist_1_link"/>
-    <exclude name="left_ur5e/adjacent_4" body1="left_ur5e/wrist_1_link" body2="left_ur5e/wrist_2_link"/>
-    <exclude name="left_ur5e/adjacent_5" body1="left_ur5e/wrist_2_link" body2="left_ur5e/wrist_3_link"/>
-    <exclude name="left_ur5e/adjacent_6" body1="left_ur5e/wrist_3_link" body2="left_ur5e/gripper/"/>
-    <exclude name="left_ur5e/adjacent_7" body1="left_ur5e/gripper/" body2="left_ur5e/gripper/base_mount"/>
-    <exclude name="left_ur5e/adjacent_8" body1="left_ur5e/gripper/base_mount" body2="left_ur5e/gripper/base"/>
-
-    <!-- Right UR5e adjacent link exclusions (kinematic chain) -->
-    <exclude name="right_ur5e/adjacent_0" body1="right_ur5e/base" body2="right_ur5e/shoulder_link"/>
-    <exclude name="right_ur5e/adjacent_1" body1="right_ur5e/shoulder_link" body2="right_ur5e/upper_arm_link"/>
-    <exclude name="right_ur5e/adjacent_2" body1="right_ur5e/upper_arm_link" body2="right_ur5e/forearm_link"/>
-    <exclude name="right_ur5e/adjacent_3" body1="right_ur5e/forearm_link" body2="right_ur5e/wrist_1_link"/>
-    <exclude name="right_ur5e/adjacent_4" body1="right_ur5e/wrist_1_link" body2="right_ur5e/wrist_2_link"/>
-    <exclude name="right_ur5e/adjacent_5" body1="right_ur5e/wrist_2_link" body2="right_ur5e/wrist_3_link"/>
-    <exclude name="right_ur5e/adjacent_6" body1="right_ur5e/wrist_3_link" body2="right_ur5e/gripper/"/>
-    <exclude name="right_ur5e/adjacent_7" body1="right_ur5e/gripper/" body2="right_ur5e/gripper/base_mount"/>
-    <exclude name="right_ur5e/adjacent_8" body1="right_ur5e/gripper/base_mount" body2="right_ur5e/gripper/base"/>
-
-    <!-- Gripper internal exclusions (left) -->
+    <exclude name="left_ur5e//unnamed_contact_0" body1="left_ur5e/base" body2="left_ur5e/shoulder_link"/>
+    <exclude name="left_ur5e//unnamed_contact_1" body1="left_ur5e/shoulder_link" body2="left_ur5e/upper_arm_link"/>
+    <exclude name="left_ur5e//unnamed_contact_2" body1="left_ur5e/upper_arm_link" body2="left_ur5e/forearm_link"/>
+    <exclude name="left_ur5e//unnamed_contact_3" body1="left_ur5e/forearm_link" body2="left_ur5e/wrist_1_link"/>
+    <exclude name="left_ur5e//unnamed_contact_4" body1="left_ur5e/wrist_1_link" body2="left_ur5e/wrist_2_link"/>
+    <exclude name="left_ur5e//unnamed_contact_5" body1="left_ur5e/wrist_2_link" body2="left_ur5e/wrist_3_link"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_0" body1="left_ur5e/gripper/base" body2="left_ur5e/gripper/left_driver"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_1" body1="left_ur5e/gripper/base" body2="left_ur5e/gripper/right_driver"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_2" body1="left_ur5e/gripper/base" body2="left_ur5e/gripper/left_spring_link"/>
@@ -510,9 +475,18 @@
     <exclude name="left_ur5e/gripper//unnamed_contact_5" body1="left_ur5e/gripper/right_driver" body2="left_ur5e/gripper/right_spring_link"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_6" body1="left_ur5e/gripper/right_coupler" body2="left_ur5e/gripper/right_follower"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_7" body1="left_ur5e/gripper/left_coupler" body2="left_ur5e/gripper/left_follower"/>
-    <exclude name="left_ur5e/gripper/finger_contact" body1="left_ur5e/gripper/left_follower" body2="left_ur5e/gripper/right_follower"/>
-
-    <!-- Gripper internal exclusions (right) -->
+    <exclude name="left_ur5e/gripper//unnamed_contact_8" body1="left_ur5e/gripper/right_coupler" body2="left_ur5e/gripper/right_spring_link"/>
+    <exclude name="left_ur5e/gripper//unnamed_contact_9" body1="left_ur5e/gripper/left_coupler" body2="left_ur5e/gripper/left_spring_link"/>
+    <exclude name="left_ur5e/gripper//unnamed_contact_10" body1="left_ur5e/gripper/left_follower" body2="left_ur5e/gripper/right_follower"/>
+    <exclude name="left_ur5e/gripper//unnamed_contact_11" body1="left_ur5e/gripper/right_spring_link" body2="left_ur5e/gripper/left_spring_link"/>
+    <exclude name="left_ur5e/gripper//unnamed_contact_12" body1="left_ur5e/gripper/right_spring_link" body2="left_ur5e/gripper/left_follower"/>
+    <exclude name="left_ur5e/gripper//unnamed_contact_13" body1="left_ur5e/gripper/right_follower" body2="left_ur5e/gripper/left_spring_link"/>
+    <exclude name="right_ur5e//unnamed_contact_0" body1="right_ur5e/base" body2="right_ur5e/shoulder_link"/>
+    <exclude name="right_ur5e//unnamed_contact_1" body1="right_ur5e/shoulder_link" body2="right_ur5e/upper_arm_link"/>
+    <exclude name="right_ur5e//unnamed_contact_2" body1="right_ur5e/upper_arm_link" body2="right_ur5e/forearm_link"/>
+    <exclude name="right_ur5e//unnamed_contact_3" body1="right_ur5e/forearm_link" body2="right_ur5e/wrist_1_link"/>
+    <exclude name="right_ur5e//unnamed_contact_4" body1="right_ur5e/wrist_1_link" body2="right_ur5e/wrist_2_link"/>
+    <exclude name="right_ur5e//unnamed_contact_5" body1="right_ur5e/wrist_2_link" body2="right_ur5e/wrist_3_link"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_0" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/left_driver"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_1" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/right_driver"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_2" body1="right_ur5e/gripper/base" body2="right_ur5e/gripper/left_spring_link"/>
@@ -521,7 +495,12 @@
     <exclude name="right_ur5e/gripper//unnamed_contact_5" body1="right_ur5e/gripper/right_driver" body2="right_ur5e/gripper/right_spring_link"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_6" body1="right_ur5e/gripper/right_coupler" body2="right_ur5e/gripper/right_follower"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_7" body1="right_ur5e/gripper/left_coupler" body2="right_ur5e/gripper/left_follower"/>
-    <exclude name="right_ur5e/gripper/finger_contact" body1="right_ur5e/gripper/left_follower" body2="right_ur5e/gripper/right_follower"/>
+    <exclude name="right_ur5e/gripper//unnamed_contact_8" body1="right_ur5e/gripper/right_coupler" body2="right_ur5e/gripper/right_spring_link"/>
+    <exclude name="right_ur5e/gripper//unnamed_contact_9" body1="right_ur5e/gripper/left_coupler" body2="right_ur5e/gripper/left_spring_link"/>
+    <exclude name="right_ur5e/gripper//unnamed_contact_10" body1="right_ur5e/gripper/left_follower" body2="right_ur5e/gripper/right_follower"/>
+    <exclude name="right_ur5e/gripper//unnamed_contact_11" body1="right_ur5e/gripper/right_spring_link" body2="right_ur5e/gripper/left_spring_link"/>
+    <exclude name="right_ur5e/gripper//unnamed_contact_12" body1="right_ur5e/gripper/right_spring_link" body2="right_ur5e/gripper/left_follower"/>
+    <exclude name="right_ur5e/gripper//unnamed_contact_13" body1="right_ur5e/gripper/right_follower" body2="right_ur5e/gripper/left_spring_link"/>
   </contact>
   <equality>
     <connect name="left_ur5e/gripper//unnamed_equality_0" class="left_ur5e/gripper/" solref="0.0050000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" body1="left_ur5e/gripper/right_follower" body2="left_ur5e/gripper/right_coupler" anchor="0 0 0"/>
@@ -560,10 +539,6 @@
     <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="right_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
   </actuator>
   <keyframe>
-    <!-- qpos: left_vention, left_arm(6), left_gripper(8), right_vention, right_arm(6), right_gripper(8) = 30 total -->
-    <!-- ctrl: left_vention, right_vention, left_arm(6), left_gripper, right_arm(6), right_gripper = 16 total -->
-    <key name="home"
-         qpos="0.2 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0 0.2 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0"
-         ctrl="0.2 0.2 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 -1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
+    <key name="home" qpos="0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0 0.25 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0" ctrl="0.25 0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0"/>
   </keyframe>
 </mujoco>

@@ -11,18 +11,24 @@ requires-python = ">=3.10"
 license = {text = "MIT"}
 dependencies = [
     "mujoco",
+    "numpy-stl>=3.2.0",
 ]
 
 [project.optional-dependencies]
 # For running robot_assembly.py to build custom configurations
+# Uses dm_control.mjcf for programmatic model assembly
 assembly = [
     "dm_control",
+    "lxml",
+    "absl-py",
+    "scipy",
+    "dm_env",
     "numpy",
 ]
-dev = [
-    "pytest",
-    "ruff",
-]
+
+[tool.uv]
+# Exclude labmaze - it requires Bazel to build and is not needed for dm_control.mjcf
+override-dependencies = ["labmaze ; sys_platform == 'never'"]
 
 [project.urls]
 Repository = "https://github.com/personalrobotics/geodude_assets"
@@ -47,4 +53,6 @@ lint.select = ["F", "E", "W", "I"]
 [dependency-groups]
 dev = [
     "pillow>=12.1.0",
+    "pytest",
+    "ruff",
 ]

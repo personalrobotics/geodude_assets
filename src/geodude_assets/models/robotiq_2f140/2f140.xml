@@ -133,6 +133,15 @@
     <exclude body1="right_driver" body2="right_spring_link"/>
     <exclude body1="right_coupler" body2="right_follower"/>
     <exclude body1="left_coupler" body2="left_follower"/>
+    <!-- 4-bar linkage internal contacts (coupler and spring_link move past each other) -->
+    <exclude body1="right_coupler" body2="right_spring_link"/>
+    <exclude body1="left_coupler" body2="left_spring_link"/>
+    <!-- Finger-to-finger contact (fingers can touch when closing on thin/no object) -->
+    <exclude body1="left_follower" body2="right_follower"/>
+    <!-- Cross exclusions for internal parts that pass near each other when closing -->
+    <exclude body1="right_spring_link" body2="left_spring_link"/>
+    <exclude body1="right_spring_link" body2="left_follower"/>
+    <exclude body1="right_follower" body2="left_spring_link"/>
   </contact>
 
   <!--

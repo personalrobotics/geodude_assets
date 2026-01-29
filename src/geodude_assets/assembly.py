@@ -132,43 +132,71 @@ def attach_arms_to_vention(
     )
     right_arm_attachment_site.attach(right_ur5e)
 
-    # The ur5e model has a "home" keyframe defined.
-    # Remove the keyframes for each arm and redefine a bimanual "home" keyframe.
-    keys_to_search = [
-        "left_ur5e/home",
-        "right_ur5e/home",
-    ]
+    # Build the combined "home" keyframe from component keyframes.
+    # The vention has linear actuators, and each arm has its own home pose.
+    # Joint order: left_linear, left_arm, left_gripper,
+    #              right_linear, right_arm, right_gripper
+    # Ctrl order: left_linear, right_linear, left_arm,
+    #             left_gripper, right_arm, right_gripper
 
-    gripper_qposes = [
-        left_gripper_qpos,
-        right_gripper_qpos,
-    ]
+    # Get vention keyframe (linear actuator positions)
+    vention_key = geodude_model.find("key", "home")
+    if vention_key is not None:
+        vention_qpos = vention_key.qpos.copy()  # [left_linear, right_linear]
+        vention_ctrl = vention_key.ctrl.copy()  # [left_linear, right_linear]
+        vention_key.remove()
+    else:
+        # Default: middle of rail
+        vention_qpos = np.array([0.25, 0.25])
+        vention_ctrl = np.array([0.25, 0.25])
 
-    gripper_ctrls = [
-        left_gripper_ctrl,
-        right_gripper_ctrl,
-    ]
+    # Get arm keyframes
+    left_key = geodude_model.find("key", "left_ur5e/home")
+    right_key = geodude_model.find("key", "right_ur5e/home")
 
-    gripper_types = [
-        left_gripper_type,
-        right_gripper_type,
-    ]
+    if left_key is not None:
+        left_arm_qpos = left_key.qpos.copy()
+        left_arm_ctrl = left_key.ctrl.copy()
+        left_key.remove()
+    else:
+        print("Keyframe left_ur5e/home not found.")
+        left_arm_qpos = np.array([])
+        left_arm_ctrl = np.array([])
 
-    res_qpos = np.array([])
-    res_ctrl = np.array([])
-    for i, key_name in enumerate(keys_to_search):
-        key = geodude_model.find("key", key_name)
-        if key is not None:
-            res_qpos = np.concatenate([res_qpos, key.qpos])
-            res_ctrl = np.concatenate([res_ctrl, key.ctrl])
-            key.remove()
-        else:
-            print(f"Keyframe {key_name} not found.")
+    if right_key is not None:
+        right_arm_qpos = right_key.qpos.copy()
+        right_arm_ctrl = right_key.ctrl.copy()
+        right_key.remove()
+        # Mirror right arm: flip shoulder_pan so arm points outward (away from vention)
+        right_arm_qpos[0] = -right_arm_qpos[0]  # shoulder_pan: -1.5708 -> +1.5708
+        right_arm_ctrl[0] = -right_arm_ctrl[0]
+    else:
+        print("Keyframe right_ur5e/home not found.")
+        right_arm_qpos = np.array([])
+        right_arm_ctrl = np.array([])
 
-        # add gripper qpos and ctrl to the result
-        if gripper_types[i] is not None:
-            res_qpos = np.concatenate([res_qpos, gripper_qposes[i]])
-            res_ctrl = np.concatenate([res_ctrl, gripper_ctrls[i]])
+    # Build qpos: linear joints are interleaved with their respective arms
+    # Joint order follows body hierarchy:
+    #   left_linear, left_arm, left_gripper, right_linear, right_arm, right_gripper
+    res_qpos = np.array([vention_qpos[0]])  # left linear
+    res_qpos = np.concatenate([res_qpos, left_arm_qpos])
+    if left_gripper_type is not None and left_gripper_qpos is not None:
+        res_qpos = np.concatenate([res_qpos, left_gripper_qpos])
+    res_qpos = np.concatenate([res_qpos, [vention_qpos[1]]])  # right linear
+    res_qpos = np.concatenate([res_qpos, right_arm_qpos])
+    if right_gripper_type is not None and right_gripper_qpos is not None:
+        res_qpos = np.concatenate([res_qpos, right_gripper_qpos])
+
+    # Build ctrl: actuator order is linear actuators first, then arm actuators
+    # Actuator order:
+    #   left_linear, right_linear, left_arm, left_gripper, right_arm, right_gripper
+    res_ctrl = vention_ctrl.copy()  # [left_linear, right_linear]
+    res_ctrl = np.concatenate([res_ctrl, left_arm_ctrl])
+    if left_gripper_type is not None and left_gripper_ctrl is not None:
+        res_ctrl = np.concatenate([res_ctrl, left_gripper_ctrl])
+    res_ctrl = np.concatenate([res_ctrl, right_arm_ctrl])
+    if right_gripper_type is not None and right_gripper_ctrl is not None:
+        res_ctrl = np.concatenate([res_ctrl, right_gripper_ctrl])
 
     geodude_model.keyframe.add(
         "key",

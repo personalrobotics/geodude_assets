@@ -43,21 +43,23 @@ uv run python -m mujoco.viewer --mjcf="$(uv run python -c 'from geodude_assets i
 
 An interactive collision viewer is available to visualize collision geometry and contact detection:
 ```bash
-uv run mjpython examples/view_collisions.py
+uv run python -u examples/view_collisions.py
 ```
 
 - Use joint sliders to move the robot (Tab to show/hide control panel)
 - Colliding bodies turn **red**
-- Press `3` to toggle collision geometry visibility
+- Press `0` to toggle collision geometry visibility
 - Press `C` to toggle contact point visualization
-- Press `R` to reset to home position
+- Press `Backspace` to reset (or `R` if using mjpython)
+
+> **Note on macOS:** The viewer automatically falls back to blocking mode when using uv's Python. For non-blocking mode with `launch_passive`, you need a "framework" Python build (e.g., from Homebrew or python.org) and can run: `mjpython examples/view_collisions.py`
 
 ## Swapping End Effectors
 
 The default Geodude model has Robotiq 2F-140 grippers on both arms. To use different end effectors (e.g., Ability Hands), use the assembly module:
 
 ```bash
-uv add geodude_assets[assembly]
+uv sync --extra assembly
 ```
 
 ### Python API
@@ -192,11 +194,15 @@ uv run ruff format .
 uv run pytest
 ```
 
-To regenerate the default geodude model:
+### Regenerating the Geodude Model
+
+To regenerate the default geodude model after modifying component XMLs:
 ```bash
 uv sync --extra assembly
 uv run python -m geodude_assets.assembly --save-mjcf -d src/geodude_assets/models/geodude -l 2f140 -r 2f140
 ```
+
+> **Note:** The assembly module uses `dm_control.mjcf`. The pyproject.toml includes a uv override to exclude `labmaze` (which requires Bazel to build) since it's not needed for MJCF model assembly.
 
 ## License
 

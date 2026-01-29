@@ -22,12 +22,12 @@ MODELS_DIR = Path(__file__).parent / "models"
 
 # Available models
 AVAILABLE_MODELS = [
-    "geodude",           # Full robot: two UR5e arms on Vention base with grippers
+    "geodude",  # Full robot: two UR5e arms on Vention base with grippers
     "universal_robots_ur5e",  # Single UR5e arm
-    "robotiq_2f140",     # Robotiq 2F-140 gripper
-    "vention",           # Vention frame base
-    "abh_left_small",    # Psyonic Ability Hand (left, small)
-    "abh_right_small",   # Psyonic Ability Hand (right, small)
+    "robotiq_2f140",  # Robotiq 2F-140 gripper
+    "vention",  # Vention frame base
+    "abh_left_small",  # Psyonic Ability Hand (left, small)
+    "abh_right_small",  # Psyonic Ability Hand (right, small)
 ]
 
 
@@ -57,10 +57,10 @@ def get_model_path(name: str = "geodude") -> Path:
 
     # Primary XML file naming conventions
     xml_candidates = [
-        model_dir / f"{name}.xml",      # geodude/geodude.xml
-        model_dir / "scene.xml",         # some models use scene.xml
-        model_dir / "ur5e.xml",          # universal_robots_ur5e/ur5e.xml
-        model_dir / "2f140.xml",         # robotiq_2f140/2f140.xml
+        model_dir / f"{name}.xml",  # geodude/geodude.xml
+        model_dir / "scene.xml",  # some models use scene.xml
+        model_dir / "ur5e.xml",  # universal_robots_ur5e/ur5e.xml
+        model_dir / "2f140.xml",  # robotiq_2f140/2f140.xml
     ]
 
     for xml_path in xml_candidates:
@@ -68,8 +68,7 @@ def get_model_path(name: str = "geodude") -> Path:
             return xml_path
 
     raise FileNotFoundError(
-        f"No XML file found in {model_dir}. "
-        f"Tried: {[p.name for p in xml_candidates]}"
+        f"No XML file found in {model_dir}. Tried: {[p.name for p in xml_candidates]}"
     )
 
 
@@ -104,8 +103,7 @@ def get_component_path(component: str) -> Path:
 
     if component not in component_map:
         raise ValueError(
-            f"Unknown component '{component}'. "
-            f"Available: {list(component_map.keys())}"
+            f"Unknown component '{component}'. Available: {list(component_map.keys())}"
         )
 
     model_name, xml_name = component_map[component]

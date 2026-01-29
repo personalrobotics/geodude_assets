@@ -115,6 +115,16 @@
     </body>
   </worldbody>
 
+  <!-- Adjacent link contact exclusions (kinematic chain) -->
+  <contact>
+    <exclude body1="base" body2="shoulder_link"/>
+    <exclude body1="shoulder_link" body2="upper_arm_link"/>
+    <exclude body1="upper_arm_link" body2="forearm_link"/>
+    <exclude body1="forearm_link" body2="wrist_1_link"/>
+    <exclude body1="wrist_1_link" body2="wrist_2_link"/>
+    <exclude body1="wrist_2_link" body2="wrist_3_link"/>
+  </contact>
+
   <actuator>
     <general class="ur5e" name="shoulder_pan" joint="shoulder_pan_joint"/>
     <general class="ur5e" name="shoulder_lift" joint="shoulder_lift_joint"/>
@@ -125,6 +135,6 @@
   </actuator>
 
   <keyframe>
-    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0"/>
+    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 1.5708 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 1.5708 0"/>
   </keyframe>
 </mujoco>

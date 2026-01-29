@@ -3,6 +3,12 @@
 
   <compiler angle="radian" meshdir="assets"/>
 
+  <!-- Default camera: front view looking at workspace -->
+  <statistic center="0 -0.4 1.1" extent="1.5"/>
+  <visual>
+    <global azimuth="-90" elevation="-25"/>
+  </visual>
+
   <contact>
     <exclude body1="vention_base" body2="left_arm_vention_base"/>
     <exclude body1="vention_base" body2="right_arm_vention_base"/>
@@ -62,4 +68,9 @@
     <position name="right_linear_actuator" joint="right_arm_linear_vention"
               ctrlrange="0 0.5" kp="100000"/>
   </actuator>
+
+  <keyframe>
+    <!-- Home position: arms at middle of rail (0.25m) -->
+    <key name="home" qpos="0.25 0.25" ctrl="0.25 0.25"/>
+  </keyframe>
 </mujoco>
