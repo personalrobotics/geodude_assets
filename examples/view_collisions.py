@@ -160,8 +160,8 @@ def main():
     # Fall back to blocking launch() if that fails
     use_passive = True
     if sys.platform == "darwin":
-        # Check if we're running under mjpython by checking for the _MJPYTHON attribute
-        # (Can't test with launch_passive because mjpython only allows one viewer per session)
+        # Check if we're running under mjpython by checking for the _MJPYTHON
+        # attribute (can't test with launch_passive - only one viewer per session)
         if not hasattr(mujoco.viewer, "_MJPYTHON") or mujoco.viewer._MJPYTHON is None:
             use_passive = False
             print("\nNote: Using blocking viewer (close window to exit).", flush=True)

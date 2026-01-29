@@ -6,8 +6,6 @@ Usage:
     uv run python examples/view_geodude.py              # Fallback: blocking viewer
 """
 
-import sys
-
 import mujoco
 import mujoco.viewer
 
@@ -33,12 +31,13 @@ try:
 
         # Print final camera parameters
         cam = viewer.cam
-        print(f"\n--- Final Camera Parameters ---", flush=True)
+        print("\n--- Final Camera Parameters ---", flush=True)
         print(f"azimuth: {cam.azimuth}", flush=True)
         print(f"elevation: {cam.elevation}", flush=True)
         print(f"distance: {cam.distance}", flush=True)
-        print(f"lookat: [{cam.lookat[0]}, {cam.lookat[1]}, {cam.lookat[2]}]", flush=True)
-        print(f"-------------------------------\n", flush=True)
+        lk = cam.lookat
+        print(f"lookat: [{lk[0]}, {lk[1]}, {lk[2]}]", flush=True)
+        print("-------------------------------\n", flush=True)
 except Exception as e:
     if "mjpython" in str(e).lower():
         print("For front camera view, run with mjpython:", flush=True)
