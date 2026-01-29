@@ -15,7 +15,8 @@ from geodude_assets import get_model_path
 
 model = mujoco.MjModel.from_xml_path(str(get_model_path()))
 data = mujoco.MjData(model)
-mujoco.mj_resetDataKeyframe(model, data, 0)  # home pose
+home_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
+mujoco.mj_resetDataKeyframe(model, data, home_key)
 
 # Try launch_passive with camera control, fall back to blocking viewer
 try:

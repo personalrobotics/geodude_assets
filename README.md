@@ -28,7 +28,8 @@ model = mujoco.MjModel.from_xml_path(str(get_model_path()))
 data = mujoco.MjData(model)
 
 # Reset to home pose
-mujoco.mj_resetDataKeyframe(model, data, 0)
+home_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
+mujoco.mj_resetDataKeyframe(model, data, home_key)
 
 # Step simulation
 mujoco.mj_step(model, data)

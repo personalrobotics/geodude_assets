@@ -42,7 +42,8 @@ def main():
     COLLISION_COLOR = np.array([1.0, 0.0, 0.0, 1.0])  # Red
 
     # Start at home
-    mujoco.mj_resetDataKeyframe(model, data, 0)
+    home_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
+    mujoco.mj_resetDataKeyframe(model, data, home_key)
 
     print("\nCollision Viewer", flush=True)
     print("=" * 40, flush=True)
@@ -140,7 +141,7 @@ def main():
 
     def key_callback(keycode):
         if keycode == ord("R") or keycode == ord("r"):
-            mujoco.mj_resetDataKeyframe(model, data, 0)
+            mujoco.mj_resetDataKeyframe(model, data, home_key)
         elif keycode == ord("P") or keycode == ord("p"):
             print_collision_geoms()
         elif keycode == ord("V") or keycode == ord("v"):
