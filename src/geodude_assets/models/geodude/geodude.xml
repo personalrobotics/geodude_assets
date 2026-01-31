@@ -247,6 +247,7 @@
                         <joint name="left_ur5e/wrist_3_joint" class="left_ur5e/size1"/>
                         <geom name="left_ur5e/geom_27" class="left_ur5e/visual" material="left_ur5e/linkgray" mesh="left_ur5e/wrist3"/>
                         <geom name="left_ur5e/geom_28" class="left_ur5e/eef_collision" size="0.040000000000000001 0.02" pos="0 0.080000000000000002 0" quat="1 1 0 0"/>
+                        <site name="left_ur5e/ft_sensor_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <site name="left_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="left_ur5e/gripper/">
                           <body name="left_ur5e/gripper/base_mount" childclass="left_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
@@ -379,6 +380,7 @@
                         <joint name="right_ur5e/wrist_3_joint" class="right_ur5e/size1"/>
                         <geom name="right_ur5e/geom_27" class="right_ur5e/visual" material="right_ur5e/linkgray" mesh="right_ur5e/wrist3"/>
                         <geom name="right_ur5e/geom_28" class="right_ur5e/eef_collision" size="0.040000000000000001 0.02" pos="0 0.080000000000000002 0" quat="1 1 0 0"/>
+                        <site name="right_ur5e/ft_sensor_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <site name="right_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="right_ur5e/gripper/">
                           <body name="right_ur5e/gripper/base_mount" childclass="right_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
@@ -538,6 +540,12 @@
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
     <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="right_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
   </actuator>
+  <sensor>
+    <force name="left_ur5e/ft_sensor_force" site="left_ur5e/ft_sensor_site"/>
+    <torque name="left_ur5e/ft_sensor_torque" site="left_ur5e/ft_sensor_site"/>
+    <force name="right_ur5e/ft_sensor_force" site="right_ur5e/ft_sensor_site"/>
+    <torque name="right_ur5e/ft_sensor_torque" site="right_ur5e/ft_sensor_site"/>
+  </sensor>
   <keyframe>
     <key name="ready" qpos="0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0 0.25 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0" ctrl="0.25 0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0"/>
   </keyframe>

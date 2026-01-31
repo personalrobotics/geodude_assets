@@ -163,6 +163,40 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 | `left_ur5e/gripper/fingers_actuator` | 0-255 | Left gripper (0=open, 255=closed) |
 | `right_ur5e/gripper/fingers_actuator` | 0-255 | Right gripper |
 
+### Force/Torque Sensors
+
+Each UR5e arm has a simulated 6-axis force/torque sensor at the tool flange, matching the built-in sensor on the real robot.
+
+| Sensor | Output | Description |
+|--------|--------|-------------|
+| `left_ur5e/ft_sensor_force` | Fx, Fy, Fz | Force at left tool flange (Newtons) |
+| `left_ur5e/ft_sensor_torque` | Tx, Ty, Tz | Torque at left tool flange (Nm) |
+| `right_ur5e/ft_sensor_force` | Fx, Fy, Fz | Force at right tool flange (Newtons) |
+| `right_ur5e/ft_sensor_torque` | Tx, Ty, Tz | Torque at right tool flange (Nm) |
+
+**Coordinate Frame (tool0):** Z+ points out of the flange (toward the tool), X+ points left, Y+ points up.
+
+```python
+import mujoco
+from geodude_assets import get_model_path
+
+model = mujoco.MjModel.from_xml_path(str(get_model_path()))
+data = mujoco.MjData(model)
+
+# Get sensor IDs
+force_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, "right_ur5e/ft_sensor_force")
+torque_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, "right_ur5e/ft_sensor_torque")
+
+# Step simulation
+mujoco.mj_step(model, data)
+
+# Read sensor values
+force_adr = model.sensor_adr[force_id]
+torque_adr = model.sensor_adr[torque_id]
+force = data.sensordata[force_adr:force_adr + 3]   # [Fx, Fy, Fz]
+torque = data.sensordata[torque_adr:torque_adr + 3]  # [Tx, Ty, Tz]
+```
+
 ## Available Models
 
 | Model | Description |
