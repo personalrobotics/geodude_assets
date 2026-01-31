@@ -450,9 +450,9 @@ class TestForceTorqueSensor:
         z_axis = site_xmat[:, 2]
 
         # At ready pose, tool Z should have a significant vertical component
-        # (pointing generally upward since the arm is in front and tool faces up/forward)
-        # The exact direction depends on the ready pose, but Z should not point
-        # back toward the base (negative world Y in this model setup)
+        # (pointing generally upward since the arm is in front and tool
+        # faces up/forward). The exact direction depends on the ready pose,
+        # but Z should not point back toward the base.
         import numpy as np
 
         # Verify z-axis is a unit vector
@@ -481,10 +481,7 @@ class TestForceTorqueSensor:
         force_adr = ur5e_model.sensor_adr[force_id]
         force = ur5e_data.sensordata[force_adr:force_adr + 3]
 
-        import numpy as np
-
         # The sensor should measure some force (gravity on tool)
-        force_magnitude = np.linalg.norm(force)
         # Note: MuJoCo force sensor measures interaction forces which may be zero
         # at static equilibrium when there's no external load. This test verifies
         # the sensor is working - actual values depend on model dynamics.
