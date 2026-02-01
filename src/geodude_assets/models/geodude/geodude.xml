@@ -541,10 +541,10 @@
     <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="right_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
   </actuator>
   <sensor>
-    <force name="left_ur5e/ft_sensor_force" site="left_ur5e/ft_sensor_site"/>
-    <torque name="left_ur5e/ft_sensor_torque" site="left_ur5e/ft_sensor_site"/>
-    <force name="right_ur5e/ft_sensor_force" site="right_ur5e/ft_sensor_site"/>
-    <torque name="right_ur5e/ft_sensor_torque" site="right_ur5e/ft_sensor_site"/>
+    <force name="left_ur5e/ft_sensor_force" noise="3.5" site="left_ur5e/ft_sensor_site"/>
+    <torque name="left_ur5e/ft_sensor_torque" noise="0.20000000000000001" site="left_ur5e/ft_sensor_site"/>
+    <force name="right_ur5e/ft_sensor_force" noise="3.5" site="right_ur5e/ft_sensor_site"/>
+    <torque name="right_ur5e/ft_sensor_torque" noise="0.20000000000000001" site="right_ur5e/ft_sensor_site"/>
   </sensor>
   <keyframe>
     <key name="ready" qpos="0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0 0.25 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0" ctrl="0.25 0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0"/>

@@ -138,9 +138,11 @@
 
   <!-- Force/Torque sensor at tool flange (matches UR5e built-in F/T sensor) -->
   <!-- Measurements are in the tool0 frame: Z+ out of flange, X+ left, Y+ up -->
+  <!-- UR5e F/T sensor specs: Force ±50N range, ±3.5N precision; Torque ±10Nm range, ±0.2Nm precision -->
+  <!-- Note: MuJoCo noise is Gaussian std dev. Clamping to range must be done in user code. -->
   <sensor>
-    <force name="ft_sensor_force" site="ft_sensor_site"/>
-    <torque name="ft_sensor_torque" site="ft_sensor_site"/>
+    <force name="ft_sensor_force" site="ft_sensor_site" noise="3.5"/>
+    <torque name="ft_sensor_torque" site="ft_sensor_site" noise="0.2"/>
   </sensor>
 
   <keyframe>
