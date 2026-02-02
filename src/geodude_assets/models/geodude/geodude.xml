@@ -2,7 +2,7 @@
   <compiler autolimits="true" angle="radian"/>
   <option impratio="10" integrator="implicitfast" cone="elliptic"/>
   <visual>
-    <global azimuth="-90" elevation="-25"/>
+    <global azimuth="-90" elevation="-26.5"/>
     <headlight ambient="0.40000000000000002 0.40000000000000002 0.40000000000000002" diffuse="0.40000000000000002 0.40000000000000002 0.40000000000000002" specular="0.29999999999999999 0.29999999999999999 0.29999999999999999"/>
   </visual>
   <statistic extent="1.5" center="0 -0.40000000000000002 1.1000000000000001"/>
