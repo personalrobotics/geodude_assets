@@ -3,14 +3,13 @@
   <option impratio="10" integrator="implicitfast" cone="elliptic"/>
   <visual>
     <global azimuth="-90" elevation="-25"/>
-<!-- Glossy "movie robot" lighting: soft ambient + specular highlights -->
-    <headlight ambient="0.4 0.4 0.4" diffuse="0.4 0.4 0.4" specular="0.3 0.3 0.3"/>
+    <headlight ambient="0.40000000000000002 0.40000000000000002 0.40000000000000002" diffuse="0.40000000000000002 0.40000000000000002 0.40000000000000002" specular="0.29999999999999999 0.29999999999999999 0.29999999999999999"/>
   </visual>
   <statistic extent="1.5" center="0 -0.40000000000000002 1.1000000000000001"/>
   <default>
     <default class="/">
       <default class="vention">
-        <material specular="0.6" shininess="0.3"/>
+        <material specular="0.59999999999999998" shininess="0.29999999999999999"/>
         <default class="visual">
           <geom type="mesh" contype="0" conaffinity="0" group="2"/>
         </default>
@@ -21,7 +20,7 @@
     </default>
     <default class="left_ur5e/">
       <default class="left_ur5e/ur5e">
-        <material specular="0.9" shininess="0.6"/>
+        <material specular="0.90000000000000002" shininess="0.59999999999999998"/>
         <joint axis="0 1 0" range="-3.1415000000000002 3.1415000000000002" armature="0.10000000000000001"/>
         <site group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01"/>
         <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-300 300" gaintype="fixed" biastype="affine" gainprm="8000" biasprm="0 -8000 -800"/>
@@ -41,7 +40,7 @@
     </default>
     <default class="left_ur5e/gripper/">
       <default class="left_ur5e/gripper/2f140">
-        <material specular="0.7" shininess="0.4"/>
+        <material specular="0.69999999999999996" shininess="0.40000000000000002"/>
         <joint axis="1 0 0"/>
         <general biastype="affine"/>
         <default class="left_ur5e/gripper/driver">
@@ -69,7 +68,7 @@
     </default>
     <default class="right_ur5e/">
       <default class="right_ur5e/ur5e">
-        <material specular="0.9" shininess="0.6"/>
+        <material specular="0.90000000000000002" shininess="0.59999999999999998"/>
         <joint axis="0 1 0" range="-3.1415000000000002 3.1415000000000002" armature="0.10000000000000001"/>
         <site group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01"/>
         <general ctrlrange="-3.1415000000000002 3.1415000000000002" forcerange="-300 300" gaintype="fixed" biastype="affine" gainprm="8000" biasprm="0 -8000 -800"/>
@@ -89,7 +88,7 @@
     </default>
     <default class="right_ur5e/gripper/">
       <default class="right_ur5e/gripper/2f140">
-        <material specular="0.7" shininess="0.4"/>
+        <material specular="0.69999999999999996" shininess="0.40000000000000002"/>
         <joint axis="1 0 0"/>
         <general biastype="affine"/>
         <default class="right_ur5e/gripper/driver">
@@ -117,14 +116,13 @@
     </default>
   </default>
   <asset>
-    <!-- Light gray skybox for paper-quality screenshots (toggle skybox in viewer Rendering menu) -->
-    <texture name="light_skybox" type="skybox" builtin="flat" rgb1="0.92 0.92 0.92" width="1" height="1"/>
-    <material name="blue" class="/" rgba="0.12 0.18 0.38 1" specular="0.5" shininess="0.3"/>
-    <material name="red" class="/" rgba="0.12 0.18 0.38 1" specular="0.5" shininess="0.3"/>
+    <texture name="light_skybox" type="skybox" builtin="flat" rgb1="0.92000000000000004 0.92000000000000004 0.92000000000000004" width="1" height="1"/>
+    <material name="blue" class="/" specular="0.5" shininess="0.29999999999999999" rgba="0.12 0.17999999999999999 0.38 1"/>
+    <material name="red" class="/" specular="0.5" shininess="0.29999999999999999" rgba="0.12 0.17999999999999999 0.38 1"/>
     <mesh name="vention_frame_visual_model" class="/" file="vention_frame_visual_model-3ad6025d0633a8c49789e10339a2c0fb6855dd81.stl"/>
     <material name="left_ur5e/black" class="left_ur5e/ur5e" rgba="0.033000000000000002 0.033000000000000002 0.033000000000000002 1"/>
     <material name="left_ur5e/jointgray" class="left_ur5e/ur5e" rgba="0.27800000000000002 0.27800000000000002 0.27800000000000002 1"/>
-    <material name="left_ur5e/linkgray" class="left_ur5e/ur5e" rgba="0.65 0.65 0.65 1"/>
+    <material name="left_ur5e/linkgray" class="left_ur5e/ur5e" rgba="0.65000000000000002 0.65000000000000002 0.65000000000000002 1"/>
     <material name="left_ur5e/urblue" class="left_ur5e/ur5e" rgba="0.48999999999999999 0.67800000000000005 0.80000000000000004 1"/>
     <mesh name="left_ur5e/base_0" class="left_ur5e/" file="base_0-d5328a99917358d9aa384f12743fe73698461d1c.obj"/>
     <mesh name="left_ur5e/base_1" class="left_ur5e/" file="base_1-d1c667ae5f87b9c900fdeadad850205153846396.obj"/>
@@ -159,7 +157,7 @@
     <mesh name="left_ur5e/gripper/spring_link" class="left_ur5e/gripper/2f140" file="spring_link-3730a0af47afa032388b26d12d24919377c589c7.stl"/>
     <material name="right_ur5e/black" class="right_ur5e/ur5e" rgba="0.033000000000000002 0.033000000000000002 0.033000000000000002 1"/>
     <material name="right_ur5e/jointgray" class="right_ur5e/ur5e" rgba="0.27800000000000002 0.27800000000000002 0.27800000000000002 1"/>
-    <material name="right_ur5e/linkgray" class="right_ur5e/ur5e" rgba="0.65 0.65 0.65 1"/>
+    <material name="right_ur5e/linkgray" class="right_ur5e/ur5e" rgba="0.65000000000000002 0.65000000000000002 0.65000000000000002 1"/>
     <material name="right_ur5e/urblue" class="right_ur5e/ur5e" rgba="0.48999999999999999 0.67800000000000005 0.80000000000000004 1"/>
     <mesh name="right_ur5e/base_0" class="right_ur5e/" file="base_0-d5328a99917358d9aa384f12743fe73698461d1c.obj"/>
     <mesh name="right_ur5e/base_1" class="right_ur5e/" file="base_1-d1c667ae5f87b9c900fdeadad850205153846396.obj"/>
@@ -199,8 +197,7 @@
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
       <geom name="geom_2" class="collision" type="box" size="0.55000000000000004 0.10000000000000001 0.66000000000000003" pos="0 -0.95999999999999996 1.4099999999999999"/>
       <geom name="geom_3" class="collision" type="box" size="0.036999999999999998 0.044999999999999998 0.071999999999999995" pos="-0.66000000000000003 -0.10000000000000001 0.71999999999999997"/>
-      <!-- Worktop: usable work surface on vention base (1.2m x 0.8m) -->
-      <site name="worktop" type="box" pos="0 -0.35 0.755" size="0.6 0.4 0.005" rgba="0.2 0.8 0.2 0" group="2"/>
+      <site name="worktop" type="box" group="2" rgba="0.20000000000000001 0.80000000000000004 0.20000000000000001 0" size="0.59999999999999998 0.40000000000000002 0.0050000000000000001" pos="0 -0.34999999999999998 0.755"/>
       <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.1200000000000001" quat="0 0 0 1">
         <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
         <joint name="left_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>

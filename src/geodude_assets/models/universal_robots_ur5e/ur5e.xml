@@ -5,7 +5,8 @@
 
   <default>
     <default class="ur5e">
-      <material specular="0.5" shininess="0.25"/>
+      <!-- Brushed aluminum look: high specular, tight shininess -->
+      <material specular="0.9" shininess="0.6"/>
       <joint axis="0 1 0" range="-3.1415 3.1415" armature="0.1"/>
       <general gaintype="fixed" biastype="affine" ctrlrange="-3.1415 3.1415" gainprm="8000" biasprm="0 -8000 -800"
         forcerange="-300 300"/>
@@ -28,7 +29,7 @@
   <asset>
     <material class="ur5e" name="black" rgba="0.033 0.033 0.033 1"/>
     <material class="ur5e" name="jointgray" rgba="0.278 0.278 0.278 1"/>
-    <material class="ur5e" name="linkgray" rgba="0.82 0.82 0.82 1"/>
+    <material class="ur5e" name="linkgray" rgba="0.65 0.65 0.65 1"/>
     <material class="ur5e" name="urblue" rgba="0.49 0.678 0.8 1"/>
 
     <mesh file="base_0.obj"/>

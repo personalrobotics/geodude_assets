@@ -20,6 +20,8 @@
 
   <default>
     <default class="2f140">
+      <!-- Metallic gripper appearance -->
+      <material specular="0.7" shininess="0.4"/>
       <general biastype="affine"/>
       <joint axis="1 0 0"/>
       <default class="driver">
