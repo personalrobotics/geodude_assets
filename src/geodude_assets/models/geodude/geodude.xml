@@ -192,6 +192,8 @@
     <mesh name="right_ur5e/gripper/spring_link" class="right_ur5e/gripper/2f140" file="spring_link-3730a0af47afa032388b26d12d24919377c589c7.stl"/>
   </asset>
   <worldbody>
+    <!-- Floor plane for physics simulation -->
+    <geom name="floor" type="plane" size="0 0 0.05" rgba="0.2 0.3 0.4 1" contype="1" conaffinity="1"/>
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
