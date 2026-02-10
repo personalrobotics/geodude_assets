@@ -72,10 +72,11 @@
 
   <actuator>
     <!-- Position-controlled lead screw actuators: 0=bottom, 0.5=top (raised 0.5m) -->
+    <!-- Reduced kp from 100000 to 50000 for stability (less oscillation) -->
     <position name="left_linear_actuator" joint="left_arm_linear_vention"
-              ctrlrange="0 0.5" kp="100000"/>
+              ctrlrange="0 0.5" kp="50000"/>
     <position name="right_linear_actuator" joint="right_arm_linear_vention"
-              ctrlrange="0 0.5" kp="100000"/>
+              ctrlrange="0 0.5" kp="50000"/>
   </actuator>
 
   <keyframe>
