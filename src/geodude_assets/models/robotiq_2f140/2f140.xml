@@ -51,6 +51,10 @@
   </default>
   <worldbody>
     <body name="base_mount" pos="0 0 0.007" childclass="2f140">
+      <!-- grasp_site: canonical TSR EE frame — z=approach (+z), y=finger-open (+x parent).
+           pos: palm = fingertip(0.148) - finger_length(0.055) = 0.093, rounded to 0.100 for clearance.
+           quat: R_z(-90°) so y_site=+x_parent (finger opening) and z_site=+z_parent (approach). -->
+      <site name="grasp_site" pos="0 0 0.100" quat="0.7071 0 0 -0.7071" size="0.005" rgba="0 1 0 1"/>
       <geom class="visual" mesh="base_mount" material="black"/>
       <geom class="collision" mesh="base_mount"/>
       <body name="base" pos="0 0 0.0038" quat="1 0 0 -1">
