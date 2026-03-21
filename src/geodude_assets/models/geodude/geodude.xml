@@ -259,6 +259,7 @@
                         <site name="left_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="left_ur5e/gripper/">
                           <body name="left_ur5e/gripper/base_mount" childclass="left_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
+                            <site name="left_ur5e/gripper/grasp_site" pos="0 0 0.100" quat="0.7071 0 0 -0.7071" size="0.005" rgba="0 1 0 1"/>
                             <geom name="left_ur5e/gripper/geom_0" class="left_ur5e/gripper/visual" material="left_ur5e/gripper/black" mesh="left_ur5e/gripper/base_mount"/>
                             <geom name="left_ur5e/gripper/geom_1" class="left_ur5e/gripper/collision" mesh="left_ur5e/gripper/base_mount"/>
                             <body name="left_ur5e/gripper/base" pos="0 0 0.0038" quat="1 0 0 -1">
@@ -392,6 +393,7 @@
                         <site name="right_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="right_ur5e/gripper/">
                           <body name="right_ur5e/gripper/base_mount" childclass="right_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
+                            <site name="right_ur5e/gripper/grasp_site" pos="0 0 0.100" quat="0.7071 0 0 -0.7071" size="0.005" rgba="0 1 0 1"/>
                             <geom name="right_ur5e/gripper/geom_0" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/base_mount"/>
                             <geom name="right_ur5e/gripper/geom_1" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/base_mount"/>
                             <body name="right_ur5e/gripper/base" pos="0 0 0.0038" quat="1 0 0 -1">
