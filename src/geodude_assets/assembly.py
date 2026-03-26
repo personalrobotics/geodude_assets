@@ -237,7 +237,7 @@ if __name__ == "__main__":
         "-d",
         "--directory",
         type=Path,
-        default="geodude",
+        default=MODELS_DIR / "geodude",
         help="Directory for the saved MJCF.",
     )
     parser.add_argument(
