@@ -205,6 +205,12 @@ def attach_arms_to_vention(
         ctrl=res_ctrl,
     )
 
+    # Floor plane for physics simulation
+    geodude_model.worldbody.add(
+        "geom", name="floor", type="plane", size=[0, 0, 0.05],
+        rgba=[0.2, 0.3, 0.4, 1], contype=1, conaffinity=1,
+    )
+
     # Default camera viewpoint
     geodude_model.statistic.extent = 3.5
     geodude_model.statistic.center = [0, 0, 1]

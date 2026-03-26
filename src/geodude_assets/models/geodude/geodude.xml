@@ -467,6 +467,7 @@
         </body>
       </body>
     </body>
+    <geom name="floor" class="/" type="plane" contype="1" conaffinity="1" size="0 0 0.050000000000000003" rgba="0.20000000000000001 0.29999999999999999 0.40000000000000002 1"/>
   </worldbody>
   <contact>
     <exclude name="//unnamed_contact_0" body1="vention_base" body2="left_arm_vention_base"/>
