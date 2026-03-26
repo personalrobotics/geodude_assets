@@ -2,10 +2,10 @@
   <compiler autolimits="true" angle="radian"/>
   <option impratio="10" integrator="implicitfast" cone="elliptic"/>
   <visual>
-    <global azimuth="-90" elevation="-26.5"/>
+    <global azimuth="-90" elevation="-35"/>
     <headlight ambient="0.40000000000000002 0.40000000000000002 0.40000000000000002" diffuse="0.40000000000000002 0.40000000000000002 0.40000000000000002" specular="0.29999999999999999 0.29999999999999999 0.29999999999999999"/>
   </visual>
-  <statistic extent="1.5" center="0 -0.40000000000000002 1.1000000000000001"/>
+  <statistic extent="3.5" center="0 0 1"/>
   <default>
     <default class="/">
       <default class="vention">
@@ -192,8 +192,6 @@
     <mesh name="right_ur5e/gripper/spring_link" class="right_ur5e/gripper/2f140" file="spring_link-3730a0af47afa032388b26d12d24919377c589c7.stl"/>
   </asset>
   <worldbody>
-    <!-- Floor plane for physics simulation -->
-    <geom name="floor" type="plane" size="0 0 0.05" rgba="0.2 0.3 0.4 1" contype="1" conaffinity="1"/>
     <body name="vention_base" childclass="vention">
       <geom name="geom_0" class="visual" material="blue" mesh="vention_frame_visual_model"/>
       <geom name="geom_1" class="collision" type="box" size="0.65000000000000002 0.59999999999999998 0.371" pos="0 -0.47499999999999998 0.38250000000000001"/>
@@ -259,7 +257,7 @@
                         <site name="left_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="left_ur5e/gripper/">
                           <body name="left_ur5e/gripper/base_mount" childclass="left_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
-                            <site name="left_ur5e/gripper/grasp_site" pos="0 0 0.100" quat="0.7071 0 0 -0.7071" size="0.005" rgba="0 1 0 1"/>
+                            <site name="left_ur5e/gripper/grasp_site" rgba="0 1 0 1" size="0.0050000000000000001" pos="0 0 0.10000000000000001" quat="0.70709999999999995 0 0 -0.70709999999999995"/>
                             <geom name="left_ur5e/gripper/geom_0" class="left_ur5e/gripper/visual" material="left_ur5e/gripper/black" mesh="left_ur5e/gripper/base_mount"/>
                             <geom name="left_ur5e/gripper/geom_1" class="left_ur5e/gripper/collision" mesh="left_ur5e/gripper/base_mount"/>
                             <body name="left_ur5e/gripper/base" pos="0 0 0.0038" quat="1 0 0 -1">
@@ -393,7 +391,7 @@
                         <site name="right_ur5e/gripper_attachment_site" pos="0 0.10000000000000001 0" quat="-1 1 0 0"/>
                         <body pos="0 0.10000000000000001 0" quat="-1 1 0 0" name="right_ur5e/gripper/">
                           <body name="right_ur5e/gripper/base_mount" childclass="right_ur5e/gripper/2f140" pos="0 0 0.0070000000000000001">
-                            <site name="right_ur5e/gripper/grasp_site" pos="0 0 0.100" quat="0.7071 0 0 -0.7071" size="0.005" rgba="0 1 0 1"/>
+                            <site name="right_ur5e/gripper/grasp_site" rgba="0 1 0 1" size="0.0050000000000000001" pos="0 0 0.10000000000000001" quat="0.70709999999999995 0 0 -0.70709999999999995"/>
                             <geom name="right_ur5e/gripper/geom_0" class="right_ur5e/gripper/visual" material="right_ur5e/gripper/black" mesh="right_ur5e/gripper/base_mount"/>
                             <geom name="right_ur5e/gripper/geom_1" class="right_ur5e/gripper/collision" mesh="right_ur5e/gripper/base_mount"/>
                             <body name="right_ur5e/gripper/base" pos="0 0 0.0038" quat="1 0 0 -1">
@@ -533,8 +531,8 @@
     </fixed>
   </tendon>
   <actuator>
-    <position name="left_linear_actuator" class="/" ctrlrange="0 0.5" joint="left_arm_linear_vention" kp="100000"/>
-    <position name="right_linear_actuator" class="/" ctrlrange="0 0.5" joint="right_arm_linear_vention" kp="100000"/>
+    <position name="left_linear_actuator" class="/" ctrlrange="0 0.5" joint="left_arm_linear_vention" kp="50000"/>
+    <position name="right_linear_actuator" class="/" ctrlrange="0 0.5" joint="right_arm_linear_vention" kp="50000"/>
     <general name="left_ur5e/shoulder_pan" class="left_ur5e/ur5e" joint="left_ur5e/shoulder_pan_joint"/>
     <general name="left_ur5e/shoulder_lift" class="left_ur5e/ur5e" joint="left_ur5e/shoulder_lift_joint"/>
     <general name="left_ur5e/elbow" class="left_ur5e/ur5e" joint="left_ur5e/elbow_joint"/>

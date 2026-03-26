@@ -205,6 +205,14 @@ def attach_arms_to_vention(
         ctrl=res_ctrl,
     )
 
+    # Default camera viewpoint
+    geodude_model.statistic.extent = 3.5
+    geodude_model.statistic.center = [0, 0, 1]
+    # 'global' is a Python keyword, so use getattr
+    vis_global = getattr(geodude_model.visual, "global")
+    vis_global.azimuth = -90
+    vis_global.elevation = -35
+
     if save_file:
         mjcf.export_with_assets(
             mjcf_model=geodude_model, out_dir=dir, out_file_name=filename
