@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Siddhartha Srinivasa
+
 """Robot assembly utilities for building custom Geodude configurations.
 
 This module uses dm_control.mjcf to programmatically combine component models
@@ -27,9 +30,7 @@ _RIGHT_ARM_ATTACHMENT_SITE_NAME = "right_arm_attachment_site"
 _GRIPPER_ATTACHMENT_SITE_NAME = "gripper_attachment_site"
 
 
-def load_ur5e_arm(
-    prefix: str, gripper_type: str | None
-) -> tuple[mjcf.RootElement, np.ndarray, np.ndarray]:
+def load_ur5e_arm(prefix: str, gripper_type: str | None) -> tuple[mjcf.RootElement, np.ndarray, np.ndarray]:
     """Load a ur5e arm with gripper with a named prefix."""
     ur5e_model = mjcf.from_path(_UR5_XML.as_posix())
     ur5e_model.model = prefix
@@ -47,18 +48,13 @@ def attach_gripper(
     """Load a gripper and attach it to the ur5e arm."""
     gripper_attachment_site = ur5e_model.find("site", _GRIPPER_ATTACHMENT_SITE_NAME)
     if gripper_attachment_site is None:
-        raise ValueError(
-            f"Unable to find a site named {_GRIPPER_ATTACHMENT_SITE_NAME} "
-            f"in {_UR5_XML.as_posix()}"
-        )
+        raise ValueError(f"Unable to find a site named {_GRIPPER_ATTACHMENT_SITE_NAME} in {_UR5_XML.as_posix()}")
     gripper, qpos, ctrl = load_gripper("gripper", gripper_type)
     gripper_attachment_site.attach(gripper)
     return ur5e_model, qpos, ctrl
 
 
-def load_gripper(
-    prefix: str, gripper_type: str
-) -> tuple[mjcf.RootElement, np.ndarray, np.ndarray]:
+def load_gripper(prefix: str, gripper_type: str) -> tuple[mjcf.RootElement, np.ndarray, np.ndarray]:
     """Load gripper model and return its qpos and ctrl."""
     if gripper_type == "2f140":
         gripper_model = mjcf.from_path(_2F140_XML.as_posix())
@@ -67,10 +63,7 @@ def load_gripper(
     elif gripper_type == "abhr":
         gripper_model = mjcf.from_path(_ABHR_XML.as_posix())
     else:
-        raise ValueError(
-            f"Only gripper types '2f140', 'abhl','abhr' are supported at this time,"
-            f"got {gripper_type}"
-        )
+        raise ValueError(f"Only gripper types '2f140', 'abhl','abhr' are supported at this time,got {gripper_type}")
     gripper_model.model = prefix
     gripper_key = gripper_model.find("key", "ready")
     gripper_qpos = gripper_key.qpos
@@ -106,30 +99,16 @@ def attach_arms_to_vention(
     for i, g in enumerate(geodude_model.worldbody.find_all("geom")):
         g.name = f"geom_{i}"
 
-    left_arm_attachment_site = geodude_model.find(
-        "site", _LEFT_ARM_ATTACHMENT_SITE_NAME
-    )
+    left_arm_attachment_site = geodude_model.find("site", _LEFT_ARM_ATTACHMENT_SITE_NAME)
     if left_arm_attachment_site is None:
-        raise ValueError(
-            f"Unable to find a site named {_LEFT_ARM_ATTACHMENT_SITE_NAME} "
-            f"in {_VENTION_XML.as_posix()}"
-        )
-    left_ur5e, left_gripper_qpos, left_gripper_ctrl = load_ur5e_arm(
-        "left_ur5e", left_gripper_type
-    )
+        raise ValueError(f"Unable to find a site named {_LEFT_ARM_ATTACHMENT_SITE_NAME} in {_VENTION_XML.as_posix()}")
+    left_ur5e, left_gripper_qpos, left_gripper_ctrl = load_ur5e_arm("left_ur5e", left_gripper_type)
     left_arm_attachment_site.attach(left_ur5e)
 
-    right_arm_attachment_site = geodude_model.find(
-        "site", _RIGHT_ARM_ATTACHMENT_SITE_NAME
-    )
+    right_arm_attachment_site = geodude_model.find("site", _RIGHT_ARM_ATTACHMENT_SITE_NAME)
     if right_arm_attachment_site is None:
-        raise ValueError(
-            f"Unable to find a site named {_RIGHT_ARM_ATTACHMENT_SITE_NAME} "
-            f"in {_VENTION_XML.as_posix()}"
-        )
-    right_ur5e, right_gripper_qpos, right_gripper_ctrl = load_ur5e_arm(
-        "right_ur5e", right_gripper_type
-    )
+        raise ValueError(f"Unable to find a site named {_RIGHT_ARM_ATTACHMENT_SITE_NAME} in {_VENTION_XML.as_posix()}")
+    right_ur5e, right_gripper_qpos, right_gripper_ctrl = load_ur5e_arm("right_ur5e", right_gripper_type)
     right_arm_attachment_site.attach(right_ur5e)
 
     # Build the combined "ready" keyframe from component keyframes.
@@ -207,8 +186,13 @@ def attach_arms_to_vention(
 
     # Floor plane for physics simulation
     geodude_model.worldbody.add(
-        "geom", name="floor", type="plane", size=[0, 0, 0.05],
-        rgba=[0.2, 0.3, 0.4, 1], contype=1, conaffinity=1,
+        "geom",
+        name="floor",
+        type="plane",
+        size=[0, 0, 0.05],
+        rgba=[0.2, 0.3, 0.4, 1],
+        contype=1,
+        conaffinity=1,
     )
 
     # Default camera viewpoint
@@ -220,18 +204,12 @@ def attach_arms_to_vention(
     vis_global.elevation = -35
 
     if save_file:
-        mjcf.export_with_assets(
-            mjcf_model=geodude_model, out_dir=dir, out_file_name=filename
-        )
-    return mujoco.MjModel.from_xml_string(
-        geodude_model.to_xml_string(), geodude_model.get_assets()
-    )
+        mjcf.export_with_assets(mjcf_model=geodude_model, out_dir=dir, out_file_name=filename)
+    return mujoco.MjModel.from_xml_string(geodude_model.to_xml_string(), geodude_model.get_assets())
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Create a MuJoCo model of two UR5e arms on a vention base."
-    )
+    parser = argparse.ArgumentParser(description="Create a MuJoCo model of two UR5e arms on a vention base.")
     parser.add_argument(
         "-s",
         "--save-mjcf",
