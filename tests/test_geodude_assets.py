@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Siddhartha Srinivasa
+
 """Tests for geodude_assets package."""
 
 import mujoco
@@ -161,9 +164,7 @@ class TestGeodueModelStructure:
         mujoco.mj_forward(geodude_model, data)
 
         # Get initial z position
-        bid = mujoco.mj_name2id(
-            geodude_model, mujoco.mjtObj.mjOBJ_BODY, "left_arm_vention_base"
-        )
+        bid = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_BODY, "left_arm_vention_base")
         initial_z = data.xpos[bid][2]
 
         # Command to raise arm
@@ -277,20 +278,20 @@ class TestContactExclusions:
             return (min(b1, b2), max(b1, b2)) in excluded_pairs
 
         # Check critical gripper exclusions (left arm)
-        assert bodies_excluded(
-            "left_ur5e/gripper/right_coupler", "left_ur5e/gripper/right_spring_link"
-        ), "Left gripper right coupler <-> spring_link should be excluded"
-        assert bodies_excluded(
-            "left_ur5e/gripper/left_coupler", "left_ur5e/gripper/left_spring_link"
-        ), "Left gripper left coupler <-> spring_link should be excluded"
+        assert bodies_excluded("left_ur5e/gripper/right_coupler", "left_ur5e/gripper/right_spring_link"), (
+            "Left gripper right coupler <-> spring_link should be excluded"
+        )
+        assert bodies_excluded("left_ur5e/gripper/left_coupler", "left_ur5e/gripper/left_spring_link"), (
+            "Left gripper left coupler <-> spring_link should be excluded"
+        )
 
         # Check critical gripper exclusions (right arm)
-        assert bodies_excluded(
-            "right_ur5e/gripper/right_coupler", "right_ur5e/gripper/right_spring_link"
-        ), "Right gripper right coupler <-> spring_link should be excluded"
-        assert bodies_excluded(
-            "right_ur5e/gripper/left_coupler", "right_ur5e/gripper/left_spring_link"
-        ), "Right gripper left coupler <-> spring_link should be excluded"
+        assert bodies_excluded("right_ur5e/gripper/right_coupler", "right_ur5e/gripper/right_spring_link"), (
+            "Right gripper right coupler <-> spring_link should be excluded"
+        )
+        assert bodies_excluded("right_ur5e/gripper/left_coupler", "right_ur5e/gripper/left_spring_link"), (
+            "Right gripper left coupler <-> spring_link should be excluded"
+        )
 
     def test_arm_adjacent_links_excluded(self, geodude_model):
         """Adjacent arm links are excluded from collision detection.
@@ -337,9 +338,7 @@ class TestContactExclusions:
             ("right_ur5e/wrist_2_link", "right_ur5e/wrist_3_link"),
         ]
         for b1, b2 in right_pairs:
-            assert bodies_excluded(b1, b2), (
-                f"Right arm {b1} <-> {b2} should be excluded"
-            )
+            assert bodies_excluded(b1, b2), f"Right arm {b1} <-> {b2} should be excluded"
 
 
 class TestForceTorqueSensor:
@@ -370,38 +369,28 @@ class TestForceTorqueSensor:
 
     def test_ft_sensor_site_exists(self, ur5e_model):
         """F/T sensor site exists in UR5e model."""
-        site_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "ft_sensor_site"
-        )
+        site_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "ft_sensor_site")
         assert site_id != -1, "ft_sensor_site not found"
 
     def test_ft_sensor_force_exists(self, ur5e_model):
         """Force sensor exists in UR5e model."""
-        sensor_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_force"
-        )
+        sensor_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_force")
         assert sensor_id != -1, "ft_sensor_force not found"
 
     def test_ft_sensor_torque_exists(self, ur5e_model):
         """Torque sensor exists in UR5e model."""
-        sensor_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_torque"
-        )
+        sensor_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_torque")
         assert sensor_id != -1, "ft_sensor_torque not found"
 
     def test_ft_sensor_force_has_3_values(self, ur5e_model):
         """Force sensor outputs 3 values (Fx, Fy, Fz)."""
-        sensor_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_force"
-        )
+        sensor_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_force")
         # Sensor dimension
         assert ur5e_model.sensor_dim[sensor_id] == 3
 
     def test_ft_sensor_torque_has_3_values(self, ur5e_model):
         """Torque sensor outputs 3 values (Tx, Ty, Tz)."""
-        sensor_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_torque"
-        )
+        sensor_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_torque")
         # Sensor dimension
         assert ur5e_model.sensor_dim[sensor_id] == 3
 
@@ -412,20 +401,16 @@ class TestForceTorqueSensor:
         """
         mujoco.mj_forward(ur5e_model, ur5e_data)
 
-        ft_site_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "ft_sensor_site"
-        )
-        gripper_site_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "gripper_attachment_site"
-        )
+        ft_site_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "ft_sensor_site")
+        gripper_site_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "gripper_attachment_site")
 
         ft_pos = ur5e_data.site_xpos[ft_site_id]
         gripper_pos = ur5e_data.site_xpos[gripper_site_id]
 
         import numpy as np
+
         np.testing.assert_allclose(
-            ft_pos, gripper_pos, atol=1e-6,
-            err_msg="F/T sensor site should be at gripper attachment position"
+            ft_pos, gripper_pos, atol=1e-6, err_msg="F/T sensor site should be at gripper attachment position"
         )
 
     def test_ft_sensor_frame_z_points_outward(self, ur5e_model, ur5e_data):
@@ -439,9 +424,7 @@ class TestForceTorqueSensor:
         mujoco.mj_resetDataKeyframe(ur5e_model, ur5e_data, key_id)
         mujoco.mj_forward(ur5e_model, ur5e_data)
 
-        ft_site_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "ft_sensor_site"
-        )
+        ft_site_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SITE, "ft_sensor_site")
 
         # Site rotation matrix (3x3, stored row-major as 9 elements)
         site_xmat = ur5e_data.site_xmat[ft_site_id].reshape(3, 3)
@@ -456,10 +439,7 @@ class TestForceTorqueSensor:
         import numpy as np
 
         # Verify z-axis is a unit vector
-        np.testing.assert_allclose(
-            np.linalg.norm(z_axis), 1.0, atol=1e-6,
-            err_msg="Z-axis should be unit vector"
-        )
+        np.testing.assert_allclose(np.linalg.norm(z_axis), 1.0, atol=1e-6, err_msg="Z-axis should be unit vector")
 
     def test_ft_sensor_reads_gravity_load(self, ur5e_model, ur5e_data):
         """F/T sensor measures gravity load from gripper/payload.
@@ -475,11 +455,9 @@ class TestForceTorqueSensor:
         mujoco.mj_forward(ur5e_model, ur5e_data)
 
         # Get sensor values
-        force_id = mujoco.mj_name2id(
-            ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_force"
-        )
+        force_id = mujoco.mj_name2id(ur5e_model, mujoco.mjtObj.mjOBJ_SENSOR, "ft_sensor_force")
         force_adr = ur5e_model.sensor_adr[force_id]
-        force = ur5e_data.sensordata[force_adr:force_adr + 3]
+        force = ur5e_data.sensordata[force_adr : force_adr + 3]
 
         # The sensor should measure some force (gravity on tool)
         # Note: MuJoCo force sensor measures interaction forces which may be zero
@@ -494,20 +472,12 @@ class TestForceTorqueSensor:
         with the arm namespace.
         """
         # Check left arm sensors
-        left_force_id = mujoco.mj_name2id(
-            geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "left_ur5e/ft_sensor_force"
-        )
-        left_torque_id = mujoco.mj_name2id(
-            geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "left_ur5e/ft_sensor_torque"
-        )
+        left_force_id = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "left_ur5e/ft_sensor_force")
+        left_torque_id = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "left_ur5e/ft_sensor_torque")
 
         # Check right arm sensors
-        right_force_id = mujoco.mj_name2id(
-            geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "right_ur5e/ft_sensor_force"
-        )
-        right_torque_id = mujoco.mj_name2id(
-            geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "right_ur5e/ft_sensor_torque"
-        )
+        right_force_id = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "right_ur5e/ft_sensor_force")
+        right_torque_id = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_SENSOR, "right_ur5e/ft_sensor_torque")
 
         assert left_force_id != -1, "Left arm F/T force sensor not found"
         assert left_torque_id != -1, "Left arm F/T torque sensor not found"

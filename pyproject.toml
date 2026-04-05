@@ -8,7 +8,13 @@ version = "0.1.0"
 description = "MuJoCo models for the Geodude bimanual robot"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
+authors = [
+    {name = "Siddhartha Srinivasa", email = "siddhartha.srinivasa@gmail.com"},
+]
+maintainers = [
+    {name = "Siddhartha Srinivasa", email = "siddhartha.srinivasa@gmail.com"},
+]
 dependencies = [
     "mujoco",
     "numpy-stl>=3.2.0",
@@ -31,6 +37,7 @@ assembly = [
 override-dependencies = ["labmaze ; sys_platform == 'never'"]
 
 [project.urls]
+Homepage = "https://github.com/personalrobotics/geodude_assets"
 Repository = "https://github.com/personalrobotics/geodude_assets"
 Issues = "https://github.com/personalrobotics/geodude_assets/issues"
 
@@ -48,7 +55,13 @@ geodude_assets = [
 ]
 
 [tool.ruff]
-lint.select = ["F", "E", "W", "I"]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/geodude_assets/__init__.py" = ["F401"]
 
 [dependency-groups]
 dev = [

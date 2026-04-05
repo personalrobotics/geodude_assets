@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Siddhartha Srinivasa
+
 """Interactive collision viewer with visual feedback.
 
 Use the MuJoCo viewer's joint controls to move the robot.
@@ -105,9 +108,7 @@ def main():
             contype = model.geom_contype[i]
             conaffinity = model.geom_conaffinity[i]
             if contype > 0 or conaffinity > 0:
-                name = (
-                    mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, i) or f"geom_{i}"
-                )
+                name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, i) or f"geom_{i}"
                 body_id = model.geom_bodyid[i]
                 body_name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, body_id)
                 geom_type = model.geom_type[i]
@@ -121,17 +122,11 @@ def main():
                     "box",
                     "mesh",
                 ]
-                type_name = (
-                    type_names[geom_type]
-                    if geom_type < len(type_names)
-                    else f"type_{geom_type}"
-                )
+                type_name = type_names[geom_type] if geom_type < len(type_names) else f"type_{geom_type}"
                 print(f"  {name} ({type_name}) on body '{body_name}'")
         print("-" * 60)
         collision_count = sum(
-            1
-            for i in range(model.ngeom)
-            if model.geom_contype[i] > 0 or model.geom_conaffinity[i] > 0
+            1 for i in range(model.ngeom) if model.geom_contype[i] > 0 or model.geom_conaffinity[i] > 0
         )
         print(f"Total collision geoms: {collision_count}")
         print()
@@ -182,9 +177,7 @@ def main():
         print("  R    - reset to ready", flush=True)
         print("  V    - print camera parameters", flush=True)
         print(flush=True)
-        with mujoco.viewer.launch_passive(
-            model, data, key_callback=key_callback
-        ) as viewer:
+        with mujoco.viewer.launch_passive(model, data, key_callback=key_callback) as viewer:
             viewer_ref[0] = viewer  # Store for key_callback access
 
             # Enable contact visualization

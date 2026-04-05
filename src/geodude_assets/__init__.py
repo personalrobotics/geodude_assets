@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Siddhartha Srinivasa
+
 """MuJoCo models for the Geodude bimanual robot.
 
 This package provides MuJoCo model files for the Geodude robot, including:
@@ -51,9 +54,7 @@ def get_model_path(name: str = "geodude") -> Path:
     model_dir = MODELS_DIR / name
 
     if not model_dir.exists():
-        raise FileNotFoundError(
-            f"Model '{name}' not found. Available models: {AVAILABLE_MODELS}"
-        )
+        raise FileNotFoundError(f"Model '{name}' not found. Available models: {AVAILABLE_MODELS}")
 
     # Primary XML file naming conventions
     xml_candidates = [
@@ -67,9 +68,7 @@ def get_model_path(name: str = "geodude") -> Path:
         if xml_path.exists():
             return xml_path
 
-    raise FileNotFoundError(
-        f"No XML file found in {model_dir}. Tried: {[p.name for p in xml_candidates]}"
-    )
+    raise FileNotFoundError(f"No XML file found in {model_dir}. Tried: {[p.name for p in xml_candidates]}")
 
 
 def get_geodude_path() -> Path:
@@ -102,9 +101,7 @@ def get_component_path(component: str) -> Path:
     }
 
     if component not in component_map:
-        raise ValueError(
-            f"Unknown component '{component}'. Available: {list(component_map.keys())}"
-        )
+        raise ValueError(f"Unknown component '{component}'. Available: {list(component_map.keys())}")
 
     model_name, xml_name = component_map[component]
     return MODELS_DIR / model_name / xml_name
