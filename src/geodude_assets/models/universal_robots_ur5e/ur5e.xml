@@ -8,10 +8,16 @@
       <!-- Brushed aluminum look: high specular, tight shininess -->
       <material specular="0.9" shininess="0.6"/>
       <joint axis="0 1 0" range="-3.1415 3.1415" armature="0.1"/>
-      <general gaintype="fixed" biastype="affine" ctrlrange="-3.1415 3.1415" gainprm="8000" biasprm="0 -8000 -800"
+      <!-- PD gains: tuned 2026-04-10 via geodude/src/geodude/demos/tune_ur5e_gains.py
+           against gravity-compensated dynamics. Target ζ ≈ 0.7 (slightly
+           under-critical, responsive). kv derived as class-averaged
+           2·ζ·sqrt(kp·J_eff) where J_eff is the max mass-matrix diagonal
+           across 4 representative poses. See personalrobotics/geodude_assets#12
+           for the sweep methodology and before/after metrics. -->
+      <general gaintype="fixed" biastype="affine" ctrlrange="-3.1415 3.1415" gainprm="3000" biasprm="0 -3000 -101"
         forcerange="-300 300"/>
       <default class="size1">
-        <general gainprm="2000" biasprm="0 -2000 -200" forcerange="-56 56"/>
+        <general gainprm="500" biasprm="0 -500 -11" forcerange="-56 56"/>
       </default>
       <default class="visual">
         <geom type="mesh" contype="0" conaffinity="0" group="2"/>
