@@ -201,8 +201,9 @@
       <body name="left_arm_vention_base" pos="-0.33000000000000002 -0.84799999999999998 1.1200000000000001" quat="0 0 0 1">
         <geom name="geom_4" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
         <joint name="left_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>
-        <site name="left_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5"/>
-        <body pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" name="left_ur5e/">
+        <!-- ROS xyz 0 0.03 0; rpy roll/pitch from cell (same quat as right mount; cell home joints are per-arm). -->
+        <site name="left_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 -0.03 0" quat="0 0 -0.7070904020014415 0.7071231599922605"/>
+        <body pos="0 -0.03 0" quat="0 0 -0.7070904020014415 0.7071231599922605" name="left_ur5e/">
           <light name="left_ur5e/spotlight" class="left_ur5e/" mode="targetbodycom" target="left_ur5e/wrist_2_link" pos="0 -1 2"/>
           <body name="left_ur5e/base" childclass="left_ur5e/ur5e" quat="0 0 0 -1" gravcomp="1">
             <inertial pos="0 0 0" mass="4" diaginertia="0.0044333315599999999 0.0044333315599999999 0.0071999999999999998"/>
@@ -335,8 +336,8 @@
       <body name="right_arm_vention_base" pos="0.33000000000000002 -0.84799999999999998 1.1200000000000001" quat="0 0 0 1">
         <geom name="geom_5" type="box" size="0.1125 0.01 0.1125" material="red" mass="18.57"/>
         <joint name="right_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>
-        <site name="right_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5"/>
-        <body pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" name="right_ur5e/">
+        <site name="right_arm_attachment_site" group="4" rgba="0.5 0.5 0.5 0.29999999999999999" size="0.01" pos="0 -0.03 0" quat="0 0 -0.7070904020014415 0.7071231599922605"/>
+        <body pos="0 -0.03 0" quat="0 0 -0.7070904020014415 0.7071231599922605" name="right_ur5e/">
           <light name="right_ur5e/spotlight" class="right_ur5e/" mode="targetbodycom" target="right_ur5e/wrist_2_link" pos="0 -1 2"/>
           <body name="right_ur5e/base" childclass="right_ur5e/ur5e" quat="0 0 0 -1" gravcomp="1">
             <inertial pos="0 0 0" mass="4" diaginertia="0.0044333315599999999 0.0044333315599999999 0.0071999999999999998"/>
@@ -512,6 +513,11 @@
     <exclude name="right_ur5e/gripper//unnamed_contact_11" body1="right_ur5e/gripper/right_spring_link" body2="right_ur5e/gripper/left_spring_link"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_12" body1="right_ur5e/gripper/right_spring_link" body2="right_ur5e/gripper/left_follower"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_13" body1="right_ur5e/gripper/right_follower" body2="right_ur5e/gripper/left_spring_link"/>
+    <!-- ROS-aligned mount: rear vention hull (geom_2) overlaps arm at low rail; shoulder/upper-arm pairs only (narrow). -->
+    <exclude name="vention_base_left_upper_arm" body1="vention_base" body2="left_ur5e/upper_arm_link"/>
+    <exclude name="vention_base_left_shoulder" body1="vention_base" body2="left_ur5e/shoulder_link"/>
+    <exclude name="vention_base_right_upper_arm" body1="vention_base" body2="right_ur5e/upper_arm_link"/>
+    <exclude name="vention_base_right_shoulder" body1="vention_base" body2="right_ur5e/shoulder_link"/>
   </contact>
   <equality>
     <connect name="left_ur5e/gripper//unnamed_equality_0" class="left_ur5e/gripper/" solref="0.0050000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" body1="left_ur5e/gripper/right_follower" body2="left_ur5e/gripper/right_coupler" anchor="0 0 0"/>
@@ -555,7 +561,9 @@
     <force name="right_ur5e/ft_sensor_force" noise="3.5" site="right_ur5e/ft_sensor_site"/>
     <torque name="right_ur5e/ft_sensor_torque" noise="0.20000000000000001" site="right_ur5e/ft_sensor_site"/>
   </sensor>
+  <!-- ready/home qpos: left_linear, left UR6 (pan,lift,elbow,w1,w2,w3), left gripper (8), right_linear, right UR6, right gripper (8). Dict order in cell YAML can differ; values must match these joint names. -->
   <keyframe>
-    <key name="ready" qpos="0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0 0.25 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 0 0 0 0 0 0 0" ctrl="0.25 0.25 -1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0 1.5708 -1.5708 1.5708 -1.5708 1.5708 0 0"/>
+    <key name="ready" qpos="0.25 -2.589130703602926 -2.1601325474181117 1.8716824690448206 3.44891802846875 -0.8690908590899866 -0.061783615742818654 0 0 0 0 0 0 0 0 0.25 2.5312066078186035 -1.025328592663147 -1.8657585382461548 -0.20165141046557622 0.9150075912475586 -0.06137401262392217 0 0 0 0 0 0 0 0" ctrl="0.25 0.25 -2.589130703602926 -2.1601325474181117 1.8716824690448206 3.44891802846875 -0.8690908590899866 -0.061783615742818654 0 2.5312066078186035 -1.025328592663147 -1.8657585382461548 -0.20165141046557622 0.9150075912475586 -0.06137401262392217 0"/>
+    <key name="home" qpos="0.25 -2.589130703602926 -2.1601325474181117 1.8716824690448206 3.44891802846875 -0.8690908590899866 -0.061783615742818654 0 0 0 0 0 0 0 0 0.25 2.5312066078186035 -1.025328592663147 -1.8657585382461548 -0.20165141046557622 0.9150075912475586 -0.06137401262392217 0 0 0 0 0 0 0 0" ctrl="0.25 0.25 -2.589130703602926 -2.1601325474181117 1.8716824690448206 3.44891802846875 -0.8690908590899866 -0.061783615742818654 0 2.5312066078186035 -1.025328592663147 -1.8657585382461548 -0.20165141046557622 0.9150075912475586 -0.06137401262392217 0"/>
   </keyframe>
 </mujoco>

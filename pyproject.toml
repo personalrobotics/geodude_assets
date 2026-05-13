@@ -29,7 +29,7 @@ assembly = [
     "absl-py",
     "scipy",
     "dm_env",
-    "numpy",
+    "numpy>=1.26,<2",
 ]
 
 [tool.uv]
