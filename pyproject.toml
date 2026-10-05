@@ -46,6 +46,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 geodude_assets = [
+    "ssrobot.toml",
     "models/**/*.xml",
     "models/**/*.stl",
     "models/**/*.obj",

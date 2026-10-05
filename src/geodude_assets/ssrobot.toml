@@ -1,0 +1,75 @@
+# Written by `ssrobot init`. Every semantic below is explicit; review it.
+# Commands and channels appear only if a template was chosen.
+schema = "ssrobot.package"
+version = 1
+robot = "geodude"
+canonical_model = "mjcf"
+
+[[models]]
+name = "mjcf"
+format = "mjcf"
+path = "models/geodude/geodude.xml"
+
+[[semantics.groups]]
+name = "left_arm_with_lift"
+joints = ["left_arm_linear_vention", "left_ur5e/shoulder_pan_joint", "left_ur5e/shoulder_lift_joint", "left_ur5e/elbow_joint", "left_ur5e/wrist_1_joint", "left_ur5e/wrist_2_joint", "left_ur5e/wrist_3_joint"]
+
+[[semantics.groups]]
+name = "left_arm"
+joints = ["left_ur5e/shoulder_pan_joint", "left_ur5e/shoulder_lift_joint", "left_ur5e/elbow_joint", "left_ur5e/wrist_1_joint", "left_ur5e/wrist_2_joint", "left_ur5e/wrist_3_joint"]
+
+[[semantics.groups]]
+name = "right_arm_with_lift"
+joints = ["right_arm_linear_vention", "right_ur5e/shoulder_pan_joint", "right_ur5e/shoulder_lift_joint", "right_ur5e/elbow_joint", "right_ur5e/wrist_1_joint", "right_ur5e/wrist_2_joint", "right_ur5e/wrist_3_joint"]
+
+[[semantics.groups]]
+name = "right_arm"
+joints = ["right_ur5e/shoulder_pan_joint", "right_ur5e/shoulder_lift_joint", "right_ur5e/elbow_joint", "right_ur5e/wrist_1_joint", "right_ur5e/wrist_2_joint", "right_ur5e/wrist_3_joint"]
+
+[[semantics.grippers]]
+name = "left_gripper"
+frame = "left_ur5e/gripper/base"
+joints = ["left_ur5e/gripper/right_driver_joint", "left_ur5e/gripper/right_coupler_joint", "left_ur5e/gripper/right_spring_link_joint", "left_ur5e/gripper/right_follower_joint", "left_ur5e/gripper/left_driver_joint", "left_ur5e/gripper/left_coupler_joint", "left_ur5e/gripper/left_spring_link_joint", "left_ur5e/gripper/left_follower_joint"]
+
+[[semantics.grippers]]
+name = "right_gripper"
+frame = "right_ur5e/gripper/base"
+joints = ["right_ur5e/gripper/right_driver_joint", "right_ur5e/gripper/right_coupler_joint", "right_ur5e/gripper/right_spring_link_joint", "right_ur5e/gripper/right_follower_joint", "right_ur5e/gripper/left_driver_joint", "right_ur5e/gripper/left_coupler_joint", "right_ur5e/gripper/left_spring_link_joint", "right_ur5e/gripper/left_follower_joint"]
+
+[[semantics.manipulators]]
+name = "left_arm_with_lift"
+group = "left_arm_with_lift"
+base_frame = "vention_base"
+tool_frame = "left_ur5e/wrist_3_link"
+end_effector = "left_hand"
+
+[[semantics.manipulators]]
+name = "left_arm"
+group = "left_arm"
+base_frame = "left_ur5e/base"
+tool_frame = "left_ur5e/wrist_3_link"
+end_effector = "left_hand"
+
+[[semantics.manipulators]]
+name = "right_arm_with_lift"
+group = "right_arm_with_lift"
+base_frame = "vention_base"
+tool_frame = "right_ur5e/wrist_3_link"
+end_effector = "right_hand"
+
+[[semantics.manipulators]]
+name = "right_arm"
+group = "right_arm"
+base_frame = "right_ur5e/base"
+tool_frame = "right_ur5e/wrist_3_link"
+end_effector = "right_hand"
+
+[[semantics.end_effectors]]
+name = "left_hand"
+frame = "left_ur5e/gripper/grasp_site"
+gripper = "left_gripper"
+
+[[semantics.end_effectors]]
+name = "right_hand"
+frame = "right_ur5e/gripper/grasp_site"
+gripper = "right_gripper"
