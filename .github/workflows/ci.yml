@@ -48,11 +48,14 @@ jobs:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      ROBOT_CODE_DISPATCH_TOKEN: ${{ secrets.ROBOT_CODE_DISPATCH_TOKEN }}
     steps:
       - name: Dispatch integration run
+        if: env.ROBOT_CODE_DISPATCH_TOKEN != ''
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.ROBOT_CODE_DISPATCH_TOKEN }}
+          token: ${{ env.ROBOT_CODE_DISPATCH_TOKEN }}
           repository: personalrobotics/robot-code
           event-type: sibling-updated
           client-payload: '{"repo":"${{ github.event.repository.name }}","sha":"${{ github.sha }}"}'
