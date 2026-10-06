@@ -55,28 +55,48 @@
       <!-- Worktop: usable work surface on vention base (1.2m x 0.8m), invisible for clean renders -->
       <site name="worktop" type="box" pos="0 -0.35 0.755" size="0.6 0.4 0.005" rgba="0.2 0.8 0.2 0" group="2"/>
 
-      <!-- Arms start at bottom of rail travel, can raise up to 0.5m -->
-      <body name="left_arm_vention_base" pos="-0.330 -0.8480 1.120" quat="0 0 0 1">
+      <!-- Each arm rides a Vention enclosed lead screw actuator (MO-LM-047-0855: 4 mm/turn
+           lead, 625 mm stroke, self-locking) driven by a NEMA 34 stepper-servo (7.2 Nm
+           holding torque). Travel is 0 (bottom) to 0.5 m.
+
+           The screw is modelled by what its drive achieves, a stiff, non-backdrivable
+           position axis, rather than by its friction: MuJoCo's position actuators have no
+           integral action, so self-locking friction would leave a dead band.
+           - armature: the motor rotor inertia reflected through the screw,
+             J_rotor * (2*pi/lead)^2 = 2.7e-4 kg m^2 * (2*pi/0.004 m)^2 = 666 kg.
+             J_rotor is a typical value for a 7.2 Nm NEMA 34 stepper; Vention does not
+             publish it. The reflected inertia dominates the 41 kg the axis carries.
+           - gravcomp: the drive holds its load with no steady-state error, as the
+             self-locking screw does; the arm bodies above are compensated the same way.
+           - the actuator below: a critically damped 10 Hz position loop on the effective
+             mass, thrust-limited by the motor.
+           The attachment sites carry the arm mounts measured on the cell (ROS xyz 0 0.03 0
+           and roll/pitch, the same for both arms). -->
+      <body name="left_arm_vention_base" pos="-0.330 -0.8480 1.120" quat="0 0 0 1" gravcomp="1">
         <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
-        <joint name="left_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>
-        <site name="left_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
+        <joint name="left_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" armature="666"/>
+        <site name="left_arm_attachment_site" size="0.01" pos="0 -0.03 0" quat="0 0 -0.7070904020014415 0.7071231599922605" rgba="0.5 0.5 0.5 0.3" group="4"/>
       </body>
 
-      <body name="right_arm_vention_base" pos="0.330 -0.8480 1.120" quat="0 0 0 1">
+      <body name="right_arm_vention_base" pos="0.330 -0.8480 1.120" quat="0 0 0 1" gravcomp="1">
         <geom type="box" size="0.1125 0.01 0.1125" mass="18.57" material="red"/>
-        <joint name="right_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" damping="5000"/>
-        <site name="right_arm_attachment_site" size="0.01" pos="0 0.01 0" quat="-0.5 -0.5 -0.5 0.5" rgba="0.5 0.5 0.5 0.3" group="4"/>
+        <joint name="right_arm_linear_vention" type="slide" axis="0 0 1" range="0 0.5" armature="666"/>
+        <site name="right_arm_attachment_site" size="0.01" pos="0 -0.03 0" quat="0 0 -0.7070904020014415 0.7071231599922605" rgba="0.5 0.5 0.5 0.3" group="4"/>
       </body>
     </body>
   </worldbody>
 
   <actuator>
-    <!-- Position-controlled lead screw actuators: 0=bottom, 0.5=top (raised 0.5m) -->
-    <!-- Reduced kp from 100000 to 50000 for stability (less oscillation) -->
+    <!-- Lead screw drives (see the carriage bodies above). With m = 707 kg (666 kg
+         reflected rotor inertia + 41 kg of carriage, UR5e, and 2F-140) and a 10 Hz loop,
+         w = 2*pi*10 rad/s: kp = m*w^2 = 2.79e6 N/m and kv = 2*m*w = 8.88e4 N s/m (critically
+         damped). Under a 300 N load the carriage then gives about 0.1 mm, less than the
+         axis's 0.125 mm backlash. Thrust is limited to what the motor can produce:
+         7.2 Nm * 458 N/Nm = 3300 N, below the screw's 5000 N rating. -->
     <position name="left_linear_actuator" joint="left_arm_linear_vention"
-              ctrlrange="0 0.5" kp="50000"/>
+              ctrlrange="0 0.5" kp="2.79e6" kv="8.88e4" forcelimited="true" forcerange="-3300 3300"/>
     <position name="right_linear_actuator" joint="right_arm_linear_vention"
-              ctrlrange="0 0.5" kp="50000"/>
+              ctrlrange="0 0.5" kp="2.79e6" kv="8.88e4" forcelimited="true" forcerange="-3300 3300"/>
   </actuator>
 
   <keyframe>
