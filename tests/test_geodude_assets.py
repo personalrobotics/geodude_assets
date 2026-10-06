@@ -198,6 +198,19 @@ class TestPhysicalConsistency:
             "-d src/geodude_assets/models/geodude -l 2f140 -r 2f140`"
         )
 
+    def test_every_model_file_is_well_formed_xml(self):
+        """Every model parses with a strict XML parser, not only MuJoCo's lenient one, so
+        other tools (ssrobot, URDF and MJCF readers) can load it too."""
+        import xml.etree.ElementTree as ET
+
+        malformed = []
+        for path in sorted(MODELS_DIR.rglob("*.xml")):
+            try:
+                ET.parse(path)
+            except ET.ParseError as e:
+                malformed.append(f"{path.relative_to(MODELS_DIR)}: {e}")
+        assert malformed == []
+
     def test_every_keyframe_is_within_joint_limits_and_free_of_contact(self, geodude_model):
         """Each keyframe is a valid start: every limited joint inside its range, and no
         contacts."""
