@@ -124,7 +124,8 @@ uv run python -m geodude_assets.assembly --save-mjcf -d ./output -l abhl -r 2f14
 ## Robot Configuration
 
 The Geodude robot consists of:
-- **Vention frame** with vertical linear rails (enclosed lead screw actuators)
+- **Vention frame** with vertical linear rails: enclosed lead screw actuators, modelled as
+  stiff, self-locking position axes (see the comments in `models/vention/vention.xml`)
 - **Two UR5e arms** mounted on the linear rails
 - **End effectors** on each arm (configurable)
 - **Worktop** - a named site marking the usable work surface
@@ -153,12 +154,12 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 |----------|-------|-------------|
 | `left_linear_actuator` | 0-0.5m | Left arm vertical position (0=bottom, 0.5=top) |
 | `right_linear_actuator` | 0-0.5m | Right arm vertical position |
-| `left_ur5e/shoulder_pan` | ±π | Left arm joint 1 |
-| `left_ur5e/shoulder_lift` | ±π | Left arm joint 2 |
-| `left_ur5e/elbow` | ±π | Left arm joint 3 |
-| `left_ur5e/wrist_1` | ±π | Left arm joint 4 |
-| `left_ur5e/wrist_2` | ±π | Left arm joint 5 |
-| `left_ur5e/wrist_3` | ±π | Left arm joint 6 |
+| `left_ur5e/shoulder_pan` | ±2π | Left arm joint 1 |
+| `left_ur5e/shoulder_lift` | ±2π | Left arm joint 2 |
+| `left_ur5e/elbow` | ±π | Left arm joint 3 (limited by UR to avoid self-collision) |
+| `left_ur5e/wrist_1` | ±2π | Left arm joint 4 |
+| `left_ur5e/wrist_2` | ±2π | Left arm joint 5 |
+| `left_ur5e/wrist_3` | ±2π | Left arm joint 6 |
 | `right_ur5e/...` | ... | Right arm joints (same as left) |
 | `left_ur5e/gripper/fingers_actuator` | 0-255 | Left gripper (0=open, 255=closed) |
 | `right_ur5e/gripper/fingers_actuator` | 0-255 | Right gripper |

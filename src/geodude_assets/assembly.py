@@ -29,6 +29,32 @@ _LEFT_ARM_ATTACHMENT_SITE_NAME = "left_arm_attachment_site"
 _RIGHT_ARM_ATTACHMENT_SITE_NAME = "right_arm_attachment_site"
 _GRIPPER_ATTACHMENT_SITE_NAME = "gripper_attachment_site"
 
+# The cell's home joints, per arm (shoulder_pan, shoulder_lift, elbow, wrist_1, wrist_2,
+# wrist_3), from the Geodude cell configuration. The arms are mounted the same way, so
+# these are not mirror images of each other. They become the "ready" keyframe.
+_READY_ARM_QPOS = {
+    "left_ur5e": (
+        -2.589130703602926,
+        -2.1601325474181117,
+        1.8716824690448206,
+        3.44891802846875,
+        -0.8690908590899866,
+        -0.061783615742818654,
+    ),
+    "right_ur5e": (
+        2.5312066078186035,
+        -1.025328592663147,
+        -1.8657585382461548,
+        -0.20165141046557622,
+        0.9150075912475586,
+        -0.06137401262392217,
+    ),
+}
+
+# At the bottom of the rail, the rear of the Vention frame overlaps the arm's shoulder and
+# upper arm. Exclude only those pairs, so the rest of the arm still collides with the frame.
+_FRAME_OVERLAP_LINKS = ("shoulder_link", "upper_arm_link")
+
 
 def load_ur5e_arm(prefix: str, gripper_type: str | None) -> tuple[mjcf.RootElement, np.ndarray, np.ndarray]:
     """Load a ur5e arm with gripper with a named prefix."""
@@ -129,30 +155,26 @@ def attach_arms_to_vention(
         vention_qpos = np.array([0.25, 0.25])
         vention_ctrl = np.array([0.25, 0.25])
 
-    # Get arm keyframes
-    left_key = geodude_model.find("key", "left_ur5e/ready")
-    right_key = geodude_model.find("key", "right_ur5e/ready")
+    # Each arm's ready pose is the cell's home pose; the standalone UR5e keyframes are
+    # dropped. Arm actuators are position servos, so ctrl equals qpos.
+    for prefix in ("left_ur5e", "right_ur5e"):
+        key = geodude_model.find("key", f"{prefix}/ready")
+        if key is not None:
+            key.remove()
+    left_arm_qpos = np.array(_READY_ARM_QPOS["left_ur5e"])
+    left_arm_ctrl = left_arm_qpos.copy()
+    right_arm_qpos = np.array(_READY_ARM_QPOS["right_ur5e"])
+    right_arm_ctrl = right_arm_qpos.copy()
 
-    if left_key is not None:
-        left_arm_qpos = left_key.qpos.copy()
-        left_arm_ctrl = left_key.ctrl.copy()
-        left_key.remove()
-    else:
-        print("Keyframe left_ur5e/ready not found.")
-        left_arm_qpos = np.array([])
-        left_arm_ctrl = np.array([])
-
-    if right_key is not None:
-        right_arm_qpos = right_key.qpos.copy()
-        right_arm_ctrl = right_key.ctrl.copy()
-        right_key.remove()
-        # Mirror right arm: flip shoulder_pan so arm points outward (away from vention)
-        right_arm_qpos[0] = -right_arm_qpos[0]  # shoulder_pan: -1.5708 -> +1.5708
-        right_arm_ctrl[0] = -right_arm_ctrl[0]
-    else:
-        print("Keyframe right_ur5e/ready not found.")
-        right_arm_qpos = np.array([])
-        right_arm_ctrl = np.array([])
+    frame = geodude_model.find("body", "vention_base")
+    for arm, side in ((left_ur5e, "left"), (right_ur5e, "right")):
+        for link in _FRAME_OVERLAP_LINKS:
+            geodude_model.contact.add(
+                "exclude",
+                name=f"vention_base_{side}_{link.removesuffix('_link')}",
+                body1=frame,
+                body2=arm.find("body", link),
+            )
 
     # Build qpos: linear joints are interleaved with their respective arms
     # Joint order follows body hierarchy:

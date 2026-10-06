@@ -176,6 +176,61 @@ class TestGeodueModelStructure:
         assert final_z > initial_z + 0.2, "Arm should have raised ~0.3m"
 
 
+class TestPhysicalConsistency:
+    """The generated model is reproducible and its ready pose and lifts are physical."""
+
+    @pytest.fixture
+    def geodude_model(self):
+        return mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+
+    def test_generated_model_matches_its_sources(self, tmp_path):
+        """geodude.xml is exactly what the assembly generator writes from the component
+        models, so no change lives only in the generated file."""
+        pytest.importorskip("dm_control")
+        from geodude_assets.assembly import attach_arms_to_vention
+
+        attach_arms_to_vention(True, str(tmp_path), "geodude.xml", "2f140", "2f140")
+        regenerated = (tmp_path / "geodude.xml").read_text()
+        assert regenerated == get_geodude_path().read_text(), (
+            "geodude.xml differs from its sources; regenerate it with "
+            "`uv run python -m geodude_assets.assembly --save-mjcf "
+            "-d src/geodude_assets/models/geodude -l 2f140 -r 2f140`"
+        )
+
+    def test_ready_pose_is_within_joint_limits(self, geodude_model):
+        """Every limited joint starts inside its range at the ready keyframe."""
+        key = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_KEY, "ready")
+        outside = []
+        for j in range(geodude_model.njnt):
+            if not geodude_model.jnt_limited[j]:
+                continue
+            q = geodude_model.key_qpos[key][geodude_model.jnt_qposadr[j]]
+            low, high = geodude_model.jnt_range[j]
+            if not low <= q <= high:
+                name = mujoco.mj_id2name(geodude_model, mujoco.mjtObj.mjOBJ_JOINT, j)
+                outside.append(f"{name}={q:.4f} not in [{low:.4f}, {high:.4f}]")
+        assert outside == []
+
+    def test_lifts_hold_their_height_like_a_self_locking_screw(self, geodude_model):
+        """Holding the ready height, a lift does not sag under its own weight, and a
+        300 N push moves it less than the screw's 0.125 mm backlash."""
+        data = mujoco.MjData(geodude_model)
+        mujoco.mj_resetDataKeyframe(geodude_model, data, 0)
+        for side in ("left", "right"):
+            joint = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_JOINT, f"{side}_arm_linear_vention")
+            body = mujoco.mj_name2id(geodude_model, mujoco.mjtObj.mjOBJ_BODY, f"{side}_arm_vention_base")
+            address = geodude_model.jnt_qposadr[joint]
+            for _ in range(500):
+                mujoco.mj_step(geodude_model, data)
+            held = data.qpos[address]
+            assert abs(held - 0.25) < 1e-5, f"{side} lift sagged to {held:.6f}"
+            data.xfrc_applied[body] = [0, 0, -300, 0, 0, 0]
+            for _ in range(500):
+                mujoco.mj_step(geodude_model, data)
+            data.xfrc_applied[body] = 0
+            assert held - data.qpos[address] < 0.125e-3, f"{side} lift gave way under 300 N"
+
+
 class TestContactExclusions:
     """Tests for contact exclusions in the geodude model.
 
