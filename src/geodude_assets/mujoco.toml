@@ -1,0 +1,14 @@
+# MujocoRuntime settings for Geodude (see ssrobot's docs/mujoco.md): start at the cell's
+# "ready" pose, and drive each Robotiq 2F-140 through its tendon actuator, whose control
+# runs from 0 (open) to 255 (closed).
+schema = "ssrobot.MujocoProfile"
+version = 1
+keyframe = "ready"
+
+[[grippers]]
+gripper = "left_gripper"
+actuators = [{ actuator = "left_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
+
+[[grippers]]
+gripper = "right_gripper"
+actuators = [{ actuator = "right_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]

@@ -1,5 +1,5 @@
 # Written by `ssrobot init`. Every semantic below is explicit; review it.
-# Commands and channels appear only if a template was chosen.
+# Commands, channels, and the MuJoCo profile below were added by hand, see mujoco.toml.
 schema = "ssrobot.package"
 version = 1
 robot = "geodude"
@@ -9,6 +9,11 @@ canonical_model = "mjcf"
 name = "mjcf"
 format = "mjcf"
 path = "models/geodude/geodude.xml"
+
+[[profiles]]
+name = "sim"
+runtime = "mujoco"
+path = "mujoco.toml"
 
 [[semantics.groups]]
 name = "left_arm_with_lift"
@@ -25,6 +30,11 @@ joints = ["right_arm_linear_vention", "right_ur5e/shoulder_pan_joint", "right_ur
 [[semantics.groups]]
 name = "right_arm"
 joints = ["right_ur5e/shoulder_pan_joint", "right_ur5e/shoulder_lift_joint", "right_ur5e/elbow_joint", "right_ur5e/wrist_1_joint", "right_ur5e/wrist_2_joint", "right_ur5e/wrist_3_joint"]
+
+[[semantics.groups]]
+name = "arms_with_lifts"  # both arms and their lifts, for the bimanual ready pose
+joints = ["left_arm_linear_vention", "left_ur5e/shoulder_pan_joint", "left_ur5e/shoulder_lift_joint", "left_ur5e/elbow_joint", "left_ur5e/wrist_1_joint", "left_ur5e/wrist_2_joint", "left_ur5e/wrist_3_joint", "right_arm_linear_vention", "right_ur5e/shoulder_pan_joint", "right_ur5e/shoulder_lift_joint", "right_ur5e/elbow_joint", "right_ur5e/wrist_1_joint", "right_ur5e/wrist_2_joint", "right_ur5e/wrist_3_joint"]
+subgroups = ["left_arm_with_lift", "right_arm_with_lift"]
 
 [[semantics.grippers]]
 name = "left_gripper"
@@ -73,3 +83,150 @@ gripper = "left_gripper"
 name = "right_hand"
 frame = "right_ur5e/gripper/grasp_site"
 gripper = "right_gripper"
+
+# The cell's home pose, both arms raised over the worktop with the lifts at 0.25 m. The
+# MuJoCo keyframe "ready" must agree with it, and MujocoRuntime starts there.
+[[semantics.configurations]]
+name = "ready"
+group = "arms_with_lifts"
+positions = [0.25, -2.589130703602926, -2.1601325474181117, 1.8716824690448206, 3.44891802846875, -0.8690908590899866, -0.061783615742818654, 0.25, 2.5312066078186035, -1.025328592663147, -1.8657585382461548, -0.20165141046557622, 0.9150075912475586, -0.06137401262392217]
+
+[[semantics.sensors]]
+name = "left_wrist_ft"
+kind = "force_torque"
+frame = "left_ur5e/ft_sensor_site"
+
+[[semantics.sensors]]
+name = "right_wrist_ft"
+kind = "force_torque"
+frame = "right_ur5e/ft_sensor_site"
+
+[[semantics.commands]]
+component = "left_arm"
+kind = "joint"
+mode = "position"
+
+[[semantics.commands]]
+component = "left_arm"
+kind = "joint_trajectory"
+
+[[semantics.commands]]
+component = "right_arm"
+kind = "joint"
+mode = "position"
+
+[[semantics.commands]]
+component = "right_arm"
+kind = "joint_trajectory"
+
+[[semantics.commands]]
+component = "left_arm_with_lift"
+kind = "joint"
+mode = "position"
+
+[[semantics.commands]]
+component = "left_arm_with_lift"
+kind = "joint_trajectory"
+
+[[semantics.commands]]
+component = "right_arm_with_lift"
+kind = "joint"
+mode = "position"
+
+[[semantics.commands]]
+component = "right_arm_with_lift"
+kind = "joint_trajectory"
+
+[[semantics.commands]]
+component = "left_gripper"
+kind = "gripper"
+
+[[semantics.commands]]
+component = "right_gripper"
+kind = "gripper"
+
+[[semantics.channels]]
+name = "left_arm_with_lift_q"
+quantity = "joint_position"
+source = "left_arm_with_lift"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "left_arm_with_lift_qd"
+quantity = "joint_velocity"
+source = "left_arm_with_lift"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "left_arm_with_lift_qf"
+quantity = "joint_effort"
+source = "left_arm_with_lift"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "left_gripper_opening"
+quantity = "gripper_opening"
+source = "left_gripper"
+shape = [1]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "left_hand_pose"
+quantity = "pose"
+source = "left_ur5e/gripper/grasp_site"
+frame = "world"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "left_wrist_wrench"
+quantity = "wrench"
+source = "left_wrist_ft"
+shape = [6]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "right_arm_with_lift_q"
+quantity = "joint_position"
+source = "right_arm_with_lift"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "right_arm_with_lift_qd"
+quantity = "joint_velocity"
+source = "right_arm_with_lift"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "right_arm_with_lift_qf"
+quantity = "joint_effort"
+source = "right_arm_with_lift"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "right_gripper_opening"
+quantity = "gripper_opening"
+source = "right_gripper"
+shape = [1]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "right_hand_pose"
+quantity = "pose"
+source = "right_ur5e/gripper/grasp_site"
+frame = "world"
+shape = [7]
+dtype = "float64"
+
+[[semantics.channels]]
+name = "right_wrist_wrench"
+quantity = "wrench"
+source = "right_wrist_ft"
+shape = [6]
+dtype = "float64"
