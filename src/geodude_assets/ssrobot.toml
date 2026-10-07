@@ -36,6 +36,103 @@ name = "arms_with_lifts"  # both arms and their lifts, for the bimanual ready po
 joints = ["left_arm_linear_vention", "left_ur5e/shoulder_pan_joint", "left_ur5e/shoulder_lift_joint", "left_ur5e/elbow_joint", "left_ur5e/wrist_1_joint", "left_ur5e/wrist_2_joint", "left_ur5e/wrist_3_joint", "right_arm_linear_vention", "right_ur5e/shoulder_pan_joint", "right_ur5e/shoulder_lift_joint", "right_ur5e/elbow_joint", "right_ur5e/wrist_1_joint", "right_ur5e/wrist_2_joint", "right_ur5e/wrist_3_joint"]
 subgroups = ["left_arm_with_lift", "right_arm_with_lift"]
 
+# Joint limits the MJCF cannot express (it has no velocity or acceleration limits, and
+# the UR5e model limits actuator force rather than joint force). These are hardware
+# limits; planning more conservatively, such as at half speed, is a planning-request
+# choice, not a lower limit here.
+#
+# UR5e: 180 deg/s on every joint, and 150 N m (base, shoulder, elbow) or 28 N m (wrists),
+# from the UR5e datasheet and Universal_Robots_ROS2_Description config/ur5e/
+# joint_limits.yaml. UR publishes no joint acceleration limit. 5 rad/s^2 is this cell's
+# chosen operating limit, the value Geodude has run at (mj_manipulator stores it halved
+# for planning).
+#
+# Vention lift (MO-LM-047 lead screw, NEMA 34 drive): 0.235 m/s rated speed, and 3300 N,
+# the motor-limited thrust derived in models/vention/vention.xml. Vention publishes no
+# acceleration limit, so none is declared.
+
+[[semantics.joint_limits]]
+joint = "left_ur5e/shoulder_pan_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 150.0
+
+[[semantics.joint_limits]]
+joint = "left_ur5e/shoulder_lift_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 150.0
+
+[[semantics.joint_limits]]
+joint = "left_ur5e/elbow_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 150.0
+
+[[semantics.joint_limits]]
+joint = "left_ur5e/wrist_1_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 28.0
+
+[[semantics.joint_limits]]
+joint = "left_ur5e/wrist_2_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 28.0
+
+[[semantics.joint_limits]]
+joint = "left_ur5e/wrist_3_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 28.0
+
+[[semantics.joint_limits]]
+joint = "left_arm_linear_vention"
+velocity = 0.235
+effort = 3300.0
+
+[[semantics.joint_limits]]
+joint = "right_ur5e/shoulder_pan_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 150.0
+
+[[semantics.joint_limits]]
+joint = "right_ur5e/shoulder_lift_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 150.0
+
+[[semantics.joint_limits]]
+joint = "right_ur5e/elbow_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 150.0
+
+[[semantics.joint_limits]]
+joint = "right_ur5e/wrist_1_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 28.0
+
+[[semantics.joint_limits]]
+joint = "right_ur5e/wrist_2_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 28.0
+
+[[semantics.joint_limits]]
+joint = "right_ur5e/wrist_3_joint"
+velocity = 3.141592653589793
+acceleration = 5.0
+effort = 28.0
+
+[[semantics.joint_limits]]
+joint = "right_arm_linear_vention"
+velocity = 0.235
+effort = 3300.0
+
 [[semantics.grippers]]
 name = "left_gripper"
 frame = "left_ur5e/gripper/base"
