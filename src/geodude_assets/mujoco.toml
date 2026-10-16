@@ -1,6 +1,12 @@
 # MujocoRuntime settings for Geodude (see ssrobot's docs/mujoco.md): start at the cell's
 # "ready" pose, and drive each Robotiq 2F-140 through its tendon actuator, whose control
 # runs from 0 (open) to 255 (closed).
+#
+# The 2F-140's driver joints travel their full range whether or not the fingers are
+# blocked: the spring links give way instead. So the actuator reads "closed" with an
+# object between the fingers, and each gripper's opening is measured from its spring-link
+# joint instead. Its position is -0.8074 rad closed on nothing and -0.0278 rad open, the
+# same on both grippers. Closed on a 66 mm can, it reads about 0.68.
 schema = "ssrobot.MujocoProfile"
 version = 1
 keyframe = "ready"
@@ -8,7 +14,9 @@ keyframe = "ready"
 [[grippers]]
 gripper = "left_gripper"
 actuators = [{ actuator = "left_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
+opening = { joint = "left_ur5e/gripper/right_spring_link_joint", closed = -0.8074, open = -0.0278 }
 
 [[grippers]]
 gripper = "right_gripper"
 actuators = [{ actuator = "right_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
+opening = { joint = "right_ur5e/gripper/right_spring_link_joint", closed = -0.8074, open = -0.0278 }
