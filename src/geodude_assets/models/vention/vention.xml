@@ -53,7 +53,7 @@
       <geom name="box" class="collision" type="box" size="0.037 0.045 0.072" pos="-0.66 -0.1 0.72"/>
 
       <!-- Worktop: usable work surface on vention base (1.2m x 0.8m), invisible for clean renders -->
-      <site name="worktop" type="box" pos="0 -0.35 0.755" size="0.6 0.4 0.005" rgba="0.2 0.8 0.2 0" group="2"/>
+      <site name="worktop" type="box" pos="0 -0.35 0.755" size="0.6 0.4 0.005" rgba="0.2 0.8 0.2 0" group="4"/>
 
       <!-- Each arm rides a Vention enclosed lead screw actuator (MO-LM-047-0855: 4 mm/turn
            lead, 625 mm stroke, self-locking) driven by a NEMA 34 stepper-servo (7.2 Nm
