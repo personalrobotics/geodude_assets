@@ -3,7 +3,10 @@
 
 """Tests for geodude_assets package."""
 
+import json
+
 import mujoco
+import numpy as np
 import pytest
 
 from geodude_assets import (
@@ -339,39 +342,30 @@ class TestContactExclusions:
         )
 
     def test_gripper_close_no_internal_contacts(self, geodude_model, geodude_data):
-        """Gripper can close without internal collision contacts.
+        """Closing on nothing, each gripper's fingertips meet, and nothing else touches.
 
-        The gripper 4-bar linkage mechanism has parts that pass close to each
-        other (coupler <-> spring_link). This test verifies those exclusions
-        are working by closing the gripper and checking for contacts.
+        The 4-bar linkage has parts that pass close to each other (coupler <->
+        spring_link), which are excluded. The two fingers are not excluded from each
+        other, so the only contacts are between the left and right follower (the pads).
         """
-        # Get gripper actuator indices
-        left_gripper_id = mujoco.mj_name2id(
-            geodude_model,
-            mujoco.mjtObj.mjOBJ_ACTUATOR,
-            "left_ur5e/gripper/fingers_actuator",
-        )
-        right_gripper_id = mujoco.mj_name2id(
-            geodude_model,
-            mujoco.mjtObj.mjOBJ_ACTUATOR,
-            "right_ur5e/gripper/fingers_actuator",
-        )
+        for hand in ("left_ur5e", "right_ur5e"):
+            actuator = mujoco.mj_name2id(
+                geodude_model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{hand}/gripper/fingers_actuator"
+            )
+            geodude_data.ctrl[actuator] = 255  # fully closed
 
-        # Close both grippers (255 = fully closed)
-        geodude_data.ctrl[left_gripper_id] = 255
-        geodude_data.ctrl[right_gripper_id] = 255
-
-        # Step simulation to let gripper close
-        for _ in range(200):
+        for _ in range(500):
             mujoco.mj_step(geodude_model, geodude_data)
 
-        # Check for contacts - there should be none since grippers are closing
-        # on empty space and internal mechanism is excluded
-        assert geodude_data.ncon == 0, (
-            f"Expected no contacts when closing gripper, "
-            f"but found {geodude_data.ncon}. "
-            "This may indicate missing gripper internal contact exclusions "
-            "(coupler <-> spring_link, follower <-> follower)."
+        def body(geom: int) -> str:
+            return mujoco.mj_id2name(geodude_model, mujoco.mjtObj.mjOBJ_BODY, geodude_model.geom_bodyid[geom])
+
+        touching = {tuple(sorted((body(c.geom1), body(c.geom2)))) for c in geodude_data.contact[: geodude_data.ncon]}
+        fingertips = {
+            (f"{hand}/gripper/left_follower", f"{hand}/gripper/right_follower") for hand in ("left_ur5e", "right_ur5e")
+        }
+        assert touching == fingertips, (
+            f"Expected only fingertip-on-fingertip contacts when closing on nothing, got {sorted(touching)}"
         )
 
     def test_gripper_bodies_excluded(self, geodude_model):
@@ -603,3 +597,139 @@ class TestForceTorqueSensor:
         assert left_torque_id != -1, "Left arm F/T torque sensor not found"
         assert right_force_id != -1, "Right arm F/T force sensor not found"
         assert right_torque_id != -1, "Right arm F/T torque sensor not found"
+
+
+class TestFingerContact:
+    """The Robotiq 2F-140's two fingers cannot pass through each other.
+
+    Each case closes one of Geodude's grippers from the ready pose, on nothing or on
+    a small cylinder between its open fingers, and measures the deepest
+    overlap between any collision geom of one finger and any of the other. On a
+    real gripper the fingertips meet, or press the object, before they could cross.
+
+    Each case writes its measurements to finger_contact.json in its pytest tmp_path.
+    To keep and inspect them: `uv run pytest tests/ -k TestFingerContact --basetemp=out`,
+    then read out/test_*/finger_contact.json. The simulation is deterministic, so a
+    rerun on the same machine writes the same numbers.
+    """
+
+    _LINKS = ("driver", "coupler", "spring_link", "follower")
+    _MAX_PENETRATION = 1e-3  # m
+    _CLOSE_STEPS = 1500  # 3 s at the model's 2 ms timestep
+    _SETTLED_STEPS = 250  # the last 0.5 s of the close
+    # Closed on nothing, the fingertips press on each other and must stay put. At rest
+    # they move about 10 micrometres in the last 0.5 s; 0.1 mm is jitter.
+    _MAX_SETTLED_MOTION = 1e-4  # m
+    # Cylinders whose axis runs across the fingers, ahead of the grasp site along the
+    # approach axis, where the linkage folds around them far enough for the fingertips
+    # to reach each other.
+    _OBJECTS = {
+        "nothing": None,
+        "3cm_cylinder": {"radius": 0.015, "ahead": 0.05},
+        "4cm_cylinder": {"radius": 0.02, "ahead": 0.06},
+    }
+
+    @staticmethod
+    def _with_object(hand: str, radius: float, ahead: float) -> mujoco.MjModel:
+        """Geodude with a free 100 g cylinder between ``hand``'s open fingers at the ready
+        pose. The cylinder starts gravity-compensated, so it waits for the fingers."""
+        spec = mujoco.MjSpec.from_file(str(get_geodude_path()))
+        model = spec.compile()
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        mujoco.mj_forward(model, data)
+        site = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, f"{hand}/gripper/grasp_site")
+        rotation = data.site_xmat[site].reshape(3, 3)
+        position = data.site_xpos[site] + ahead * rotation[:, 2]
+        # The cylinder's axis (its z) along the site's x: across the finger-opening axis.
+        axis_to_site_x = np.array([[0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0]])
+        quat = np.zeros(4)
+        mujoco.mju_mat2Quat(quat, (rotation @ axis_to_site_x).ravel())
+        body = spec.worldbody.add_body(name="object", pos=position, quat=quat, gravcomp=1)
+        body.add_freejoint(name="object")
+        body.add_geom(type=mujoco.mjtGeom.mjGEOM_CYLINDER, size=[radius, 0.06, 0], mass=0.1)
+        return spec.compile()
+
+    def _finger_geoms(self, model: mujoco.MjModel, hand: str, side: str) -> list[int]:
+        bodies = {
+            mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{hand}/gripper/{side}_{link}") for link in self._LINKS
+        }
+        return [
+            g
+            for g in range(model.ngeom)
+            if model.geom_bodyid[g] in bodies and (model.geom_contype[g] or model.geom_conaffinity[g])
+        ]
+
+    @pytest.mark.parametrize("object_name", list(_OBJECTS))
+    @pytest.mark.parametrize("hand", ["left_ur5e", "right_ur5e"])
+    def test_fingers_do_not_pass_through_each_other(self, hand, object_name, tmp_path):
+        """Closed on nothing or on a small cylinder, no pair of the fingers' collision
+        geoms overlaps by more than 1 mm. On nothing, the fingertips come to rest against
+        each other; a cylinder stays held between them once its gravity is switched on."""
+        held = self._OBJECTS[object_name]
+        if held is None:
+            model = mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+        else:
+            model = self._with_object(hand, held["radius"], held["ahead"])
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        if held is not None:
+            # The keyframe predates the cylinder; start it where it was placed.
+            address = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "object")]
+            data.qpos[address : address + 7] = model.qpos0[address : address + 7]
+
+        actuator = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{hand}/gripper/fingers_actuator")
+        data.ctrl[actuator] = 255  # fully closed
+        fingertips = [
+            mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{hand}/gripper/{side}_follower")
+            for side in ("left", "right")
+        ]
+        settled = []
+        for step in range(self._CLOSE_STEPS):
+            mujoco.mj_step(model, data)
+            if step >= self._CLOSE_STEPS - self._SETTLED_STEPS:
+                settled.append(data.xpos[fingertips].copy())
+        settled_motion = float(np.ptp(np.array(settled), axis=0).max())
+
+        report = {"hand": hand, "object": object_name, "settled_fingertip_motion_mm": 1e3 * settled_motion}
+        if held is not None:
+            obj = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object")
+            grasped_at = data.xpos[obj].copy()
+            model.body_gravcomp[obj] = 0
+            for _ in range(500):
+                mujoco.mj_step(model, data)
+            report["object_drop_mm"] = 1e3 * float(np.linalg.norm(data.xpos[obj] - grasped_at))
+            sides = set()
+            for c in data.contact[: data.ncon]:
+                bodies = (model.geom_bodyid[c.geom1], model.geom_bodyid[c.geom2])
+                if obj in bodies:
+                    other = mujoco.mj_id2name(
+                        model, mujoco.mjtObj.mjOBJ_BODY, bodies[1] if bodies[0] == obj else bodies[0]
+                    )
+                    for side in ("left", "right"):
+                        if other.startswith(f"{hand}/gripper/{side}_"):
+                            sides.add(side)
+            report["object_touched_by"] = sorted(sides)
+
+        deepest = (np.inf, "", "")
+        for a in self._finger_geoms(model, hand, "left"):
+            for b in self._finger_geoms(model, hand, "right"):
+                distance = mujoco.mj_geomDistance(model, data, a, b, 0.05, None)
+                if distance < deepest[0]:
+                    deepest = (distance, model.geom(a).name, model.geom(b).name)
+        report["min_finger_to_finger_distance_mm"] = 1e3 * deepest[0]
+        report["closest_pair"] = list(deepest[1:])
+        (tmp_path / "finger_contact.json").write_text(json.dumps(report, indent=2) + "\n")
+
+        assert deepest[0] >= -self._MAX_PENETRATION, (
+            f"{hand} fingers overlap by {-1e3 * deepest[0]:.1f} mm closing on {object_name} "
+            f"({deepest[1]} / {deepest[2]})"
+        )
+        if held is None:
+            assert settled_motion < self._MAX_SETTLED_MOTION, (
+                f"{hand} fingertips moved {1e3 * settled_motion:.3f} mm after closing on nothing"
+            )
+        else:
+            assert report["object_touched_by"] == ["left", "right"], f"{object_name} not held by both fingers"
+            # Falling for that second would move it metres; held, it settles within 1 cm.
+            assert report["object_drop_mm"] < 10.0, f"{object_name} slipped {report['object_drop_mm']:.1f} mm"
