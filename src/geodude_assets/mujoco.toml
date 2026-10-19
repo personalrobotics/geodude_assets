@@ -5,8 +5,9 @@
 # The 2F-140's driver joints travel their full range whether or not the fingers are
 # blocked: the spring links give way instead. So the actuator reads "closed" with an
 # object between the fingers, and each gripper's opening is measured from its spring-link
-# joint instead. Its position is -0.8074 rad closed on nothing and -0.0278 rad open, the
-# same on both grippers. Closed on a 66 mm can, it reads about 0.68.
+# joint instead. Its position is -0.7019 rad closed on nothing, where the fingertips meet,
+# and -0.0278 rad open, the same on both grippers. Closed on a 66 mm cylinder held across
+# the fingers at the depths of sstsr's Robotiq2F140 side grasp, it reads 0.45 to 0.48.
 schema = "ssrobot.MujocoProfile"
 version = 1
 keyframe = "ready"
@@ -14,9 +15,9 @@ keyframe = "ready"
 [[grippers]]
 gripper = "left_gripper"
 actuators = [{ actuator = "left_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
-opening = { joint = "left_ur5e/gripper/right_spring_link_joint", closed = -0.8074, open = -0.0278 }
+opening = { joint = "left_ur5e/gripper/right_spring_link_joint", closed = -0.7019, open = -0.0278 }
 
 [[grippers]]
 gripper = "right_gripper"
 actuators = [{ actuator = "right_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
-opening = { joint = "right_ur5e/gripper/right_spring_link_joint", closed = -0.8074, open = -0.0278 }
+opening = { joint = "right_ur5e/gripper/right_spring_link_joint", closed = -0.7019, open = -0.0278 }
