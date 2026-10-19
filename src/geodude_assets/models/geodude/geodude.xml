@@ -495,10 +495,6 @@
     <exclude name="left_ur5e/gripper//unnamed_contact_7" body1="left_ur5e/gripper/left_coupler" body2="left_ur5e/gripper/left_follower"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_8" body1="left_ur5e/gripper/right_coupler" body2="left_ur5e/gripper/right_spring_link"/>
     <exclude name="left_ur5e/gripper//unnamed_contact_9" body1="left_ur5e/gripper/left_coupler" body2="left_ur5e/gripper/left_spring_link"/>
-    <exclude name="left_ur5e/gripper//unnamed_contact_10" body1="left_ur5e/gripper/left_follower" body2="left_ur5e/gripper/right_follower"/>
-    <exclude name="left_ur5e/gripper//unnamed_contact_11" body1="left_ur5e/gripper/right_spring_link" body2="left_ur5e/gripper/left_spring_link"/>
-    <exclude name="left_ur5e/gripper//unnamed_contact_12" body1="left_ur5e/gripper/right_spring_link" body2="left_ur5e/gripper/left_follower"/>
-    <exclude name="left_ur5e/gripper//unnamed_contact_13" body1="left_ur5e/gripper/right_follower" body2="left_ur5e/gripper/left_spring_link"/>
     <exclude name="right_ur5e//unnamed_contact_0" body1="right_ur5e/base" body2="right_ur5e/shoulder_link"/>
     <exclude name="right_ur5e//unnamed_contact_1" body1="right_ur5e/shoulder_link" body2="right_ur5e/upper_arm_link"/>
     <exclude name="right_ur5e//unnamed_contact_2" body1="right_ur5e/upper_arm_link" body2="right_ur5e/forearm_link"/>
@@ -515,10 +511,6 @@
     <exclude name="right_ur5e/gripper//unnamed_contact_7" body1="right_ur5e/gripper/left_coupler" body2="right_ur5e/gripper/left_follower"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_8" body1="right_ur5e/gripper/right_coupler" body2="right_ur5e/gripper/right_spring_link"/>
     <exclude name="right_ur5e/gripper//unnamed_contact_9" body1="right_ur5e/gripper/left_coupler" body2="right_ur5e/gripper/left_spring_link"/>
-    <exclude name="right_ur5e/gripper//unnamed_contact_10" body1="right_ur5e/gripper/left_follower" body2="right_ur5e/gripper/right_follower"/>
-    <exclude name="right_ur5e/gripper//unnamed_contact_11" body1="right_ur5e/gripper/right_spring_link" body2="right_ur5e/gripper/left_spring_link"/>
-    <exclude name="right_ur5e/gripper//unnamed_contact_12" body1="right_ur5e/gripper/right_spring_link" body2="right_ur5e/gripper/left_follower"/>
-    <exclude name="right_ur5e/gripper//unnamed_contact_13" body1="right_ur5e/gripper/right_follower" body2="right_ur5e/gripper/left_spring_link"/>
   </contact>
   <equality>
     <connect name="left_ur5e/gripper//unnamed_equality_0" class="left_ur5e/gripper/" solref="0.0050000000000000001 1" solimp="0.94999999999999996 0.98999999999999999 0.001" body1="left_ur5e/gripper/right_follower" body2="left_ur5e/gripper/right_coupler" anchor="0 0 0"/>
