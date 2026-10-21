@@ -599,6 +599,78 @@ class TestForceTorqueSensor:
         assert right_torque_id != -1, "Right arm F/T torque sensor not found"
 
 
+class TestPinchTorsion:
+    """A pinch resists spinning the object about the line between the pads.
+
+    The 2F-140 pinches a 50 mm, 50 g ball, which touches each pad at a single point, and
+    a torque then acts on the ball about the line between the pads: 0.02 N*m for 0.5 s,
+    about what a can's own weight exerts pinched 40 mm from its centre. The only thing
+    resisting it is each contact's friction about its own normal, which MuJoCo gives a
+    contact only with condim 4 or 6: with condim 3 the ball spins between the pads as
+    on an axle. Real rubber pads resist it over their contact area. (An object touching
+    each pad at two separated points, such as a cylinder across the fingers, also resists
+    by sliding friction; a scrape that rocks it onto one point does not.)
+
+    Each case writes its measurements to pinch_torsion.json in its pytest tmp_path; to
+    keep them: `uv run pytest tests/ -k TestPinchTorsion --basetemp=out`.
+    """
+
+    _RADIUS, _MASS = 0.025, 0.05
+    _AHEAD = 0.07  # m ahead of the grasp site, between the fingertips' pads
+    _CLOSE_STEPS = 1500  # 3 s at 2 ms
+    _TORQUE, _TORQUE_STEPS = 0.02, 250  # N*m about the pinch line, for 0.5 s
+    _MAX_TWIST = 0.05  # rad relative to the fingers
+
+    @pytest.mark.parametrize("hand", ["left_ur5e", "right_ur5e"])
+    def test_a_pinched_ball_does_not_spin_between_the_pads(self, hand, tmp_path):
+        spec = mujoco.MjSpec.from_file(str(get_geodude_path()))
+        model = spec.compile()
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        mujoco.mj_forward(model, data)
+        site = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, f"{hand}/gripper/grasp_site")
+        rotation = data.site_xmat[site].reshape(3, 3).copy()
+        body = spec.worldbody.add_body(
+            name="object", pos=data.site_xpos[site] + self._AHEAD * rotation[:, 2], gravcomp=1
+        )
+        body.add_freejoint(name="object")
+        body.add_geom(type=mujoco.mjtGeom.mjGEOM_SPHERE, size=[self._RADIUS, 0, 0], mass=self._MASS)
+        model = spec.compile()
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        address = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "object")]
+        data.qpos[address : address + 7] = model.qpos0[address : address + 7]
+
+        data.ctrl[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{hand}/gripper/fingers_actuator")] = 255
+        for _ in range(self._CLOSE_STEPS):
+            mujoco.mj_step(model, data)
+        obj = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object")
+        finger = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{hand}/gripper/right_follower")
+
+        def relative() -> np.ndarray:
+            return data.xmat[finger].reshape(3, 3).T @ data.xmat[obj].reshape(3, 3)
+
+        touching = sorted(
+            {
+                (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, other) or str(other), int(model.geom_condim[other]))
+                for c in data.contact[: data.ncon]
+                if obj in (model.geom_bodyid[c.geom1], model.geom_bodyid[c.geom2])
+                for other in [c.geom2 if model.geom_bodyid[c.geom1] == obj else c.geom1]
+            }
+        )
+        grasped = relative()
+        pinch_line = data.site_xmat[site].reshape(3, 3)[:, 1]  # the finger-opening axis
+        for _ in range(self._TORQUE_STEPS):
+            data.xfrc_applied[obj, 3:] = self._TORQUE * pinch_line
+            mujoco.mj_step(model, data)
+        change = grasped.T @ relative()
+        twist = float(np.arccos(np.clip((np.trace(change) - 1) / 2, -1.0, 1.0)))
+        report = {"hand": hand, "twist_rad": twist, "touching_geoms_and_condim": touching}
+        (tmp_path / "pinch_torsion.json").write_text(json.dumps(report, indent=2) + "\n")
+        assert len(touching) >= 2, f"{hand}: the ball is not pinched ({report})"
+        assert twist < self._MAX_TWIST, f"{hand}: the pinched ball spun {twist:.3f} rad ({report})"
+
+
 class TestFingerContact:
     """The Robotiq 2F-140's two fingers cannot pass through each other.
 

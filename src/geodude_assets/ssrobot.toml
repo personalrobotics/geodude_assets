@@ -181,6 +181,20 @@ name = "right_hand"
 frame = "right_ur5e/gripper/grasp_site"
 gripper = "right_gripper"
 
+# Each gripper's two fingertip links touch when it closes on nothing, or deep on an
+# object; that is the grasp, not a collision to plan around. Physics keeps them
+# colliding (the model has no exclude for them, so the fingers cannot pass through each
+# other); a planner treats this pair as allowed.
+[[semantics.collision_allowances]]
+frame_a = "left_ur5e/gripper/left_follower"
+frame_b = "left_ur5e/gripper/right_follower"
+reason = "the fingertips meet when the gripper closes"
+
+[[semantics.collision_allowances]]
+frame_a = "right_ur5e/gripper/left_follower"
+frame_b = "right_ur5e/gripper/right_follower"
+reason = "the fingertips meet when the gripper closes"
+
 # The cell's home pose, both arms raised over the worktop with the lifts at 0.25 m. The
 # MuJoCo keyframe "ready" must agree with it, and MujocoRuntime starts there.
 [[semantics.configurations]]

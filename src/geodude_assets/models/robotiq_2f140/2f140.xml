@@ -41,7 +41,10 @@
         <geom type="mesh" contype="0" conaffinity="0" group="2"/>
       </default>
       <default class="collision">
-        <geom type="mesh" group="3"/>
+        <!-- condim 4: contacts carry torsional friction about their normals, as rubber
+             pads do over their contact area; with MuJoCo's default 3 a pinched object
+             spins freely about the line between the pads. -->
+        <geom type="mesh" group="3" condim="4"/>
         <default class="pad_box1">
           <geom mass="0" type="box" pos="0 0.0457554 -0.0272203" size="0.0135 0.0325 0.00375" friction="0.7"
             solimp="0.95 0.99 0.001" solref="0.004 1" priority="1" rgba="0.55 0.55 0.55 1"/>
