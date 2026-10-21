@@ -156,7 +156,7 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 | `right_linear_actuator` | 0-0.5m | Right arm vertical position |
 | `left_ur5e/shoulder_pan` | ±2π | Left arm joint 1 |
 | `left_ur5e/shoulder_lift` | ±2π | Left arm joint 2 |
-| `left_ur5e/elbow` | ±π | Left arm joint 3 (limited by UR to avoid self-collision) |
+| `left_ur5e/elbow` | ±2π | Left arm joint 3 (UR limits the real elbow to ±π; self-collision is a separate constraint here) |
 | `left_ur5e/wrist_1` | ±2π | Left arm joint 4 |
 | `left_ur5e/wrist_2` | ±2π | Left arm joint 5 |
 | `left_ur5e/wrist_3` | ±2π | Left arm joint 6 |
