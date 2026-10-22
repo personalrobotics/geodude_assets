@@ -164,6 +164,15 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 | `left_ur5e/gripper/fingers_actuator` | 0-255 | Left gripper (0=open, 255=closed) |
 | `right_ur5e/gripper/fingers_actuator` | 0-255 | Right gripper |
 
+Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Measured in `TestGripDrive`:
+
+| | The model | Real 2F-140 (Robotiq) |
+|---|---|---|
+| Grip, per pad, on a 40–110 mm object held in parallel | About 46 N | 10–125 N, set per command; Geodude's hardware commands 50 N |
+| Fingertip speed | Up to about 195 mm/s | 30–250 mm/s |
+
+A stronger grip isn't available in this model: from about 6.4 on the actuator's force range, the drive overpowers the finger's spring link and folds the finger on small objects (#36).
+
 ### Force/Torque Sensors
 
 Each UR5e arm has a simulated 6-axis force/torque sensor at the tool flange, matching the built-in sensor on the real robot.

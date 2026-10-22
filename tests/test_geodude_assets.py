@@ -805,3 +805,122 @@ class TestFingerContact:
             assert report["object_touched_by"] == ["left", "right"], f"{object_name} not held by both fingers"
             # Falling for that second would move it metres; held, it settles within 1 cm.
             assert report["object_drop_mm"] < 10.0, f"{object_name} slipped {report['object_drop_mm']:.1f} mm"
+
+
+class TestGripDrive:
+    """The 2F-140's drive behaves like the real gripper's: a position target with a force
+    limit, at a set speed (personalrobotics/geodude_assets#37).
+
+    From the ready pose, each case drives one of Geodude's grippers:
+    - closing and opening on nothing: the fingertips' peak speed is within Robotiq's
+      30-250 mm/s for the 2F-140, and the fingers are still once they arrive;
+    - a half-open command opens the fingers part way, between fully open and closed;
+    - gripping a 50 g cylinder of 40, 66 or 110 mm across, its axis across the fingers and
+      its contact line 10 mm behind the fingertips: the finger stays parallel and each pad
+      presses with 46 N, within 5 %. That is near the 50 N Geodude's hardware commands; a
+      stronger drive would overpower the finger's spring link and fold the finger on the
+      40 mm cylinder (personalrobotics/geodude_assets#36).
+
+    Each case writes its measurements to grip_drive.json in its pytest tmp_path. To keep
+    and inspect them: `uv run pytest tests/ -k TestGripDrive --basetemp=out`, then read
+    out/test_*/grip_drive.json. The simulation is deterministic, so a rerun on the same
+    machine writes the same numbers.
+    """
+
+    _STEP = 0.002  # s, the model's timestep
+    _MOVE_STEPS = 1500  # 3 s
+    _SPEED_RANGE = (0.030, 0.250)  # m/s at each fingertip, Robotiq's 2F-140 range
+    _MAX_SETTLED_MOTION = 1e-4  # m over the last 0.5 s of a move
+    _GRIP = 46.0  # N on each pad
+    _GRIP_TOLERANCE = 0.05
+    _BEHIND_TIP = 0.010  # m: where the cylinder touches the pads, behind the fingertips
+    _FINGER_LENGTH = 0.114  # m: grasp site to fingertip along the approach axis
+
+    @staticmethod
+    def _gap(model, data, hand):
+        left, right = (
+            mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{hand}/gripper/{side}_follower")
+            for side in ("left", "right")
+        )
+        return float(np.linalg.norm(data.xpos[left] - data.xpos[right]))
+
+    def _move(self, hand, start, end):
+        model = mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        actuator = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{hand}/gripper/fingers_actuator")
+        data.ctrl[actuator] = start
+        for _ in range(self._MOVE_STEPS):
+            mujoco.mj_step(model, data)
+        data.ctrl[actuator] = end
+        gaps = []
+        for _ in range(self._MOVE_STEPS):
+            mujoco.mj_step(model, data)
+            gaps.append(self._gap(model, data, hand))
+        gaps = np.array(gaps)
+        speed = float(np.abs(np.diff(gaps)).max() / self._STEP / 2)  # each fingertip
+        settled = float(np.ptp(gaps[-250:]))
+        return gaps[0], gaps[-1], speed, settled
+
+    @pytest.mark.parametrize("hand", ["left_ur5e", "right_ur5e"])
+    def test_the_fingers_move_at_the_real_grippers_speed(self, hand, tmp_path):
+        closed = self._move(hand, 0, 255)
+        opened = self._move(hand, 255, 0)
+        half = self._move(hand, 0, 128)
+        report = {
+            "hand": hand,
+            "close": {
+                "from_mm": 1e3 * closed[0],
+                "to_mm": 1e3 * closed[1],
+                "peak_fingertip_mm_s": 1e3 * closed[2],
+                "settled_motion_mm": 1e3 * closed[3],
+            },
+            "open": {
+                "from_mm": 1e3 * opened[0],
+                "to_mm": 1e3 * opened[1],
+                "peak_fingertip_mm_s": 1e3 * opened[2],
+                "settled_motion_mm": 1e3 * opened[3],
+            },
+            "half_open_command_gap_mm": 1e3 * half[1],
+        }
+        (tmp_path / "grip_drive.json").write_text(json.dumps(report, indent=2) + "\n")
+        low, high = self._SPEED_RANGE
+        for name, (_, _, speed, settled) in (("closing", closed), ("opening", opened)):
+            assert low <= speed <= high, f"{hand} fingertips peak at {1e3 * speed:.0f} mm/s {name} ({report})"
+            assert settled < self._MAX_SETTLED_MOTION, f"{hand} fingers still moving after {name} ({report})"
+        assert closed[1] < half[1] < opened[1], f"{hand}: a half-open command is not part way ({report})"
+
+    @pytest.mark.parametrize("diameter", [0.040, 0.066, 0.110])
+    @pytest.mark.parametrize("hand", ["left_ur5e", "right_ur5e"])
+    def test_each_pad_grips_with_the_commanded_force(self, hand, diameter, tmp_path):
+        model = TestFingerContact._with_object(hand, diameter / 2, self._FINGER_LENGTH - self._BEHIND_TIP)
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        address = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "object")]
+        data.qpos[address : address + 7] = model.qpos0[address : address + 7]
+        obj = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object")
+        model.body_mass[obj] = 0.05
+        data.ctrl[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{hand}/gripper/fingers_actuator")] = 255
+        for _ in range(self._MOVE_STEPS):
+            mujoco.mj_step(model, data)
+        model.body_gravcomp[obj] = 0
+        for _ in range(250):
+            mujoco.mj_step(model, data)
+        per_side = {"left": 0.0, "right": 0.0}
+        force = np.zeros(6)
+        for i in range(data.ncon):
+            c = data.contact[i]
+            bodies = (model.geom_bodyid[c.geom1], model.geom_bodyid[c.geom2])
+            if obj not in bodies:
+                continue
+            other = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, bodies[1] if bodies[0] == obj else bodies[0])
+            mujoco.mj_contactForce(model, data, i, force)
+            for side in per_side:
+                if other.startswith(f"{hand}/gripper/{side}_"):
+                    per_side[side] += float(force[0])
+        report = {"hand": hand, "diameter_mm": 1e3 * diameter, "pad_force_N": per_side}
+        (tmp_path / "grip_drive.json").write_text(json.dumps(report, indent=2) + "\n")
+        for side, value in per_side.items():
+            assert abs(value - self._GRIP) <= self._GRIP_TOLERANCE * self._GRIP, (
+                f"{hand} {side} pad grips a {1e3 * diameter:.0f} mm cylinder with {value:.1f} N ({report})"
+            )
