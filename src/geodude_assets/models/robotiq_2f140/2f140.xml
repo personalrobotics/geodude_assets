@@ -177,16 +177,26 @@
   </equality>
 
   <!--
-    The general actuator below is a customized position actuator (with some damping) where
-    gainprm[0] != kp (see http://mujoco.org/book/modeling.html#position).
-    The reason why gainprm[0] != kp is because the control input range has to be re-scaled to
-    [0, 255]. The joint range is currently set at [0, 0.8], the control range is [0, 255] and
-    kp = 100. Tau = Kp * scale * control_input - Kp * error, max(Kp * scale * control_input) = 0.8,
-    hence scale = 0.8 * 100 / 255
+    The drive, as the real gripper's: a position target with a force limit, at a set speed.
+    It is a position servo on the split tendon:
+      force = kp * 0.8 * ctrl / 255 - kp * length - kv * velocity, clamped to forcerange,
+    so ctrl 0-255 targets an opening from open (length 0) to closed (0.8), as the real
+    gripper's position register does.
+    - kp = 1000 (gainprm 1000 * 0.8 / 255): stiff, so the drive pushes at its full force until
+      within a few thousandths of its target. Menagerie's kp 100 let the force fade to zero as
+      the fingers neared full close.
+    - forcerange 6.2: about 46 N on each pad gripping a 40-110 mm object in parallel, near the
+      50 N Geodude's hardware commands (max_effort 50 N; Robotiq rates the 2F-140 at 10-125 N).
+      More is not available here: from about 6.4, the drive overpowers the finger's spring link
+      and folds the finger even on a 40 mm object held 10 mm behind the fingertips
+      (personalrobotics/geodude_assets#36).
+    - kv = 300: the fingertips close and open at up to about 195 mm/s, within the 2F-140's
+      30-250 mm/s.
+    Measured in tests/test_geodude_assets.py (TestGripDrive); personalrobotics/geodude_assets#37.
   -->
   <actuator>
-    <general class="2f140" name="fingers_actuator" tendon="split" forcerange="-5 5" ctrlrange="0 255"
-      gainprm="0.3137255 0 0" biasprm="0 -100 -10"/>
+    <general class="2f140" name="fingers_actuator" tendon="split" forcerange="-6.2 6.2" ctrlrange="0 255"
+      gainprm="3.137255 0 0" biasprm="0 -1000 -300"/>
   </actuator>
 
   <keyframe>

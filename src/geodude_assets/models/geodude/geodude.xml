@@ -539,14 +539,14 @@
     <general name="left_ur5e/wrist_1" class="left_ur5e/size1" joint="left_ur5e/wrist_1_joint"/>
     <general name="left_ur5e/wrist_2" class="left_ur5e/size1" joint="left_ur5e/wrist_2_joint"/>
     <general name="left_ur5e/wrist_3" class="left_ur5e/size1" joint="left_ur5e/wrist_3_joint"/>
-    <general name="left_ur5e/gripper/fingers_actuator" class="left_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="left_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
+    <general name="left_ur5e/gripper/fingers_actuator" class="left_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-6.2000000000000002 6.2000000000000002" tendon="left_ur5e/gripper/split" gainprm="3.1372550000000001 0 0" biasprm="0 -1000 -300"/>
     <general name="right_ur5e/shoulder_pan" class="right_ur5e/ur5e" joint="right_ur5e/shoulder_pan_joint"/>
     <general name="right_ur5e/shoulder_lift" class="right_ur5e/ur5e" joint="right_ur5e/shoulder_lift_joint"/>
     <general name="right_ur5e/elbow" class="right_ur5e/ur5e" ctrlrange="-3.1415929999999999 3.1415929999999999" joint="right_ur5e/elbow_joint"/>
     <general name="right_ur5e/wrist_1" class="right_ur5e/size1" joint="right_ur5e/wrist_1_joint"/>
     <general name="right_ur5e/wrist_2" class="right_ur5e/size1" joint="right_ur5e/wrist_2_joint"/>
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
-    <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="right_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
+    <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-6.2000000000000002 6.2000000000000002" tendon="right_ur5e/gripper/split" gainprm="3.1372550000000001 0 0" biasprm="0 -1000 -300"/>
   </actuator>
   <sensor>
     <force name="left_ur5e/ft_sensor_force" noise="3.5" site="left_ur5e/ft_sensor_site"/>
