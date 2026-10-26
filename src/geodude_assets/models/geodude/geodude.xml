@@ -229,7 +229,7 @@
                 <geom name="left_ur5e/geom_11" class="left_ur5e/collision" size="0.050000000000000003 0.20000000000000001" pos="0 0 0.20000000000000001"/>
                 <body name="left_ur5e/forearm_link" pos="0 -0.13100000000000001 0.42499999999999999" gravcomp="1">
                   <inertial pos="0.00050000000000000001 0.0195 0.2422" mass="2.8460000000000001" fullinertia="0.078792539999999994 0.078485100000000002 0.0039963200000000003 6.6000000000000003e-06 -1.365e-05 -0.00137272"/>
-                  <joint name="left_ur5e/elbow_joint"/>
+                  <joint name="left_ur5e/elbow_joint" range="-3.1415929999999999 3.1415929999999999"/>
                   <geom name="left_ur5e/geom_12" class="left_ur5e/visual" material="left_ur5e/urblue" mesh="left_ur5e/forearm_0"/>
                   <geom name="left_ur5e/geom_13" class="left_ur5e/visual" material="left_ur5e/linkgray" mesh="left_ur5e/forearm_1"/>
                   <geom name="left_ur5e/geom_14" class="left_ur5e/visual" material="left_ur5e/black" mesh="left_ur5e/forearm_2"/>
@@ -363,7 +363,7 @@
                 <geom name="right_ur5e/geom_11" class="right_ur5e/collision" size="0.050000000000000003 0.20000000000000001" pos="0 0 0.20000000000000001"/>
                 <body name="right_ur5e/forearm_link" pos="0 -0.13100000000000001 0.42499999999999999" gravcomp="1">
                   <inertial pos="0.00050000000000000001 0.0195 0.2422" mass="2.8460000000000001" fullinertia="0.078792539999999994 0.078485100000000002 0.0039963200000000003 6.6000000000000003e-06 -1.365e-05 -0.00137272"/>
-                  <joint name="right_ur5e/elbow_joint"/>
+                  <joint name="right_ur5e/elbow_joint" range="-3.1415929999999999 3.1415929999999999"/>
                   <geom name="right_ur5e/geom_12" class="right_ur5e/visual" material="right_ur5e/urblue" mesh="right_ur5e/forearm_0"/>
                   <geom name="right_ur5e/geom_13" class="right_ur5e/visual" material="right_ur5e/linkgray" mesh="right_ur5e/forearm_1"/>
                   <geom name="right_ur5e/geom_14" class="right_ur5e/visual" material="right_ur5e/black" mesh="right_ur5e/forearm_2"/>
@@ -543,14 +543,14 @@
     <position name="right_linear_actuator" class="/" forcelimited="true" ctrlrange="0 0.5" forcerange="-3300 3300" joint="right_arm_linear_vention" kp="2790000" kv="88800"/>
     <general name="left_ur5e/shoulder_pan" class="left_ur5e/ur5e" joint="left_ur5e/shoulder_pan_joint"/>
     <general name="left_ur5e/shoulder_lift" class="left_ur5e/ur5e" joint="left_ur5e/shoulder_lift_joint"/>
-    <general name="left_ur5e/elbow" class="left_ur5e/ur5e" joint="left_ur5e/elbow_joint"/>
+    <general name="left_ur5e/elbow" class="left_ur5e/ur5e" ctrlrange="-3.1415929999999999 3.1415929999999999" joint="left_ur5e/elbow_joint"/>
     <general name="left_ur5e/wrist_1" class="left_ur5e/size1" joint="left_ur5e/wrist_1_joint"/>
     <general name="left_ur5e/wrist_2" class="left_ur5e/size1" joint="left_ur5e/wrist_2_joint"/>
     <general name="left_ur5e/wrist_3" class="left_ur5e/size1" joint="left_ur5e/wrist_3_joint"/>
     <general name="left_ur5e/gripper/fingers_actuator" class="left_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-5 5" tendon="left_ur5e/gripper/split" gainprm="0.31372549999999999 0 0" biasprm="0 -100 -10"/>
     <general name="right_ur5e/shoulder_pan" class="right_ur5e/ur5e" joint="right_ur5e/shoulder_pan_joint"/>
     <general name="right_ur5e/shoulder_lift" class="right_ur5e/ur5e" joint="right_ur5e/shoulder_lift_joint"/>
-    <general name="right_ur5e/elbow" class="right_ur5e/ur5e" joint="right_ur5e/elbow_joint"/>
+    <general name="right_ur5e/elbow" class="right_ur5e/ur5e" ctrlrange="-3.1415929999999999 3.1415929999999999" joint="right_ur5e/elbow_joint"/>
     <general name="right_ur5e/wrist_1" class="right_ur5e/size1" joint="right_ur5e/wrist_1_joint"/>
     <general name="right_ur5e/wrist_2" class="right_ur5e/size1" joint="right_ur5e/wrist_2_joint"/>
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>

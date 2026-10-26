@@ -7,12 +7,14 @@
     <default class="ur5e">
       <!-- Brushed aluminum look: high specular, tight shininess -->
       <material specular="0.9" shininess="0.6"/>
-      <!-- Every joint, the elbow included, ranges +/-360 deg. Universal Robots limits the
-           real elbow to +/-180 deg (Universal_Robots_ROS2_Description, config/ur5e/
-           joint_limits.yaml) to avoid self-collision; this model leaves that to a
-           self-collision constraint instead of the joint range. Actuator control ranges
-           match the joint ranges, so a commanded position is never clipped short of
-           what the arm can reach. -->
+      <!-- Joint ranges are the UR5e's own: +/-360 deg on every joint except the elbow,
+           which Universal Robots limits to +/-180 deg to avoid self-collision
+           (Universal_Robots_ROS2_Description, config/ur5e/joint_limits.yaml). The forearm
+           folds into the shoulder lift before the elbow reaches 180 deg, so a wider range
+           adds no reachable pose, only a second elbow value for each pose behind a wall no
+           motion can cross, which splits a planner's space into disconnected regions.
+           Actuator control ranges match the joint ranges, so a commanded position is never
+           clipped short of what the arm can reach. -->
       <joint axis="0 1 0" range="-6.283185 6.283185" armature="0.1"/>
       <!-- PD gains: tuned 2026-04-10 via geodude/src/geodude/demos/tune_ur5e_gains.py
            against gravity-compensated dynamics. Target ζ ≈ 0.7 (slightly
@@ -103,7 +105,7 @@
           <geom class="collision" size="0.05 0.2" pos="0 0 0.2"/>
           <body name="forearm_link" pos="0 -0.131 0.425" gravcomp="1">
             <inertial mass="2.846" pos="0.0005 0.0195 0.2422" fullinertia="0.07879254 0.0784851 0.00399632 6.6e-06 -1.365e-05 -0.00137272"/>
-            <joint name="elbow_joint"/>
+            <joint name="elbow_joint" range="-3.141593 3.141593"/>
             <geom mesh="forearm_0" material="urblue" class="visual"/>
             <geom mesh="forearm_1" material="linkgray" class="visual"/>
             <geom mesh="forearm_2" material="black" class="visual"/>
@@ -155,7 +157,7 @@
   <actuator>
     <general class="ur5e" name="shoulder_pan" joint="shoulder_pan_joint"/>
     <general class="ur5e" name="shoulder_lift" joint="shoulder_lift_joint"/>
-    <general class="ur5e" name="elbow" joint="elbow_joint"/>
+    <general class="ur5e" name="elbow" joint="elbow_joint" ctrlrange="-3.141593 3.141593"/>
     <general class="size1" name="wrist_1" joint="wrist_1_joint"/>
     <general class="size1" name="wrist_2" joint="wrist_2_joint"/>
     <general class="size1" name="wrist_3" joint="wrist_3_joint"/>
