@@ -8,6 +8,16 @@
 # joint instead. Its position is -0.7019 rad closed on nothing, where the fingertips meet,
 # and -0.0278 rad open, the same on both grippers. Closed on a 66 mm cylinder held across
 # the fingers at the depths of sstsr's Robotiq2F140 side grasp, it reads 0.45 to 0.48.
+#
+# A gripper command ends when its fingers' motion ends (personalrobotics/ssrobot#219), by
+# each gripper's completion detector on that opening: it reached its target once within
+# goal_tolerance of it; it stopped short once its openings over stall_dwell_ns vary by
+# no more than stall_delta. Both tolerances are 1/255, the resolution of the 2F-140's
+# position register. The dwell was measured in MuJoCo over an unobstructed open, an empty
+# close, and a close on that 66 mm cylinder: the fingers do not move for the first 20 to
+# 40 ms after a command, so a dwell of 20 ms or less declares a stall before they start;
+# from 50 ms up, the outcomes are the same (reached, reached, stopped short at 0.463). It
+# is 100 ms, which was also consistent with the previous finger servo (80 ms and up).
 schema = "ssrobot.MujocoProfile"
 version = 1
 keyframe = "ready"
@@ -16,8 +26,10 @@ keyframe = "ready"
 gripper = "left_gripper"
 actuators = [{ actuator = "left_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
 opening = { joint = "left_ur5e/gripper/right_spring_link_joint", closed = -0.7019, open = -0.0278 }
+completion = { goal_tolerance = 0.00392156862745098, stall_delta = 0.00392156862745098, stall_dwell_ns = 100_000_000 }
 
 [[grippers]]
 gripper = "right_gripper"
 actuators = [{ actuator = "right_ur5e/gripper/fingers_actuator", closed = 255.0, open = 0.0 }]
 opening = { joint = "right_ur5e/gripper/right_spring_link_joint", closed = -0.7019, open = -0.0278 }
+completion = { goal_tolerance = 0.00392156862745098, stall_delta = 0.00392156862745098, stall_dwell_ns = 100_000_000 }
