@@ -170,6 +170,9 @@ Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position
 |---|---|---|
 | Grip, per pad, on a 40–110 mm object held in parallel | About 46 N | 10–125 N, set per command; Geodude's hardware commands 50 N |
 | Fingertip speed | Up to about 195 mm/s | 30–250 mm/s |
+| A pad's resistance to twisting about its normal, at one contact point | 12.96 mm × the normal force: about 0.66 N·m at 51 N | Not published |
+
+The twist a pad resists is its contact patch's, from geometry: sliding friction 0.7 times the 18.5 mm mean distance of its 27 × 65 mm face from its centre, under uniform pressure (`TestPadTorsion`). A rigid pad touches a box edge or a sphere at a single point, which has nothing else to resist a twist, and MuJoCo's default of 5 mm let a box pinched that way pivot out of the grip under its weight (#36). A pad seated flat touches at its four corners, whose sliding friction resists more. `TestPadGrip` lifts and carries objects at full speed with both coefficients, including an overload, which slips.
 
 A stronger grip isn't available in this model: from about 6.4 on the actuator's force range, the drive overpowers the finger's spring link and folds the finger on small objects (#36).
 

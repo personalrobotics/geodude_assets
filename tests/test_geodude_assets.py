@@ -671,6 +671,365 @@ class TestPinchTorsion:
         assert twist < self._MAX_TWIST, f"{hand}: the pinched ball spun {twist:.3f} rad ({report})"
 
 
+class TestPadTorsion:
+    """Each 2F-140 pad resists twisting about its normal as its whole contact face would
+    (personalrobotics/geodude_assets#36).
+
+    MuJoCo gives a condim-4 contact a torsional coefficient, a length: the contact
+    resists a twist about its normal up to that length times its normal force. A rigid
+    pad touching an object at a single point, as it does on a box edge or a sphere, has
+    nothing else to resist that twist, so the coefficient stands for the pad's contact
+    patch. Under uniform pressure over the whole face, sliding friction resists a twist
+    with mu * E[r] * N, where E[r] is the mean distance of the face from its centre; so
+    the coefficient is mu * E[r], from the pad box's own size and sliding friction.
+
+    The calibration presses a 50 mm sphere, gravity off, onto one copy of the pad geom
+    (its compiled size, friction, condim, priority, solref and solimp, under Geodude's
+    solver options) with a known force, and ramps a pure torque about the normal until
+    the sphere breaks away. It checks that MuJoCo applies the convention as stated: one
+    contact, of dimension 4, carrying the pad's own torsional coefficient (the pad's
+    priority decides, not the sphere's 0.005), breaking away at that coefficient times
+    the force. A pad seated flat on a box face touches at its four corners, whose
+    sliding friction also resists, so it holds more; that is not asserted here.
+
+    Each case writes pad_torsion.json in its pytest tmp_path; to keep them:
+    `uv run pytest tests/ -k TestPadTorsion --basetemp=out`.
+    """
+
+    _RAMP_S = 5.0  # s for the torque to reach the predicted breakaway
+    _SETTLE_S = 0.5  # s of pressing before the torque ramps
+    _BREAKAWAY = 1.0  # rad/s: the sphere is spinning away, not creeping in the soft contact
+    # Breakaway is detected once the sphere has spun up, while the torque still ramps, so
+    # it reads a little high.
+    _SLIP_RANGE = (0.97, 1.05)  # breakaway torque / (coefficient * force)
+
+    @staticmethod
+    def _pads(model, hands=("left_ur5e", "right_ur5e")):
+        """Each gripper's pad boxes: the box geoms on its followers."""
+        followers = {
+            mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{hand}/gripper/{side}_follower")
+            for hand in hands
+            for side in ("left", "right")
+        }
+        return [
+            g
+            for g in range(model.ngeom)
+            if model.geom_bodyid[g] in followers and model.geom_type[g] == mujoco.mjtGeom.mjGEOM_BOX
+        ]
+
+    @staticmethod
+    def _mean_radius(half_x, half_y, cells=2001):
+        """E[r] over a rectangle of half-sides ``half_x`` and ``half_y``, by the midpoint rule."""
+        x = (np.arange(cells) + 0.5) / cells * 2 * half_x - half_x
+        y = (np.arange(cells) + 0.5) / cells * 2 * half_y - half_y
+        return float(np.hypot(*np.meshgrid(x, y)).mean())
+
+    def test_each_pads_torsional_coefficient_is_its_contact_face(self, tmp_path):
+        model = mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+        pads = self._pads(model)
+        assert len(pads) == 4
+        report = []
+        for g in pads:
+            half = sorted(model.geom_size[g])  # the thinnest half-extent is the pad's thickness
+            mu, torsion = float(model.geom_friction[g][0]), float(model.geom_friction[g][1])
+            face = self._mean_radius(half[1], half[2])
+            report.append(
+                {
+                    "geom": mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, g),
+                    "face_mm": [2e3 * half[1], 2e3 * half[2]],
+                    "mean_radius_mm": 1e3 * face,
+                    "sliding": mu,
+                    "torsional_m": torsion,
+                    "derived_m": mu * face,
+                }
+            )
+        (tmp_path / "pad_torsion.json").write_text(json.dumps(report, indent=2) + "\n")
+        for pad in report:
+            assert pad["torsional_m"] == pytest.approx(pad["derived_m"], rel=0.01), pad
+
+    @pytest.mark.parametrize("force", [10.0, 20.0, 51.0])
+    def test_one_pad_contact_breaks_away_at_its_coefficient_times_its_load(self, force, tmp_path):
+        geodude = mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+        (pad,) = self._pads(geodude, hands=("right_ur5e",))[:1]
+        spec = mujoco.MjSpec()
+        for option in ("timestep", "cone", "impratio", "solver"):
+            setattr(spec.option, option, getattr(geodude.opt, option))
+        spec.option.gravity = [0, 0, 0]
+        size = geodude.geom_size[pad]
+        thin = int(np.argmin(size))
+        spec.worldbody.add_geom(
+            name="pad",
+            type=mujoco.mjtGeom.mjGEOM_BOX,
+            size=size,
+            friction=geodude.geom_friction[pad],
+            condim=int(geodude.geom_condim[pad]),
+            priority=int(geodude.geom_priority[pad]),
+            solref=geodude.geom_solref[pad],
+            solimp=geodude.geom_solimp[pad],
+        )
+        normal = np.eye(3)[thin]
+        sphere = spec.worldbody.add_body(name="sphere", pos=(size[thin] + 0.025) * normal)
+        sphere.add_freejoint(name="sphere")
+        sphere.add_geom(type=mujoco.mjtGeom.mjGEOM_SPHERE, size=[0.025, 0, 0], mass=0.05, friction=[0.7, 0.005, 0.0001])
+        model = spec.compile()
+        data = mujoco.MjData(model)
+        body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "sphere")
+        spin = model.jnt_dofadr[0] + 3 + thin
+
+        coefficient = float(geodude.geom_friction[pad][1])
+        predicted = coefficient * force
+        breakaway, contact = None, None
+        while data.time < self._SETTLE_S + 2 * self._RAMP_S and breakaway is None:
+            torque = predicted * max(0.0, data.time - self._SETTLE_S) / self._RAMP_S
+            data.xfrc_applied[body, :3] = -force * normal
+            data.xfrc_applied[body, 3:] = torque * normal
+            mujoco.mj_step(model, data)
+            if contact is None and data.time >= self._SETTLE_S:
+                contact = [
+                    {"dim": int(c.dim), "friction": [float(v) for v in c.friction], "pos_mm": (1e3 * c.pos).tolist()}
+                    for c in data.contact[: data.ncon]
+                ]
+            if abs(data.qvel[spin]) > self._BREAKAWAY:
+                breakaway = torque
+        report = {
+            "force_N": force,
+            "pad_torsional_m": coefficient,
+            "predicted_Nm": predicted,
+            "breakaway_Nm": breakaway,
+            "contacts": contact,
+        }
+        (tmp_path / "pad_torsion.json").write_text(json.dumps(report, indent=2) + "\n")
+        assert contact is not None and len(contact) == 1 and contact[0]["dim"] == 4, report
+        assert contact[0]["friction"][2] == pytest.approx(coefficient), report  # the pad's, by priority
+        assert breakaway is not None, f"no breakaway up to twice the prediction ({report})"
+        low, high = self._SLIP_RANGE
+        assert low <= breakaway / predicted <= high, report
+
+
+class TestPadGrip:
+    """What the pads' torsional coefficient changes in a grip, a lift and a full-speed
+    carry, at the coefficient this model declares and at MuJoCo's default 0.005 m that
+    it replaced (personalrobotics/geodude_assets#36).
+
+    Each case pinches an object in Geodude's right 2F-140 at the ready pose, holding the
+    object still while the fingers close, as a table holds it; then turns its gravity on,
+    lifts it (shoulder_lift up 0.3 rad) and carries it (shoulder_pan 1.5 rad), each a
+    trapezoid at the UR5e's 3.14 rad/s and 5 rad/s^2 (ssrobot.toml's joint limits), and
+    holds 0.5 s:
+    - ``can_fingertips``: prl_assets' 66 mm, 50 g can, 10 mm behind the fingertips;
+    - ``pop_tarts_seated``: a 0.62 kg box 102 mm across, its centre 90 mm from the pinch
+      line, horizontally; each pad seats flat on its face and touches at four corners;
+    - ``pop_tarts_one_point``: the same box touching each pad at a single point, as every
+      box that pivoted out of a grasp did over Geodude's development corpus
+      (personalrobotics/geodude#201). By construction: its faces are set back 5 mm and
+      each pad presses a 5 mm sphere on one;
+    - ``heavier_one_point``: 1.2 kg the same way, its centre 60 mm off the pinch line;
+    - ``overload_one_point``: 2.5 kg, the 2F-140's rated friction-grip payload, 90 mm off
+      the line: its weight's torque exceeds what the pads' torsion can resist.
+
+    An object is held while it stays within Geodude's attachment monitor tolerances, 20 mm
+    and 0.4 rad of where it was gripped (geodude HOLD_TOLERANCE_M, SWING_TOLERANCE_RAD).
+    At the declared coefficient, every case but the overload is held, and the pads, not
+    the linkage, hold it: a box's driver, spring-link and follower joints move less than
+    0.02 rad. The overload must slip: a grip is finite, not a weld. At 0.005 m, a box
+    touching each pad at one point pivots out. Each case records, for both coefficients,
+    each pad's contact points, normal force and torsional torque after gripping, the
+    weight's torque about the pinch line, the object's peak rotation and displacement,
+    the linkage's peak motion, and when it was lost.
+
+    Each case writes pad_grip.json in its pytest tmp_path; to keep them:
+    `uv run pytest tests/ -k TestPadGrip --basetemp=out`.
+    """
+
+    _HAND = "right_ur5e"
+    _DEFAULT_TORSION = 0.005  # m: MuJoCo's default, which the pads had before #36
+    _NUB = 0.005  # m: the radius of a one-point case's contact sphere
+    _CLOSE_STEPS, _REST_STEPS = 1500, 250  # 3 s closing, 0.5 s under gravity
+    _MOVES = (("shoulder_lift", 0.3), ("shoulder_pan", 1.5))  # rad
+    _SPEED, _ACCELERATION = np.pi, 5.0  # rad/s, rad/s^2
+    _HOLD_S = 0.5
+    _HELD_M, _HELD_RAD = 0.02, 0.4
+    # The linkage is not giving way: a seated pad's follower settles by 0.012 rad under its
+    # four corner contacts, at either coefficient; a finger giving way as a box pivots out
+    # of it, at 0.005 m, turns 0.18 rad.
+    _LINKAGE_RAD = 0.02
+    _BOX = {"half_lever": 0.0953, "half_other": 0.030, "pinch_ahead": 0.0815}  # pinched at the pads' centre
+    _CASES = {
+        "can_fingertips": {"shape": "cylinder", "across": 0.066, "length": 0.123, "mass": 0.05, "lever": 0.0,
+                           "pinch_ahead": 0.104},
+        "pop_tarts_seated": {"shape": "box", "across": 0.102, "mass": 0.62, "lever": 0.09, **_BOX},
+        "pop_tarts_one_point": {"shape": "one_point", "across": 0.102, "mass": 0.62, "lever": 0.09, **_BOX},
+        "heavier_one_point": {"shape": "one_point", "across": 0.102, "mass": 1.2, "lever": 0.06, **_BOX},
+        "overload_one_point": {"shape": "one_point", "across": 0.102, "mass": 2.5, "lever": 0.09, **_BOX},
+    }  # fmt: skip
+
+    def _model(self, case):
+        """Geodude with the case's free object between the right gripper's open pads."""
+        spec = mujoco.MjSpec.from_file(str(get_geodude_path()))
+        model = spec.compile()
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        mujoco.mj_forward(model, data)
+        site = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, f"{self._HAND}/gripper/grasp_site")
+        rotation = data.site_xmat[site].reshape(3, 3)
+        pinch_axis = rotation[:, 1]
+        pinch = data.site_xpos[site] + case["pinch_ahead"] * rotation[:, 2]
+        lever = np.cross([0.0, 0.0, -1.0], pinch_axis)  # horizontal, across the pinch line
+        lever /= np.linalg.norm(lever)
+        frame = np.column_stack([lever, pinch_axis, np.cross(lever, pinch_axis)])
+        quat = np.zeros(4)
+        mujoco.mju_mat2Quat(quat, frame.ravel())
+        body = spec.worldbody.add_body(name="object", pos=pinch + case["lever"] * lever, quat=quat, gravcomp=1)
+        body.add_freejoint(name="object")
+        across = case["across"] / 2
+        if case["shape"] == "cylinder":
+            axis = np.zeros(4)  # the cylinder's axis along the frame's third axis, across the fingers
+            mujoco.mju_mat2Quat(axis, np.array([[0.0, 0, 1], [0, 1, 0], [-1, 0, 0]]).ravel())
+            body.add_geom(
+                type=mujoco.mjtGeom.mjGEOM_CYLINDER,
+                size=[across, case["length"] / 2, 0],
+                quat=axis,
+                mass=case["mass"],
+                friction=[0.6, 0.005, 0.0001],
+            )
+            return spec.compile()
+        inset = self._NUB if case["shape"] == "one_point" else 0.0
+        body.add_geom(
+            type=mujoco.mjtGeom.mjGEOM_BOX,
+            size=[case["half_lever"], across - inset, case["half_other"]],
+            mass=case["mass"],
+            friction=[0.7, 0.005, 0.0001],
+        )
+        if inset:
+            for side in (-1, 1):
+                body.add_geom(
+                    type=mujoco.mjtGeom.mjGEOM_SPHERE,
+                    size=[self._NUB, 0, 0],
+                    pos=[-case["lever"], side * (across - self._NUB), 0],
+                    mass=0,
+                    friction=[0.7, 0.005, 0.0001],
+                )
+        return spec.compile()
+
+    def _run(self, case, torsion):
+        model = self._model(case)
+        for g in TestPadTorsion._pads(model, hands=(self._HAND,)):
+            model.geom_friction[g][1] = torsion
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        joint = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "object")
+        address, dof = model.jnt_qposadr[joint], model.jnt_dofadr[joint]
+        data.qpos[address : address + 7] = model.qpos0[address : address + 7]
+        obj = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "object")
+        actuator = lambda name: mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{self._HAND}/{name}")  # noqa: E731
+        data.ctrl[actuator("gripper/fingers_actuator")] = 255
+        still = data.qpos[address : address + 7].copy()
+        for _ in range(self._CLOSE_STEPS):
+            mujoco.mj_step(model, data)
+            data.qpos[address : address + 7] = still
+            data.qvel[dof : dof + 6] = 0
+        model.body_gravcomp[obj] = 0
+        for _ in range(self._REST_STEPS):
+            mujoco.mj_step(model, data)
+
+        follower = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{self._HAND}/gripper/right_follower")
+        linkage = [
+            model.jnt_qposadr[
+                mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, f"{self._HAND}/gripper/{s}_{p}_joint")
+            ]
+            for s in ("left", "right")
+            for p in ("driver", "spring_link", "follower")
+        ]
+
+        def relative():
+            frame = data.xmat[follower].reshape(3, 3)
+            return frame.T @ data.xmat[obj].reshape(3, 3), frame.T @ (data.xpos[obj] - data.xpos[follower])
+
+        def pads():
+            out = {"left": [], "right": []}
+            force = np.zeros(6)
+            for i in range(data.ncon):
+                c = data.contact[i]
+                bodies = (model.geom_bodyid[c.geom1], model.geom_bodyid[c.geom2])
+                if obj not in bodies:
+                    continue
+                other = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, bodies[1] if bodies[0] == obj else bodies[0])
+                for side in out:
+                    if other == f"{self._HAND}/gripper/{side}_follower":
+                        mujoco.mj_contactForce(model, data, i, force)
+                        out[side].append((float(force[0]), float(force[3]) if c.dim >= 4 else 0.0))
+            return {
+                side: {
+                    "points": len(points),
+                    "normal_N": round(sum(n for n, _ in points), 2),
+                    "torsion_Nm": round(sum(t for _, t in points), 4),
+                }
+                for side, points in out.items()
+            }
+
+        gripped = pads()
+        rotation0, position0 = relative()
+        joints0 = data.qpos[linkage].copy()
+        peak_turn = peak_move = peak_linkage = 0.0
+        lost = None
+        for name, delta in self._MOVES:
+            servo = actuator(name)
+            start = float(data.ctrl[servo])
+            ramp = min(self._SPEED / self._ACCELERATION, np.sqrt(abs(delta) / self._ACCELERATION))
+            peak = self._ACCELERATION * ramp
+            cruise = max(0.0, (abs(delta) - self._ACCELERATION * ramp**2) / peak)
+            total = 2 * ramp + cruise
+            t = 0.0
+            while t < total + self._HOLD_S:
+                if t < ramp:
+                    s = 0.5 * self._ACCELERATION * t**2
+                elif t < ramp + cruise:
+                    s = 0.5 * self._ACCELERATION * ramp**2 + peak * (t - ramp)
+                else:
+                    s = abs(delta) - 0.5 * self._ACCELERATION * max(0.0, total - t) ** 2
+                data.ctrl[servo] = start + np.sign(delta) * s
+                mujoco.mj_step(model, data)
+                t += model.opt.timestep
+                rotation, position = relative()
+                turn = float(np.arccos(np.clip((np.trace(rotation0.T @ rotation) - 1) / 2, -1.0, 1.0)))
+                move = float(np.linalg.norm(position - position0))
+                peak_turn, peak_move = max(peak_turn, turn), max(peak_move, move)
+                peak_linkage = max(peak_linkage, float(np.abs(data.qpos[linkage] - joints0).max()))
+                if lost is None and (turn > self._HELD_RAD or move > self._HELD_M):
+                    lost = f"{name}, {t:.2f} s in"
+        return {
+            "torsional_m": torsion,
+            "weight_torque_Nm": round(case["mass"] * 9.81 * case["lever"], 3),
+            "gripped": gripped,
+            "peak_turn_rad": round(peak_turn, 4),
+            "peak_move_mm": round(1e3 * peak_move, 2),
+            "peak_linkage_rad": round(peak_linkage, 4),
+            "lost": lost,
+        }
+
+    @pytest.mark.parametrize("name", list(_CASES))
+    def test_the_pads_hold_what_they_should_and_let_an_overload_slip(self, name, tmp_path):
+        case = self._CASES[name]
+        model = mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+        declared = float(model.geom_friction[TestPadTorsion._pads(model, hands=(self._HAND,))[0]][1])
+        runs = {"declared": self._run(case, declared), "mujoco_default": self._run(case, self._DEFAULT_TORSION)}
+        report = {"case": name, **case, **runs}
+        (tmp_path / "pad_grip.json").write_text(json.dumps(report, indent=2) + "\n")
+
+        repaired, before = runs["declared"], runs["mujoco_default"]
+        if name.startswith("overload"):
+            assert repaired["lost"] is not None, f"an overload held like a weld ({report})"
+            return
+        assert repaired["lost"] is None, f"{name} was not held ({report})"
+        if case["shape"] != "cylinder":
+            assert repaired["peak_linkage_rad"] < self._LINKAGE_RAD, f"the linkage gave way ({report})"
+        if case["shape"] == "one_point":
+            assert all(p["points"] == 1 for p in repaired["gripped"].values()), report
+            assert before["lost"] is not None, f"at 0.005 m it held too: the case does not test torsion ({report})"
+        else:
+            assert before["lost"] is None, f"{name} needs more than the old pads; not a torsion case ({report})"
+
+
 class TestFingerContact:
     """The Robotiq 2F-140's two fingers cannot pass through each other.
 
