@@ -27,6 +27,9 @@ description](https://github.com/ros-industrial/robotiq/tree/kinetic-devel/roboti
 7. Added `impratio=10` for better noslip.
 8. Added `scene.xml` which includes the robot, with a textured groundplane, skybox, and haze.
 9. Added hanging box to `scene.xml`.
+10. Set each pad's torsional friction to its contact patch's, 0.01296 m: sliding friction
+    0.7 times the mean distance of its 27 × 65 mm face from its centre
+    (personalrobotics/geodude_assets#36).
 
 ## License
 

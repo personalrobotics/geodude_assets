@@ -45,8 +45,14 @@
              pads do over their contact area; with MuJoCo's default 3 a pinched object
              spins freely about the line between the pads. -->
         <geom type="mesh" group="3" condim="4"/>
+        <!-- friction "0.7 0.01296 0.0001": sliding 0.7; torsional 0.01296 m, the pad's
+             contact patch, mu * E[r] for its 27 x 65 mm face under uniform pressure
+             (E[r] = 18.51 mm), since a single point contact has nothing else to resist a
+             twist about its normal; rolling, MuJoCo's default. MuJoCo's own default
+             torsional 0.005 let a box pinched at one point per pad pivot out of the grip
+             under its weight (personalrobotics/geodude_assets#36; TestPadTorsion). -->
         <default class="pad_box1">
-          <geom mass="0" type="box" pos="0 0.0457554 -0.0272203" size="0.0135 0.0325 0.00375" friction="0.7"
+          <geom mass="0" type="box" pos="0 0.0457554 -0.0272203" size="0.0135 0.0325 0.00375" friction="0.7 0.01296 0.0001"
             solimp="0.95 0.99 0.001" solref="0.004 1" priority="1" rgba="0.55 0.55 0.55 1"/>
         </default>
       </default>
