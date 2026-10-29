@@ -12,6 +12,9 @@
            (Universal_Robots_ROS2_Description, config/ur5e/joint_limits.yaml). Actuator
            control ranges match them, so a commanded position is never clipped short of
            what the arm can reach. -->
+      <!-- Armature, the reflected rotor inertia, is set per joint below to the published UR5e values (Clochiatti et al.,
+           Robotica 2024, doi 10.1017/S0263574724000833, Table IV, times the 100:1 drive ratio squared); this default
+           only covers a joint added without one. -->
       <joint axis="0 1 0" range="-6.283185 6.283185" armature="0.1"/>
       <!-- PD gains: tuned 2026-04-10 via geodude/src/geodude/demos/tune_ur5e_gains.py
            against gravity-compensated dynamics. Target ζ ≈ 0.7 (slightly
@@ -79,14 +82,14 @@
       <geom mesh="base_1" material="jointgray" class="visual"/>
       <body name="shoulder_link" pos="0 0 0.163" gravcomp="1">
         <inertial mass="3.7" pos="0 0 0" diaginertia="0.0102675 0.0102675 0.00666"/>
-        <joint name="shoulder_pan_joint" axis="0 0 1"/>
+        <joint name="shoulder_pan_joint" armature="1.73119" axis="0 0 1"/>
         <geom mesh="shoulder_0" material="urblue" class="visual"/>
         <geom mesh="shoulder_1" material="black" class="visual"/>
         <geom mesh="shoulder_2" material="jointgray" class="visual"/>
         <geom class="collision" size="0.06 0.06" pos="0 0 -0.04"/>
         <body name="upper_arm_link" pos="0 0.138 0" quat="1 0 1 0" gravcomp="1">
           <inertial mass="8.393" pos="0 0 0.2125" diaginertia="0.133886 0.133886 0.0151074"/>
-          <joint name="shoulder_lift_joint"/>
+          <joint name="shoulder_lift_joint" armature="1.53147"/>
           <geom mesh="upperarm_0" material="linkgray" class="visual"/>
           <geom mesh="upperarm_1" material="black" class="visual"/>
           <geom mesh="upperarm_2" material="jointgray" class="visual"/>
@@ -95,7 +98,7 @@
           <geom class="collision" size="0.05 0.2" pos="0 0 0.2"/>
           <body name="forearm_link" pos="0 -0.131 0.425" gravcomp="1">
             <inertial mass="2.275" pos="0 0 0.196" diaginertia="0.0311796 0.0311796 0.004095"/>
-            <joint name="elbow_joint" range="-3.141593 3.141593"/>
+            <joint name="elbow_joint" armature="1.86773" range="-3.141593 3.141593"/>
             <geom mesh="forearm_0" material="urblue" class="visual"/>
             <geom mesh="forearm_1" material="linkgray" class="visual"/>
             <geom mesh="forearm_2" material="black" class="visual"/>
@@ -104,14 +107,14 @@
             <geom class="collision" size="0.038 0.19" pos="0 0 0.2"/>
             <body name="wrist_1_link" pos="0 0 0.392" quat="1 0 1 0" gravcomp="1">
               <inertial mass="1.219" pos="0 0.127 0" diaginertia="0.0025599 0.0025599 0.0021942"/>
-              <joint name="wrist_1_joint" class="size1"/>
+              <joint name="wrist_1_joint" armature="0.21349" class="size1"/>
               <geom mesh="wrist1_0" material="black" class="visual"/>
               <geom mesh="wrist1_1" material="urblue" class="visual"/>
               <geom mesh="wrist1_2" material="jointgray" class="visual"/>
               <geom class="collision" pos="0 0.05 0" quat="1 1 0 0" size="0.04 0.07"/>
               <body name="wrist_2_link" pos="0 0.127 0" gravcomp="1">
                 <inertial mass="1.219" pos="0 0 0.1" diaginertia="0.0025599 0.0025599 0.0021942"/>
-                <joint name="wrist_2_joint" axis="0 0 1" class="size1"/>
+                <joint name="wrist_2_joint" armature="0.20968" axis="0 0 1" class="size1"/>
                 <geom mesh="wrist2_0" material="black" class="visual"/>
                 <geom mesh="wrist2_1" material="urblue" class="visual"/>
                 <geom mesh="wrist2_2" material="jointgray" class="visual"/>
@@ -120,7 +123,7 @@
                 <body name="wrist_3_link" pos="0 0 0.1" gravcomp="1">
                   <inertial mass="0.1889" pos="0 0.0771683 0" quat="1 0 0 1"
                     diaginertia="0.000132134 9.90863e-05 9.90863e-05"/>
-                  <joint name="wrist_3_joint" class="size1"/>
+                  <joint name="wrist_3_joint" armature="0.21081" class="size1"/>
                   <geom material="linkgray" mesh="wrist3" class="visual"/>
                   <geom class="eef_collision" pos="0 0.08 0" quat="1 1 0 0" size="0.04 0.02"/>
                   <!-- F/T sensor at tool flange (tool0 frame): Z+ out, X+ left, Y+ up -->
