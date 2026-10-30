@@ -19,7 +19,7 @@
 # from 50 ms up, the outcomes are the same (reached, reached, stopped short at 0.463). It
 # is 100 ms, which was also consistent with the previous finger servo (80 ms and up).
 schema = "ssrobot.MujocoProfile"
-version = 1
+version = 2
 keyframe = "ready"
 
 [[grippers]]
