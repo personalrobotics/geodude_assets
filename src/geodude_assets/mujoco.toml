@@ -23,21 +23,23 @@ version = 1
 keyframe = "ready"
 
 # The simulated sensors (personalrobotics/ssrobot#221). MuJoCo's state carries no sensor
-# noise: a held joint converges exactly, or to a limit cycle set by the constraint
-# solver's tolerance. So this profile declares the resolution its readings are reported
-# at, as a modelling choice of the simulated sensor, not a measurement. The physical
-# robot's drivers declare their own, and until they are measured, none. Each object pose
-# is reported to 0.001 m per coordinate and 0.01 rad per rotation-vector component,
-# perception grade.
+# noise, so this profile declares the resolution its readings are reported at, a
+# modelling choice of the simulated sensor, not a measurement: each object pose to 0.001
+# m per coordinate and 0.01 rad per rotation-vector component. These are the MuJoCo
+# source's values; the physical robot's drivers declare their own, and the hardware is
+# unmeasured.
 object_resolution = { translation_m = 0.001, rotation_rad = 0.01 }
 
-# The signal of every scene object's pose, for rest watches: one sample per 2 ms control
-# tick, a dropped tick breaking continuity, and readings within one step of the object
-# resolution. No dwell: how long an object must stay still is the object's own, and each
-# rest watch on an object supplies it (for a standing cylinder, its rocking period about
-# its rim). Derived and verified by ssrobot scripts/calibrate_rest.py at 759876521d91,
-# artifact artifacts/calibrate-rest/geodude.json (sha256 038c62c54c09bec4).
-object_rest = { cadence_ns = 2000000, max_gap_ns = 2000000, translation_m = 0.001, rotation_rad = 0.01, source = "bounds: one step of this profile's declared object resolution, 0.001 m and 0.01 rad, a perception-grade modelling choice of the simulated sensor, not a measurement; the hardware is unmeasured. cadence and largest gap: one 2 ms control tick. No dwell: each object supplies its own; verified in MuJoCo 3.14.0 by ssrobot scripts/calibrate_rest.py at 759876521d91 on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json" }
+# When a scene object's pose counts as at rest in this simulation: within 0.002 m per
+# coordinate and 0.01 rad of turn for 92 ms, one sample per 2 ms control tick with no
+# tick dropped. The bounds are one resolution step above the largest stationary chatter
+# of the reference scene's cylinder after it settles from a drop, and the dwell one tick
+# longer than the longest interval it looked still and then moved (90 ms). The cylinder
+# is the only object these traces cover; other objects may need their own. MuJoCo
+# source's values; the hardware is unmeasured. Calibrated by ssrobot
+# scripts/calibrate_rest.py at d748b314db6a, artifact
+# artifacts/calibrate-rest/geodude.json (sha256 7a55236a1590f707).
+object_rest = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 92000000, translation_m = 0.002, rotation_rad = 0.01, source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at d748b314db6a on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json: bounds one step above the largest stationary chatter after settling (2 steps of 0.001 m, 1 of 0.01 rad); dwell one tick longer than the longest interval that looked still and then moved, 90000000 ns, from drops of the reference scene's cylinder, the only object available, judged from the release; one sample per control tick; the hardware is unmeasured" }
 
 [[grippers]]
 gripper = "left_gripper"
@@ -51,44 +53,42 @@ actuators = [{ actuator = "right_ur5e/gripper/fingers_actuator", closed = 255.0,
 opening = { joint = "right_ur5e/gripper/right_spring_link_joint", closed = -0.7019, open = -0.0278 }
 completion = { goal_tolerance = 0.00392156862745098, stall_delta = 0.00392156862745098, stall_dwell_ns = 100_000_000 }
 
-# How finely this simulation reports left_arm_with_lift_q, its prismatic lift and 6
-# revolute joints: 2*pi/2^17 rad, a 17-bit encoder's step, per revolute joint, and 1e-6
-# m for the lift. A declared modelling choice of the simulated sensor; the hardware is
-# unmeasured.
+# How finely this simulation reports left_arm_with_lift_q: 2*pi/2^17 rad, a 17-bit
+# encoder's step, per revolute joint, and 1e-6 m for the lift. A declared modelling
+# choice of the simulated sensor; the hardware is unmeasured.
 [[resolution]]
 channel = "left_arm_with_lift_q"
 step = [1e-06, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05]
 
-# When left_arm_with_lift_q counts as at rest in this simulation: every joint within one
-# step of its resolution for 244 ms, sampled every 2 ms control tick with no tick
-# dropped. The dwell is the slowest response of the channel's servos, from the compiled
-# model: left_ur5e/shoulder_lift_joint (kp 3000, c 101, largest joint inertia 3.362 over
-# the calibration's configurations, zeta 0.503) overshoots by 8.15 steps from its
-# largest arrival error, a visible oscillation, so its dwell is one damped period,
-# 0.2433 s: readings within one step for a whole period leave less than half a step of
-# amplitude. Derived and verified by ssrobot scripts/calibrate_rest.py at 759876521d91,
-# artifact artifacts/calibrate-rest/geodude.json (sha256 038c62c54c09bec4).
+# When left_arm_with_lift_q counts as at rest in this simulation: every joint within its
+# variation (2, 2, 3, 2, 2, 2, 2 resolution steps, in joint order) for 128 ms, one
+# sample per 2 ms control tick with no tick dropped. Each variation is one step above
+# the largest stationary chatter of that joint once settled, and the dwell one tick
+# longer than the longest interval the arm looked still and then moved (126 ms), over
+# traces of reaches, out-and-backs through zero velocity, pauses, and single-joint moves
+# judged from each trajectory's end. MuJoCo source's values; the hardware is unmeasured.
+# Calibrated by ssrobot scripts/calibrate_rest.py at d748b314db6a, artifact
+# artifacts/calibrate-rest/geodude.json (sha256 7a55236a1590f707).
 [[rest]]
 channel = "left_arm_with_lift_q"
-criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 244000000, variation = [1e-06, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05], source = "variation: one step of this profile's declared resolution per element (2*pi/2^17 rad per revolute joint, 1e-06 m per prismatic joint), a modelling choice of the simulated sensor, not a measurement; the hardware is unmeasured. dwell: left_ur5e/shoulder_lift_joint's servo, damped period 0.243339 s (kp 3000, c 101, largest M 3.36194 over the trials, zeta 0.503, first overshoot 8.15 steps from its largest arrival error 0.00243), the largest over the channel's joints, from the compiled model, rounded up to 122 ticks. cadence and largest gap: one 2 ms control tick; verified in MuJoCo 3.14.0 by ssrobot scripts/calibrate_rest.py at 759876521d91 on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json" }
+criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 128000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at d748b314db6a on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json: variation one step above the largest stationary chatter after settling, per element ([2, 2, 3, 2, 2, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 126000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured" }
 
-# How finely this simulation reports right_arm_with_lift_q, its prismatic lift and 6
-# revolute joints: 2*pi/2^17 rad, a 17-bit encoder's step, per revolute joint, and 1e-6
-# m for the lift. A declared modelling choice of the simulated sensor; the hardware is
-# unmeasured.
+# How finely this simulation reports right_arm_with_lift_q: 2*pi/2^17 rad, a 17-bit
+# encoder's step, per revolute joint, and 1e-6 m for the lift. A declared modelling
+# choice of the simulated sensor; the hardware is unmeasured.
 [[resolution]]
 channel = "right_arm_with_lift_q"
 step = [1e-06, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05]
 
 # When right_arm_with_lift_q counts as at rest in this simulation: every joint within
-# one step of its resolution for 250 ms, sampled every 2 ms control tick with no tick
-# dropped. The dwell is the slowest response of the channel's servos, from the compiled
-# model: right_ur5e/shoulder_lift_joint (kp 3000, c 101, largest joint inertia 3.638
-# over the calibration's configurations, zeta 0.483) overshoots by 10.6 steps from its
-# largest arrival error, a visible oscillation, so its dwell is one damped period, 0.25
-# s: readings within one step for a whole period leave less than half a step of
-# amplitude. Derived and verified by ssrobot scripts/calibrate_rest.py at 759876521d91,
-# artifact artifacts/calibrate-rest/geodude.json (sha256 038c62c54c09bec4).
+# its variation (1, 2, 3, 2, 3, 2, 2 resolution steps, in joint order) for 118 ms, one
+# sample per 2 ms control tick with no tick dropped. Each variation is one step above
+# the largest stationary chatter of that joint once settled, and the dwell one tick
+# longer than the longest interval the arm looked still and then moved (116 ms), over
+# traces of reaches, out-and-backs through zero velocity, pauses, and single-joint moves
+# judged from each trajectory's end. MuJoCo source's values; the hardware is unmeasured.
+# Calibrated by ssrobot scripts/calibrate_rest.py at d748b314db6a, artifact
+# artifacts/calibrate-rest/geodude.json (sha256 7a55236a1590f707).
 [[rest]]
 channel = "right_arm_with_lift_q"
-criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 250000000, variation = [1e-06, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.7936899621426287e-05], source = "variation: one step of this profile's declared resolution per element (2*pi/2^17 rad per revolute joint, 1e-06 m per prismatic joint), a modelling choice of the simulated sensor, not a measurement; the hardware is unmeasured. dwell: right_ur5e/shoulder_lift_joint's servo, damped period 0.249952 s (kp 3000, c 101, largest M 3.63836 over the trials, zeta 0.483, first overshoot 10.6 steps from its largest arrival error 0.00288), the largest over the channel's joints, from the compiled model, rounded up to 125 ticks. cadence and largest gap: one 2 ms control tick; verified in MuJoCo 3.14.0 by ssrobot scripts/calibrate_rest.py at 759876521d91 on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json" }
+criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 118000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at d748b314db6a on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json: variation one step above the largest stationary chatter after settling, per element ([1, 2, 3, 2, 3, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 116000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured" }
