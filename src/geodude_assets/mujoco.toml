@@ -31,15 +31,16 @@ keyframe = "ready"
 object_resolution = { translation_m = 0.001, rotation_rad = 0.01 }
 
 # When a scene object's pose counts as at rest in this simulation: within 0.002 m per
-# coordinate and 0.01 rad of turn for 92 ms, one sample per 2 ms control tick with no
+# coordinate and 0.02 rad of turn for 96 ms, one sample per 2 ms control tick with no
 # tick dropped. The bounds are one resolution step above the largest stationary chatter
 # of the reference scene's cylinder after it settles from a drop, and the dwell one tick
-# longer than the longest interval it looked still and then moved (90 ms). The cylinder
+# longer than the longest interval it looked still and then moved (94 ms). The cylinder
 # is the only object these traces cover; other objects may need their own. MuJoCo
 # source's values; the hardware is unmeasured. Calibrated by ssrobot
-# scripts/calibrate_rest.py at d748b314db6a, artifact
-# artifacts/calibrate-rest/geodude.json (sha256 7a55236a1590f707).
-object_rest = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 92000000, translation_m = 0.002, rotation_rad = 0.01, source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at d748b314db6a on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json: bounds one step above the largest stationary chatter after settling (2 steps of 0.001 m, 1 of 0.01 rad); dwell one tick longer than the longest interval that looked still and then moved, 90000000 ns, from drops of the reference scene's cylinder, the only object available, judged from the release; one sample per control tick; the hardware is unmeasured" }
+# scripts/calibrate_rest.py at ssrobot 337554288706 on this repository at d139e8c06e9d,
+# artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a;
+# reproduced by rerunning the script at those commits.
+object_rest = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 96000000, translation_m = 0.002, rotation_rad = 0.02, source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: bounds one step above the largest stationary chatter after settling (2 steps of 0.001 m, 2 of 0.01 rad); dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, from drops of the reference scene's cylinder, the only object available, judged from the release; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a" }
 
 [[grippers]]
 gripper = "left_gripper"
@@ -67,11 +68,13 @@ step = [1e-06, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.793689962142628
 # longer than the longest interval the arm looked still and then moved (126 ms), over
 # traces of reaches, out-and-backs through zero velocity, pauses, and single-joint moves
 # judged from each trajectory's end. MuJoCo source's values; the hardware is unmeasured.
-# Calibrated by ssrobot scripts/calibrate_rest.py at d748b314db6a, artifact
-# artifacts/calibrate-rest/geodude.json (sha256 7a55236a1590f707).
+# Calibrated by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on this
+# repository at d139e8c06e9d, artifact sha256
+# d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a; reproduced by
+# rerunning the script at those commits.
 [[rest]]
 channel = "left_arm_with_lift_q"
-criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 128000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at d748b314db6a on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json: variation one step above the largest stationary chatter after settling, per element ([2, 2, 3, 2, 2, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 126000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured" }
+criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 128000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: variation one step above the largest stationary chatter after settling, per element ([2, 2, 3, 2, 2, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 126000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a" }
 
 # How finely this simulation reports right_arm_with_lift_q: 2*pi/2^17 rad, a 17-bit
 # encoder's step, per revolute joint, and 1e-6 m for the lift. A declared modelling
@@ -87,8 +90,10 @@ step = [1e-06, 4.7936899621426287e-05, 4.7936899621426287e-05, 4.793689962142628
 # longer than the longest interval the arm looked still and then moved (116 ms), over
 # traces of reaches, out-and-backs through zero velocity, pauses, and single-joint moves
 # judged from each trajectory's end. MuJoCo source's values; the hardware is unmeasured.
-# Calibrated by ssrobot scripts/calibrate_rest.py at d748b314db6a, artifact
-# artifacts/calibrate-rest/geodude.json (sha256 7a55236a1590f707).
+# Calibrated by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on this
+# repository at d139e8c06e9d, artifact sha256
+# d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a; reproduced by
+# rerunning the script at those commits.
 [[rest]]
 channel = "right_arm_with_lift_q"
-criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 118000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at d748b314db6a on personalrobotics/geodude_assets@d139e8c06e9d, artifact ssrobot artifacts/calibrate-rest/geodude.json: variation one step above the largest stationary chatter after settling, per element ([1, 2, 3, 2, 3, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 116000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured" }
+criteria = { cadence_ns = 2000000, max_gap_ns = 2000000, dwell_ns = 118000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: variation one step above the largest stationary chatter after settling, per element ([1, 2, 3, 2, 3, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 116000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a" }
