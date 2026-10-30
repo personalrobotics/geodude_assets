@@ -35,31 +35,38 @@ opening = { joint = "right_ur5e/gripper/right_spring_link_joint", closed = -0.70
 completion = { goal_tolerance = 0.00392156862745098, stall_delta = 0.00392156862745098, stall_dwell_ns = 100_000_000 }
 
 # When left_arm_with_lift_q counts as at rest in this simulation: every joint within its
-# variation (2, 2, 3, 2, 2, 2, 2 resolution steps, in joint order) for 128 ms, one
-# sample per 2 ms control tick with no tick dropped. Each variation is one step above
-# the largest stationary chatter of that joint once settled, and the dwell one tick
-# longer than the longest interval the arm looked still and then moved (126 ms), over
-# traces of reaches, out-and-backs through zero velocity, pauses, and single-joint moves
-# judged from each trajectory's end. MuJoCo source's values; the hardware is unmeasured.
-# Calibrated by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on this
-# repository at d139e8c06e9d, artifact sha256
-# d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a; reproduced by
-# rerunning the script at those commits.
+# variation for 96 ms, read every 2 ms control tick with none dropped. The variation is
+# declared, the bound on what counts as still: the lift within 2 um, and each revolute
+# joint within (2, 3, 2, 2, 2, 2) steps of 2*pi/2^17 rad, in joint order, carried over
+# from personalrobotics/ssrobot#223. MuJoCo's settled state converges to solver or float
+# tolerance, so it has no chatter to set a bound by (personalrobotics/ssrobot#224). The
+# dwell is measured against it on the readings exactly as observed: one tick longer than
+# the longest interval they stayed within it and then moved (94 ms), over reaches, out-
+# and-backs through zero velocity, pauses, and single-joint moves, judged from each
+# trajectory's end. MuJoCo source's values; the hardware is unmeasured. Evidence:
+# evidence/mujoco-rest.json (sha256
+# f867c4084f6ffcda3a6e66d9809b026db643d71c60a20afe0a2c6db5f20f46f8), written by
+# ssrobot's scripts/calibrate_rest.py --robot geodude --commit geodude=daa864d4f09d at
+# ssrobot ebecbcb5f810, 14 of 14 judged trials passing.
 [[rest]]
 channel = "left_arm_with_lift_q"
-criteria = { max_gap_ns = 2000000, dwell_ns = 128000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: variation one step above the largest stationary chatter after settling, per element ([2, 2, 3, 2, 2, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 126000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a" }
+criteria = { max_gap_ns = 2000000, dwell_ns = 96000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot ebecbcb5f810 on personalrobotics/geodude_assets@daa864d4f09d; the hardware is unmeasured; evidence/mujoco-rest.json sha256 f867c4084f6ffcda3a6e66d9809b026db643d71c60a20afe0a2c6db5f20f46f8" }
 
 # When right_arm_with_lift_q counts as at rest in this simulation: every joint within
-# its variation (1, 2, 3, 2, 3, 2, 2 resolution steps, in joint order) for 118 ms, one
-# sample per 2 ms control tick with no tick dropped. Each variation is one step above
-# the largest stationary chatter of that joint once settled, and the dwell one tick
-# longer than the longest interval the arm looked still and then moved (116 ms), over
-# traces of reaches, out-and-backs through zero velocity, pauses, and single-joint moves
-# judged from each trajectory's end. MuJoCo source's values; the hardware is unmeasured.
-# Calibrated by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on this
-# repository at d139e8c06e9d, artifact sha256
-# d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a; reproduced by
-# rerunning the script at those commits.
+# its variation for 106 ms, read every 2 ms control tick with none dropped. The
+# variation is declared, the bound on what counts as still: the lift within 1 um, and
+# each revolute joint within (2, 3, 2, 3, 2, 2) steps of 2*pi/2^17 rad, in joint order,
+# carried over from personalrobotics/ssrobot#223. MuJoCo's settled state converges to
+# solver or float tolerance, so it has no chatter to set a bound by
+# (personalrobotics/ssrobot#224). The dwell is measured against it on the readings
+# exactly as observed: one tick longer than the longest interval they stayed within it
+# and then moved (104 ms), over reaches, out-and-backs through zero velocity, pauses,
+# and single-joint moves, and moves carrying the reference cylinder, judged from each
+# trajectory's end. MuJoCo source's values; the hardware is unmeasured. Evidence:
+# evidence/mujoco-rest.json (sha256
+# f867c4084f6ffcda3a6e66d9809b026db643d71c60a20afe0a2c6db5f20f46f8), written by
+# ssrobot's scripts/calibrate_rest.py --robot geodude --commit geodude=daa864d4f09d at
+# ssrobot ebecbcb5f810, 15 of 15 judged trials passing.
 [[rest]]
 channel = "right_arm_with_lift_q"
-criteria = { max_gap_ns = 2000000, dwell_ns = 118000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: variation one step above the largest stationary chatter after settling, per element ([1, 2, 3, 2, 3, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 116000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a" }
+criteria = { max_gap_ns = 2000000, dwell_ns = 106000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot ebecbcb5f810 on personalrobotics/geodude_assets@daa864d4f09d; the hardware is unmeasured; evidence/mujoco-rest.json sha256 f867c4084f6ffcda3a6e66d9809b026db643d71c60a20afe0a2c6db5f20f46f8" }
