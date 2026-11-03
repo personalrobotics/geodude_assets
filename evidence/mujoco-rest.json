@@ -1,12 +1,12 @@
 {
   "robot": "geodude",
   "provenance": {
-    "ssrobot_commit": "ebecbcb5f810ba71f03661f30be4ccc28b7163dd",
+    "ssrobot_commit": "c5c0d4040c73cba5d6a6b7cda32b27e971e7d713",
     "ssrobot_clean": true,
     "script": "scripts/calibrate_rest.py",
     "repository": "personalrobotics/geodude_assets",
-    "commit": "daa864d4f09d1bda852b3a849caa1d2e13a4d871",
-    "archive_sha256": "948faf6d6d29389c7aff76ec47300ad1646a0cfa4ade9f5de972c2a978c147be",
+    "commit": "e7be8b437cd954285a9fb515a6de39fb94b3fc42",
+    "archive_sha256": "e916fdfd7c4a33a52ab319bf0ac3d6a5652c3492f149a2b8a58ffd54fb15a870",
     "python": "3.14.7",
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
     "machine": "arm64",
@@ -52,7 +52,7 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: variation one step above the largest stationary chatter after settling, per element ([2, 2, 3, 2, 2, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 126000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a"
+        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot ebecbcb5f810 on personalrobotics/geodude_assets@daa864d4f09d; the hardware is unmeasured; evidence/mujoco-rest.json sha256 f867c4084f6ffcda3a6e66d9809b026db643d71c60a20afe0a2c6db5f20f46f8"
       },
       "criteria": {
         "max_gap_ns": 2000000,
@@ -66,13 +66,35 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot ebecbcb5f810 on personalrobotics/geodude_assets@daa864d4f09d; the hardware is unmeasured"
+        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot c5c0d4040c73 on personalrobotics/geodude_assets@e7be8b437cd9; the hardware is unmeasured"
       },
       "longest_false_still": {
         "span_ns": 94000000,
         "from_ns": 6224000000,
         "to_ns": 6318000000
       },
+      "sets": {
+        "unloaded": {
+          "trials": 16,
+          "judged": 14,
+          "longest_span_ns": 94000000,
+          "dwell_ns": 96000000,
+          "longest_in": [
+            {
+              "set": "unloaded",
+              "index": 11,
+              "name": "toward_middle/out_and_back_fast"
+            }
+          ]
+        }
+      },
+      "determined_by": [
+        {
+          "set": "unloaded",
+          "index": 11,
+          "name": "toward_middle/out_and_back_fast"
+        }
+      ],
       "summary": {
         "trials": 16,
         "judged": 14,
@@ -86,6 +108,8 @@
       },
       "trials": [
         {
+          "set": "unloaded",
+          "index": 0,
           "name": "keyframe/reach_toward_middle",
           "describe": "every joint 0.4 rad (0.1 m) toward mid-range",
           "legs": [
@@ -108,6 +132,7 @@
             "ended_ns": 4002000000
           },
           "end_ns": 4000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -135,6 +160,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 1,
           "name": "keyframe/reach_away",
           "describe": "every joint 0.25 rad (0.0625 m) away from mid-range",
           "legs": [
@@ -157,6 +184,7 @@
             "ended_ns": 3502000000
           },
           "end_ns": 3500000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -184,6 +212,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 2,
           "name": "keyframe/out_and_back",
           "describe": "every joint 0.4 rad (0.1 m) out and back over 3 s",
           "legs": [
@@ -206,6 +236,7 @@
             "ended_ns": 5002000000
           },
           "end_ns": 5000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -233,6 +264,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 3,
           "name": "keyframe/out_and_back_fast",
           "describe": "every joint 0.15 rad out and back, at half the limits",
           "legs": [
@@ -255,6 +288,7 @@
             "ended_ns": 3092000000
           },
           "end_ns": 3090000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -282,6 +316,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 4,
           "name": "keyframe/slow_creep",
           "describe": "every joint 0.01 rad (2.5 mm) over 5 s",
           "legs": [
@@ -304,6 +340,7 @@
             "ended_ns": 7002000000
           },
           "end_ns": 7000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": true,
           "judged": false,
@@ -331,6 +368,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 5,
           "name": "keyframe/pause",
           "describe": "every joint 0.2 rad, a 0.5 s pause, then 0.2 rad more",
           "legs": [
@@ -379,6 +418,7 @@
             "ended_ns": 4502000000
           },
           "end_ns": 4500000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -406,6 +446,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 6,
           "name": "keyframe/single_first",
           "describe": "left_arm_linear_vention alone 0.4 rad (0.1 m) out and back",
           "legs": [
@@ -428,6 +470,7 @@
             "ended_ns": 4672000000
           },
           "end_ns": 4670000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -455,6 +498,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 7,
           "name": "keyframe/single_last",
           "describe": "left_ur5e/wrist_3_joint alone 0.4 rad out and back",
           "legs": [
@@ -477,6 +522,7 @@
             "ended_ns": 4002000000
           },
           "end_ns": 4000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -504,6 +550,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 8,
           "name": "toward_middle/reach_toward_middle",
           "describe": "every joint 0.4 rad (0.1 m) toward mid-range",
           "legs": [
@@ -526,6 +574,7 @@
             "ended_ns": 7004000000
           },
           "end_ns": 7002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -553,6 +602,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 9,
           "name": "toward_middle/reach_away",
           "describe": "every joint 0.25 rad (0.0625 m) away from mid-range",
           "legs": [
@@ -575,6 +626,7 @@
             "ended_ns": 6504000000
           },
           "end_ns": 6502000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -602,6 +654,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 10,
           "name": "toward_middle/out_and_back",
           "describe": "every joint 0.4 rad (0.1 m) out and back over 3 s",
           "legs": [
@@ -624,6 +678,7 @@
             "ended_ns": 8004000000
           },
           "end_ns": 8002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -651,6 +706,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 11,
           "name": "toward_middle/out_and_back_fast",
           "describe": "every joint 0.15 rad out and back, at half the limits",
           "legs": [
@@ -673,6 +730,7 @@
             "ended_ns": 6094000000
           },
           "end_ns": 6092000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -700,6 +758,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 12,
           "name": "toward_middle/slow_creep",
           "describe": "every joint 0.01 rad (2.5 mm) over 5 s",
           "legs": [
@@ -722,6 +782,7 @@
             "ended_ns": 10004000000
           },
           "end_ns": 10002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": true,
           "judged": false,
@@ -749,6 +810,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 13,
           "name": "toward_middle/pause",
           "describe": "every joint 0.2 rad, a 0.5 s pause, then 0.2 rad more",
           "legs": [
@@ -797,6 +860,7 @@
             "ended_ns": 7504000000
           },
           "end_ns": 7502000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -824,6 +888,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 14,
           "name": "toward_middle/single_first",
           "describe": "left_arm_linear_vention alone 0.4 rad (0.1 m) out and back",
           "legs": [
@@ -846,6 +912,7 @@
             "ended_ns": 7674000000
           },
           "end_ns": 7672000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -873,6 +940,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 15,
           "name": "toward_middle/single_last",
           "describe": "left_ur5e/wrist_3_joint alone 0.4 rad out and back",
           "legs": [
@@ -895,6 +964,7 @@
             "ended_ns": 7004000000
           },
           "end_ns": 7002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -944,7 +1014,7 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values, calibrated from recorded traces by ssrobot scripts/calibrate_rest.py at ssrobot 337554288706 on personalrobotics/geodude_assets@d139e8c06e9d: variation one step above the largest stationary chatter after settling, per element ([1, 2, 3, 2, 3, 2, 2] steps of this profile's resolution); dwell one tick longer than the longest interval that looked still and then moved, 116000000 ns, judged from each trajectory's end; one sample per control tick; the hardware is unmeasured; reproduced by rerunning the script at those commits; artifact sha256 d5850ae7c9f2d89b8bd5c18d48907ff561010bb2d34d8e95f1746d72a39cf37a"
+        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot ebecbcb5f810 on personalrobotics/geodude_assets@daa864d4f09d; the hardware is unmeasured; evidence/mujoco-rest.json sha256 f867c4084f6ffcda3a6e66d9809b026db643d71c60a20afe0a2c6db5f20f46f8"
       },
       "criteria": {
         "max_gap_ns": 2000000,
@@ -958,17 +1028,46 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot ebecbcb5f810 on personalrobotics/geodude_assets@daa864d4f09d; the hardware is unmeasured"
+        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot c5c0d4040c73 on personalrobotics/geodude_assets@e7be8b437cd9; the hardware is unmeasured"
       },
       "longest_false_still": {
         "span_ns": 104000000,
         "from_ns": 5116000000,
         "to_ns": 5220000000
       },
+      "sets": {
+        "unloaded": {
+          "trials": 16,
+          "judged": 14,
+          "longest_span_ns": 104000000,
+          "dwell_ns": 106000000,
+          "longest_in": [
+            {
+              "set": "unloaded",
+              "index": 2,
+              "name": "keyframe/out_and_back"
+            }
+          ]
+        },
+        "loaded": {
+          "trials": 3,
+          "judged": 0,
+          "longest_span_ns": null,
+          "dwell_ns": null,
+          "longest_in": []
+        }
+      },
+      "determined_by": [
+        {
+          "set": "unloaded",
+          "index": 2,
+          "name": "keyframe/out_and_back"
+        }
+      ],
       "summary": {
         "trials": 19,
-        "judged": 15,
-        "passed": 15,
+        "judged": 14,
+        "passed": 14,
         "all_passed": true,
         "delay_ns": [
           124000000,
@@ -978,6 +1077,8 @@
       },
       "trials": [
         {
+          "set": "unloaded",
+          "index": 0,
           "name": "keyframe/reach_toward_middle",
           "describe": "every joint 0.4 rad (0.1 m) toward mid-range",
           "legs": [
@@ -1000,6 +1101,7 @@
             "ended_ns": 4002000000
           },
           "end_ns": 4000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1027,6 +1129,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 1,
           "name": "keyframe/reach_away",
           "describe": "every joint 0.25 rad (0.0625 m) away from mid-range",
           "legs": [
@@ -1049,6 +1153,7 @@
             "ended_ns": 3502000000
           },
           "end_ns": 3500000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1076,6 +1181,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 2,
           "name": "keyframe/out_and_back",
           "describe": "every joint 0.4 rad (0.1 m) out and back over 3 s",
           "legs": [
@@ -1098,6 +1205,7 @@
             "ended_ns": 5002000000
           },
           "end_ns": 5000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1125,6 +1233,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 3,
           "name": "keyframe/out_and_back_fast",
           "describe": "every joint 0.15 rad out and back, at half the limits",
           "legs": [
@@ -1147,6 +1257,7 @@
             "ended_ns": 3092000000
           },
           "end_ns": 3090000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1174,6 +1285,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 4,
           "name": "keyframe/slow_creep",
           "describe": "every joint 0.01 rad (2.5 mm) over 5 s",
           "legs": [
@@ -1196,6 +1309,7 @@
             "ended_ns": 7002000000
           },
           "end_ns": 7000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": true,
           "judged": false,
@@ -1223,6 +1337,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 5,
           "name": "keyframe/pause",
           "describe": "every joint 0.2 rad, a 0.5 s pause, then 0.2 rad more",
           "legs": [
@@ -1271,6 +1387,7 @@
             "ended_ns": 4502000000
           },
           "end_ns": 4500000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1298,6 +1415,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 6,
           "name": "keyframe/single_first",
           "describe": "right_arm_linear_vention alone 0.4 rad (0.1 m) out and back",
           "legs": [
@@ -1320,6 +1439,7 @@
             "ended_ns": 4672000000
           },
           "end_ns": 4670000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1347,6 +1467,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 7,
           "name": "keyframe/single_last",
           "describe": "right_ur5e/wrist_3_joint alone 0.4 rad out and back",
           "legs": [
@@ -1369,6 +1491,7 @@
             "ended_ns": 4002000000
           },
           "end_ns": 4000000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1396,6 +1519,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 8,
           "name": "toward_middle/reach_toward_middle",
           "describe": "every joint 0.4 rad (0.1 m) toward mid-range",
           "legs": [
@@ -1418,6 +1543,7 @@
             "ended_ns": 7004000000
           },
           "end_ns": 7002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1445,6 +1571,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 9,
           "name": "toward_middle/reach_away",
           "describe": "every joint 0.25 rad (0.0625 m) away from mid-range",
           "legs": [
@@ -1467,6 +1595,7 @@
             "ended_ns": 6504000000
           },
           "end_ns": 6502000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1494,6 +1623,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 10,
           "name": "toward_middle/out_and_back",
           "describe": "every joint 0.4 rad (0.1 m) out and back over 3 s",
           "legs": [
@@ -1516,6 +1647,7 @@
             "ended_ns": 8004000000
           },
           "end_ns": 8002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1543,6 +1675,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 11,
           "name": "toward_middle/out_and_back_fast",
           "describe": "every joint 0.15 rad out and back, at half the limits",
           "legs": [
@@ -1565,6 +1699,7 @@
             "ended_ns": 6094000000
           },
           "end_ns": 6092000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1592,6 +1727,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 12,
           "name": "toward_middle/slow_creep",
           "describe": "every joint 0.01 rad (2.5 mm) over 5 s",
           "legs": [
@@ -1614,6 +1751,7 @@
             "ended_ns": 10004000000
           },
           "end_ns": 10002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": true,
           "judged": false,
@@ -1641,6 +1779,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 13,
           "name": "toward_middle/pause",
           "describe": "every joint 0.2 rad, a 0.5 s pause, then 0.2 rad more",
           "legs": [
@@ -1689,6 +1829,7 @@
             "ended_ns": 7504000000
           },
           "end_ns": 7502000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1716,6 +1857,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 14,
           "name": "toward_middle/single_first",
           "describe": "right_arm_linear_vention alone 0.4 rad (0.1 m) out and back",
           "legs": [
@@ -1738,6 +1881,7 @@
             "ended_ns": 7674000000
           },
           "end_ns": 7672000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1765,6 +1909,8 @@
           }
         },
         {
+          "set": "unloaded",
+          "index": 15,
           "name": "toward_middle/single_last",
           "describe": "right_ur5e/wrist_3_joint alone 0.4 rad out and back",
           "legs": [
@@ -1787,6 +1933,7 @@
             "ended_ns": 7004000000
           },
           "end_ns": 7002000000,
+          "invalid": [],
           "valid": true,
           "out_of_envelope": false,
           "judged": true,
@@ -1814,6 +1961,8 @@
           }
         },
         {
+          "set": "loaded",
+          "index": 0,
           "name": "payload/out_and_back",
           "describe": "holding the object: every revolute joint 0.2 rad out and back",
           "legs": [
@@ -1832,11 +1981,19 @@
             ]
           ],
           "execution": {
-            "state": "succeeded",
-            "ended_ns": 10716000000
+            "state": "not_submitted",
+            "ended_ns": null
           },
-          "end_ns": 10714000000,
+          "end_ns": null,
           "payload": {
+            "lift": {
+              "height": 0.1,
+              "minimum_rise": 0.09,
+              "support": "vention_base",
+              "known": [
+                "personalrobotics/geodude_assets#42: deep grasps whose inner links carry the load give way"
+              ]
+            },
             "object_at_start": [
               0.35,
               -0.35,
@@ -1875,43 +2032,91 @@
               -0.001867739191860245,
               -0.003064321076811663
             ],
-            "object_raised_m": 0.09955962319490885,
-            "object_raised_to_m": 0.912924051923285
+            "lift_plan": "succeeded",
+            "lift_diagnostics": [
+              {
+                "code": "line_margin",
+                "message": "planned against the line narrowed by 2.5e-05 m on each side; validated against the original"
+              }
+            ],
+            "lift_execution": "succeeded",
+            "object_raised_m": 0.09899338574742556,
+            "object_raised_to_m": 0.9123578144758017,
+            "lift_violation": null,
+            "settle": {
+              "evidence": "PRIVILEGED CALIBRATION EVIDENCE: the simulator's pose of the held object, observed to decide when the grip has settled before the attachment's reference is reset. It establishes loaded arm-rest criteria; it is not a runtime gripper-rest event.",
+              "criteria": {
+                "max_gap_ns": 2000000,
+                "dwell_ns": 500000000,
+                "translation_m": 0.0001,
+                "rotation_rad": 0.001,
+                "source": "calibrate_rest.py: 1% of MujocoRuntime's attachment tolerances over 0.5 s"
+              },
+              "outcome": "deadline",
+              "started_ns": 5204000000,
+              "ended_ns": 125204000000,
+              "violation_while_settling": {
+                "stamp_ns": 15130000000,
+                "position_error_m": 0.010000341484651855,
+                "rotation_error_rad": 0.016630189583275425
+              },
+              "object_raised_m": 0.09133664703075228
+            }
+          },
+          "validation": {
+            "valid": false,
+            "checks": 64,
+            "validator": "sscbirrt 3.15.0 native",
+            "policy": "Valid at states at most 0.05 apart (Euclidean, joint space, to a relative 1e-09) along each raw-linear motion, endpoints included; nothing is claimed between them. No collision clearance is added.",
+            "witness": {
+              "failure": "collision",
+              "segment": 61,
+              "fraction": 1.0,
+              "configuration": [
+                3.8414731329745373,
+                -0.05890226416564845,
+                -1.148236612095876,
+                0.8315817829402319,
+                -0.6678665281086105,
+                -1.0529039489638683
+              ],
+              "contacts": [
+                {
+                  "kind": "robot_environment",
+                  "first": "cylinder",
+                  "second": "vention_base",
+                  "distance": -0.0011353224128155526
+                }
+              ],
+              "detail": "in collision"
+            }
           },
           "objects": {
             "cylinder": [
-              0.3320828055770306,
-              -0.35359315192720764,
-              0.9257004821205825
+              0.3238225228087863,
+              -0.3473575668826265,
+              0.9046231193632296
             ]
           },
-          "valid": true,
-          "out_of_envelope": false,
-          "judged": true,
-          "longest_false_still": {
-            "span_ns": 104000000,
-            "from_ns": 10842000000,
-            "to_ns": 10946000000
+          "violations": {
+            "cylinder": null
           },
+          "invalid": [
+            "leg collides with the object held",
+            "the grip did not settle: deadline"
+          ],
+          "valid": false,
+          "out_of_envelope": false,
+          "judged": false,
+          "longest_false_still": null,
           "check": {
-            "outcome": "at_rest",
-            "watched_from_ns": 10716000000,
-            "fired_ns": 11024000000,
-            "delay_ns": 308000000,
-            "range_after": [
-              1.0036422948278556e-07,
-              6.318984306208364e-05,
-              0.00013857484742413329,
-              5.040892423191501e-05,
-              3.629715463415728e-05,
-              1.4889240177007323e-05,
-              2.6823750951532332e-06
-            ],
-            "stays_within": true,
-            "passed": true
+            "outcome": "not_submitted",
+            "passed": false
           }
         },
         {
+          "set": "loaded",
+          "index": 1,
           "name": "payload/slow_creep",
           "describe": "holding the object: every revolute joint 0.01 rad over 5 s",
           "legs": [
@@ -1931,10 +2136,18 @@
           ],
           "execution": {
             "state": "succeeded",
-            "ended_ns": 13716000000
+            "ended_ns": 132206000000
           },
-          "end_ns": 13714000000,
+          "end_ns": 132204000000,
           "payload": {
+            "lift": {
+              "height": 0.1,
+              "minimum_rise": 0.09,
+              "support": "vention_base",
+              "known": [
+                "personalrobotics/geodude_assets#42: deep grasps whose inner links carry the load give way"
+              ]
+            },
             "object_at_start": [
               0.35,
               -0.35,
@@ -1973,43 +2186,91 @@
               -0.001867739191860245,
               -0.003064321076811663
             ],
-            "object_raised_m": 0.09955962319490885,
-            "object_raised_to_m": 0.912924051923285
+            "lift_plan": "succeeded",
+            "lift_diagnostics": [
+              {
+                "code": "line_margin",
+                "message": "planned against the line narrowed by 2.5e-05 m on each side; validated against the original"
+              }
+            ],
+            "lift_execution": "succeeded",
+            "object_raised_m": 0.09899338574742556,
+            "object_raised_to_m": 0.9123578144758017,
+            "lift_violation": null,
+            "settle": {
+              "evidence": "PRIVILEGED CALIBRATION EVIDENCE: the simulator's pose of the held object, observed to decide when the grip has settled before the attachment's reference is reset. It establishes loaded arm-rest criteria; it is not a runtime gripper-rest event.",
+              "criteria": {
+                "max_gap_ns": 2000000,
+                "dwell_ns": 500000000,
+                "translation_m": 0.0001,
+                "rotation_rad": 0.001,
+                "source": "calibrate_rest.py: 1% of MujocoRuntime's attachment tolerances over 0.5 s"
+              },
+              "outcome": "deadline",
+              "started_ns": 5204000000,
+              "ended_ns": 125204000000,
+              "violation_while_settling": {
+                "stamp_ns": 15130000000,
+                "position_error_m": 0.010000341484651855,
+                "rotation_error_rad": 0.016630189583275425
+              },
+              "object_raised_m": 0.09133664703075228
+            }
+          },
+          "validation": {
+            "valid": true,
+            "checks": 501,
+            "validator": "sscbirrt 3.15.0 native",
+            "policy": "Valid at states at most 0.05 apart (Euclidean, joint space, to a relative 1e-09) along each raw-linear motion, endpoints included; nothing is claimed between them. No collision clearance is added.",
+            "witness": null
           },
           "objects": {
             "cylinder": [
-              0.34175331543123116,
-              -0.35817295877044175,
-              0.9028762232694305
+              0.3330348582099904,
+              -0.3503473699589064,
+              0.8962138680468352
             ]
           },
-          "valid": true,
+          "violations": {
+            "cylinder": {
+              "stamp_ns": 129292000000,
+              "position_error_m": 0.00016119667543891802,
+              "rotation_error_rad": 0.10000820062382254
+            }
+          },
+          "invalid": [
+            "the grip did not settle: deadline",
+            "attachment violated after the reference reset"
+          ],
+          "valid": false,
           "out_of_envelope": true,
           "judged": false,
           "longest_false_still": {
             "span_ns": 0,
-            "from_ns": 13718000000,
-            "to_ns": 13718000000
+            "from_ns": 132208000000,
+            "to_ns": 132208000000
           },
           "check": {
             "outcome": "at_rest",
-            "watched_from_ns": 13716000000,
-            "fired_ns": 13824000000,
+            "watched_from_ns": 132206000000,
+            "fired_ns": 132314000000,
             "delay_ns": 108000000,
             "range_after": [
-              1.8478986119063734e-09,
-              2.812523338668882e-06,
-              2.301475978266909e-06,
-              1.1539923234771265e-06,
-              2.137519594103132e-06,
-              1.4557050318719789e-05,
-              3.4993308857256267e-06
+              1.384504233481465e-09,
+              1.0048992464817275e-06,
+              1.746161056331852e-06,
+              1.1666582422353855e-06,
+              1.2965591814628752e-06,
+              3.892581794673333e-07,
+              4.3951705031020083e-07
             ],
             "stays_within": true,
             "passed": true
           }
         },
         {
+          "set": "loaded",
+          "index": 2,
           "name": "payload/pause",
           "describe": "holding the object: every revolute joint 0.1 rad, a 0.5 s pause, then 0.1 rad more",
           "legs": [
@@ -2054,11 +2315,19 @@
             ]
           ],
           "execution": {
-            "state": "succeeded",
-            "ended_ns": 11216000000
+            "state": "not_submitted",
+            "ended_ns": null
           },
-          "end_ns": 11214000000,
+          "end_ns": null,
           "payload": {
+            "lift": {
+              "height": 0.1,
+              "minimum_rise": 0.09,
+              "support": "vention_base",
+              "known": [
+                "personalrobotics/geodude_assets#42: deep grasps whose inner links carry the load give way"
+              ]
+            },
             "object_at_start": [
               0.35,
               -0.35,
@@ -2097,39 +2366,85 @@
               -0.001867739191860245,
               -0.003064321076811663
             ],
-            "object_raised_m": 0.09955962319490885,
-            "object_raised_to_m": 0.912924051923285
+            "lift_plan": "succeeded",
+            "lift_diagnostics": [
+              {
+                "code": "line_margin",
+                "message": "planned against the line narrowed by 2.5e-05 m on each side; validated against the original"
+              }
+            ],
+            "lift_execution": "succeeded",
+            "object_raised_m": 0.09899338574742556,
+            "object_raised_to_m": 0.9123578144758017,
+            "lift_violation": null,
+            "settle": {
+              "evidence": "PRIVILEGED CALIBRATION EVIDENCE: the simulator's pose of the held object, observed to decide when the grip has settled before the attachment's reference is reset. It establishes loaded arm-rest criteria; it is not a runtime gripper-rest event.",
+              "criteria": {
+                "max_gap_ns": 2000000,
+                "dwell_ns": 500000000,
+                "translation_m": 0.0001,
+                "rotation_rad": 0.001,
+                "source": "calibrate_rest.py: 1% of MujocoRuntime's attachment tolerances over 0.5 s"
+              },
+              "outcome": "deadline",
+              "started_ns": 5204000000,
+              "ended_ns": 125204000000,
+              "violation_while_settling": {
+                "stamp_ns": 15130000000,
+                "position_error_m": 0.010000341484651855,
+                "rotation_error_rad": 0.016630189583275425
+              },
+              "object_raised_m": 0.09133664703075228
+            }
+          },
+          "validation": {
+            "valid": false,
+            "checks": 193,
+            "validator": "sscbirrt 3.15.0 native",
+            "policy": "Valid at states at most 0.05 apart (Euclidean, joint space, to a relative 1e-09) along each raw-linear motion, endpoints included; nothing is claimed between them. No collision clearance is added.",
+            "witness": {
+              "failure": "collision",
+              "segment": 190,
+              "fraction": 1.0,
+              "configuration": [
+                3.8422351435449666,
+                -0.059664274736077695,
+                -1.1489986226663051,
+                0.8323437935106611,
+                -0.6686285386790397,
+                -1.0536659595342974
+              ],
+              "contacts": [
+                {
+                  "kind": "robot_environment",
+                  "first": "cylinder",
+                  "second": "vention_base",
+                  "distance": -0.0007461173702246219
+                }
+              ],
+              "detail": "in collision"
+            }
           },
           "objects": {
             "cylinder": [
-              0.5292430598176832,
-              -0.4739643117768653,
-              0.8159488610474164
+              0.3238225228087863,
+              -0.3473575668826265,
+              0.9046231193632296
             ]
           },
+          "violations": {
+            "cylinder": null
+          },
+          "invalid": [
+            "leg collides with the object held",
+            "the grip did not settle: deadline"
+          ],
           "valid": false,
           "out_of_envelope": false,
           "judged": false,
-          "longest_false_still": {
-            "span_ns": 1542000000,
-            "from_ns": 19668000000,
-            "to_ns": 21210000000
-          },
+          "longest_false_still": null,
           "check": {
-            "outcome": "at_rest",
-            "watched_from_ns": 11216000000,
-            "fired_ns": 12258000000,
-            "delay_ns": 1042000000,
-            "range_after": [
-              1.0809816141654771e-06,
-              0.0004251664639176589,
-              0.0012875781189414862,
-              0.000481415022565046,
-              0.0008601570721249452,
-              0.0005943908207076687,
-              0.0005013279214804989
-            ],
-            "stays_within": false,
+            "outcome": "not_submitted",
             "passed": false
           }
         }
