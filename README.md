@@ -164,7 +164,7 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 | `left_ur5e/gripper/fingers_actuator` | 0-255 | Left gripper (0=open, 255=closed) |
 | `right_ur5e/gripper/fingers_actuator` | 0-255 | Right gripper |
 
-Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Fully closed targets the driver's 0.7 rad limit, the URDF's, where the pads meet: closed on nothing, the hand settles with its pads together, symmetrically, about 3 s after the command (`TestClosedHandSettles`, #48). Measured in `TestGripDrive`:
+Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Fully closed targets the driver's 0.7 rad limit, the URDF's, where the pads meet: closed on nothing, the hand comes to rest with its pads together, symmetrically, 2.83 s after the command, and stays there (`TestClosedHandSettles`, #48). Measured in `TestGripDrive`:
 
 | | The model | Real 2F-140 (Robotiq) |
 |---|---|---|

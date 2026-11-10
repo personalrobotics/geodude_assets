@@ -217,7 +217,7 @@
       crept 0.12 mm, past the 0.1 mm a settled move allows (personalrobotics/geodude_assets#49).
       Because kv damps the drive's approach to its target, a close on nothing ends
       exponentially (kv / kp = 0.3 s) where the pads meet: they first touch about 1.5 s after
-      the command, and the hand is still about 3.0 s after it (#48). Below kv 250 the pads
+      the command, and the hand comes to rest 2.83 s after it (#48). Below kv 250 the pads
       would meet sooner, but the fingertips would close faster than 250 mm/s.
     Measured under MuJoCo 3.14 in tests/test_geodude_assets.py (TestGripDrive);
     personalrobotics/geodude_assets#37, #49.
