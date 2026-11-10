@@ -8,7 +8,7 @@
       "python",
       "scripts/calibrate_gripper.py",
       "--out",
-      "/private/tmp/claude-501/-Users-siddh-code-robot-code/08af1f26-82ca-4f5a-8b09-af54dd5f4e9e/scratchpad/geo-main",
+      "artifacts/calibrate-gripper",
       "--robot",
       "geodude",
       "--commit",
