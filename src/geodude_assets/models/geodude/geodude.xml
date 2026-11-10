@@ -47,7 +47,7 @@
         <joint axis="1 0 0"/>
         <general biastype="affine"/>
         <default class="left_ur5e/gripper/driver">
-          <joint solreflimit="0.0050000000000000001 1" solimplimit="0.94999999999999996 0.98999999999999999 0.001" range="-0.80000000000000004 0" armature="0.0050000000000000001" damping="0.10000000000000001"/>
+          <joint solreflimit="0.0050000000000000001 1" solimplimit="0.94999999999999996 0.98999999999999999 0.001" range="-0.69999999999999996 0" armature="0.0050000000000000001" damping="0.10000000000000001"/>
         </default>
         <default class="left_ur5e/gripper/follower">
           <joint pos="0 0.0050000000000000001 -0.017500000000000002" solreflimit="0.0050000000000000001 1" solimplimit="0.94999999999999996 0.98999999999999999 0.001" range="-0.87570000000000003 0.87570000000000003" armature="0.001"/>
@@ -95,7 +95,7 @@
         <joint axis="1 0 0"/>
         <general biastype="affine"/>
         <default class="right_ur5e/gripper/driver">
-          <joint solreflimit="0.0050000000000000001 1" solimplimit="0.94999999999999996 0.98999999999999999 0.001" range="-0.80000000000000004 0" armature="0.0050000000000000001" damping="0.10000000000000001"/>
+          <joint solreflimit="0.0050000000000000001 1" solimplimit="0.94999999999999996 0.98999999999999999 0.001" range="-0.69999999999999996 0" armature="0.0050000000000000001" damping="0.10000000000000001"/>
         </default>
         <default class="right_ur5e/gripper/follower">
           <joint pos="0 0.0050000000000000001 -0.017500000000000002" solreflimit="0.0050000000000000001 1" solimplimit="0.94999999999999996 0.98999999999999999 0.001" range="-0.87570000000000003 0.87570000000000003" armature="0.001"/>
@@ -539,14 +539,14 @@
     <general name="left_ur5e/wrist_1" class="left_ur5e/size1" joint="left_ur5e/wrist_1_joint"/>
     <general name="left_ur5e/wrist_2" class="left_ur5e/size1" joint="left_ur5e/wrist_2_joint"/>
     <general name="left_ur5e/wrist_3" class="left_ur5e/size1" joint="left_ur5e/wrist_3_joint"/>
-    <general name="left_ur5e/gripper/fingers_actuator" class="left_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-6.2999999999999998 6.2999999999999998" tendon="left_ur5e/gripper/split" gainprm="3.1372550000000001 0 0" biasprm="0 -1000 -300"/>
+    <general name="left_ur5e/gripper/fingers_actuator" class="left_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-6.2999999999999998 6.2999999999999998" tendon="left_ur5e/gripper/split" gainprm="2.745098 0 0" biasprm="0 -1000 -300"/>
     <general name="right_ur5e/shoulder_pan" class="right_ur5e/ur5e" joint="right_ur5e/shoulder_pan_joint"/>
     <general name="right_ur5e/shoulder_lift" class="right_ur5e/ur5e" joint="right_ur5e/shoulder_lift_joint"/>
     <general name="right_ur5e/elbow" class="right_ur5e/ur5e" ctrlrange="-3.1415929999999999 3.1415929999999999" joint="right_ur5e/elbow_joint"/>
     <general name="right_ur5e/wrist_1" class="right_ur5e/size1" joint="right_ur5e/wrist_1_joint"/>
     <general name="right_ur5e/wrist_2" class="right_ur5e/size1" joint="right_ur5e/wrist_2_joint"/>
     <general name="right_ur5e/wrist_3" class="right_ur5e/size1" joint="right_ur5e/wrist_3_joint"/>
-    <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-6.2999999999999998 6.2999999999999998" tendon="right_ur5e/gripper/split" gainprm="3.1372550000000001 0 0" biasprm="0 -1000 -300"/>
+    <general name="right_ur5e/gripper/fingers_actuator" class="right_ur5e/gripper/2f140" ctrlrange="0 255" forcerange="-6.2999999999999998 6.2999999999999998" tendon="right_ur5e/gripper/split" gainprm="2.745098 0 0" biasprm="0 -1000 -300"/>
   </actuator>
   <sensor>
     <force name="left_ur5e/ft_sensor_force" noise="3.5" site="left_ur5e/ft_sensor_site"/>

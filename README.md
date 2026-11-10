@@ -164,12 +164,12 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 | `left_ur5e/gripper/fingers_actuator` | 0-255 | Left gripper (0=open, 255=closed) |
 | `right_ur5e/gripper/fingers_actuator` | 0-255 | Right gripper |
 
-Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Measured in `TestGripDrive`:
+Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Fully closed targets the driver's 0.7 rad limit, the URDF's, where the pads meet: closed on nothing, the hand settles with its pads together, symmetrically, about 3 s after the command (`TestClosedHandSettles`, #48). Measured in `TestGripDrive`:
 
 | | The model | Real 2F-140 (Robotiq) |
 |---|---|---|
 | Grip, per pad, on a 40–110 mm object held in parallel | 45.6–54.3 N | 10–125 N, set per command; Geodude's hardware commands 50 N |
-| Fingertip speed, averaged over 20 ms | Up to about 233 mm/s | 30–250 mm/s |
+| Fingertip speed, averaged over 20 ms | Up to about 221 mm/s | 30–250 mm/s |
 | A pad's resistance to twisting about its normal, at one contact point | 12.96 mm × the normal force: about 0.66 N·m at 51 N | Not published |
 
 The twist a pad resists is its contact patch's, from geometry: sliding friction 0.7 times the 18.5 mm mean distance of its 27 × 65 mm face from its centre, under uniform pressure (`TestPadTorsion`). A rigid pad touches a box edge or a sphere at a single point, which has nothing else to resist a twist, and MuJoCo's default of 5 mm let a box pinched that way pivot out of the grip under its weight (#36). A pad seated flat touches at its four corners, whose sliding friction resists more. `TestPadGrip` lifts and carries objects at full speed with both coefficients, including an overload, which slips.

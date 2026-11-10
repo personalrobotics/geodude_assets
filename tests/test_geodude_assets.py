@@ -347,6 +347,11 @@ class TestContactExclusions:
         The 4-bar linkage has parts that pass close to each other (coupler <->
         spring_link), which are excluded. The two fingers are not excluded from each
         other, so the only contacts are between the left and right follower (the pads).
+
+        The close lasts 3 s, as TestFingerContact's does. The drive targets the point
+        where the pads meet, the driver's 0.7 rad limit from the URDF, so its kv-damped
+        approach ends exponentially and the pads first touch at about 1.5 s; at 1 s they
+        are still about 4 mm apart (personalrobotics/geodude_assets#48).
         """
         for hand in ("left_ur5e", "right_ur5e"):
             actuator = mujoco.mj_name2id(
@@ -354,7 +359,7 @@ class TestContactExclusions:
             )
             geodude_data.ctrl[actuator] = 255  # fully closed
 
-        for _ in range(500):
+        for _ in range(1500):  # 3 s at 2 ms
             mujoco.mj_step(geodude_model, geodude_data)
 
         def body(geom: int) -> str:
@@ -1028,6 +1033,73 @@ class TestPadGrip:
             assert before["lost"] is not None, f"at 0.005 m it held too: the case does not test torsion ({report})"
         else:
             assert before["lost"] is None, f"{name} needs more than the old pads; not a torsion case ({report})"
+
+
+class TestClosedHandSettles:
+    """Closed on nothing, each 2F-140 comes to rest with its pads together, symmetrically
+    (personalrobotics/geodude_assets#48).
+
+    From the ready pose, one of Geodude's grippers closes fully (255) with nothing between
+    its fingers, under the model's own options, which are Geodude's: a 2 ms timestep, the
+    implicitfast integrator, an elliptic friction cone and impratio 10. The hand settles
+    once every finger joint (driver, coupler, spring link and follower, on both sides)
+    varies by at most 1e-6 rad over 200 ms; it must do so within 5 s of the command, and
+    each joint must then agree with its mirror on the other side to within 0.005 rad.
+
+    Under MuJoCo 3.14 the hand settles about 3.0 s after the command, its sides within
+    0.0011 rad of each other. With the 2F-85's 0.8 rad driver travel, which this model had
+    before #48, the drive kept pushing the pads into each other at its full force: the
+    squeezed fingers chattered by about 1e-4 rad every 200 ms, never settled, and slid over
+    about 45 s into a lopsided rest (followers at 0.60 and 0.80 rad). The URDF's 0.7 rad
+    limit, where the pads meet, lets the drive come to rest against them.
+
+    Each case writes closed_hand_settle.json in its pytest tmp_path; to keep them:
+    `uv run pytest tests/ -k TestClosedHandSettles --basetemp=out`.
+    """
+
+    _LINKS = ("driver", "coupler", "spring_link", "follower")
+    _WINDOW_S = 0.2  # s over which every joint must be still
+    _STILL = 1e-6  # rad: the most any joint may vary over the window
+    _WITHIN_S = 5.0  # s after the command by which the hand must have settled
+    _SYMMETRY = 0.005  # rad between each joint and its mirror once settled
+
+    @pytest.mark.parametrize("hand", ["left_ur5e", "right_ur5e"])
+    def test_closed_on_nothing_the_hand_settles_symmetrically(self, hand, tmp_path):
+        model = mujoco.MjModel.from_xml_path(str(get_geodude_path()))
+        assert model.opt.timestep == 0.002
+        assert model.opt.integrator == mujoco.mjtIntegrator.mjINT_IMPLICITFAST
+        assert model.opt.cone == mujoco.mjtCone.mjCONE_ELLIPTIC
+        assert model.opt.impratio == 10
+        data = mujoco.MjData(model)
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        data.ctrl[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{hand}/gripper/fingers_actuator")] = 255
+        names = [f"{side}_{link}" for side in ("left", "right") for link in self._LINKS]
+        addresses = [
+            model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, f"{hand}/gripper/{name}_joint")]
+            for name in names
+        ]
+        window = round(self._WINDOW_S / model.opt.timestep)
+        history = []
+        settled_at = None
+        while data.time < self._WITHIN_S and settled_at is None:
+            mujoco.mj_step(model, data)
+            history.append(data.qpos[addresses].copy())
+            if len(history) > window and np.ptp(np.array(history[-window - 1 :]), axis=0).max() <= self._STILL:
+                settled_at = data.time
+        variation = np.ptp(np.array(history[-window - 1 :]), axis=0)
+        position = dict(zip(names, (float(v) for v in data.qpos[addresses])))
+        asymmetry = {link: abs(position[f"left_{link}"] - position[f"right_{link}"]) for link in self._LINKS}
+        report = {
+            "hand": hand,
+            "settled_at_s": settled_at,
+            "max_variation_over_200ms_rad": float(variation.max()),
+            "joints_rad": position,
+            "asymmetry_rad": asymmetry,
+        }
+        (tmp_path / "closed_hand_settle.json").write_text(json.dumps(report, indent=2) + "\n")
+        assert settled_at is not None, f"{hand} closed on nothing has not settled after {self._WITHIN_S} s ({report})"
+        for link, difference in asymmetry.items():
+            assert difference <= self._SYMMETRY, f"{hand} {link}s differ by {difference:.4f} rad ({report})"
 
 
 class TestFingerContact:
