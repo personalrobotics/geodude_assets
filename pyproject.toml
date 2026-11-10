@@ -16,7 +16,10 @@ maintainers = [
     {name = "Siddhartha Srinivasa", email = "siddhartha.srinivasa@gmail.com"},
 ]
 dependencies = [
-    "mujoco",
+    # The 2F-140's drive is calibrated on MuJoCo 3.14. From 3.5 the model grips and moves
+    # as calibrated (personalrobotics/geodude_assets#49); from 3.12 a hand closed on nothing
+    # settles, which it never does on 3.4 to 3.11 (personalrobotics/geodude_assets#48).
+    "mujoco>=3.12",
     "numpy-stl>=3.2.0",
 ]
 

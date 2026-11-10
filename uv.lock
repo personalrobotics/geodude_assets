@@ -285,7 +285,7 @@ requires-dist = [
     { name = "dm-control", marker = "extra == 'assembly'" },
     { name = "dm-env", marker = "extra == 'assembly'" },
     { name = "lxml", marker = "extra == 'assembly'" },
-    { name = "mujoco" },
+    { name = "mujoco", specifier = ">=3.12" },
     { name = "numpy", marker = "extra == 'assembly'", specifier = ">=1.26" },
     { name = "numpy-stl", specifier = ">=3.2.0" },
     { name = "scipy", marker = "extra == 'assembly'" },
