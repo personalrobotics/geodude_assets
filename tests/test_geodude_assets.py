@@ -1171,14 +1171,30 @@ class TestGripDrive:
     limit, at a set speed (personalrobotics/geodude_assets#37).
 
     From the ready pose, each case drives one of Geodude's grippers:
-    - closing and opening on nothing: the fingertips' peak speed is within Robotiq's
-      30-250 mm/s for the 2F-140, and the fingers are still once they arrive;
+    - closing and opening on nothing: the fingertips' peak speed, averaged over 20 ms, is
+      within Robotiq's 30-250 mm/s for the 2F-140, and the fingers are still once they
+      arrive. Robotiq's figure is a closing speed. Over single 2 ms steps the fingertips
+      also ring as the linkage takes up the drive's full force at the start of a move, with
+      a period of about 3 steps for the first 10-40 ms; a 20 ms window, about two periods,
+      averages that ringing out (personalrobotics/geodude_assets#49). The single-step peak
+      must still stay within 1.5 times Robotiq's 250 mm/s: ringing reaches about 1.2 times
+      it, and a real overshoot of the drive, brief enough to hide in the average, would not
+      stay under 1.5;
     - a half-open command opens the fingers part way, between fully open and closed;
     - gripping a 50 g cylinder of 40, 66 or 110 mm across, its axis across the fingers and
-      its contact line 10 mm behind the fingertips: the finger stays parallel and each pad
-      presses with 46 N, within 5 %. That is near the 50 N Geodude's hardware commands; a
-      stronger drive would overpower the finger's spring link and fold the finger on the
-      40 mm cylinder (personalrobotics/geodude_assets#36).
+      its contact line 10 mm behind the fingertips: the finger stays parallel, not folded,
+      and each pad presses with 50 N, within 10 %. Parallel: each coupler joint stays
+      within 0.01 rad of its lower limit, and the fingertips do not touch each other. A
+      finger folding round the object turns its coupler off the limit, by 0.04 to 0.45 rad
+      in every fold measured (a 40 or 66 mm cylinder 15-20 mm behind the fingertips, or a
+      40 mm cylinder at forcerange 10), and closes its fingertip on the other's; a parallel
+      grip keeps it within 0.001 rad. The grip band is centred on the 50 N Geodude's
+      hardware commands (max_effort), well within Robotiq's 10-125 N for the 2F-140. It
+      replaces 46 N within 5 %, which was fitted to MuJoCo 3.4, whose pads touched each
+      cylinder at a single point. MuJoCo 3.14 touches the 110 mm cylinder along a line
+      across the pad's 27 mm width, and this model's grip rises 19 % from the 40 mm to the
+      110 mm cylinder: 45.6, 47.5 and 54.3 N at the drive's forcerange of 6.3
+      (personalrobotics/geodude_assets#49).
 
     Each case writes its measurements to grip_drive.json in its pytest tmp_path. To keep
     and inspect them: `uv run pytest tests/ -k TestGripDrive --basetemp=out`, then read
@@ -1189,9 +1205,12 @@ class TestGripDrive:
     _STEP = 0.002  # s, the model's timestep
     _MOVE_STEPS = 1500  # 3 s
     _SPEED_RANGE = (0.030, 0.250)  # m/s at each fingertip, Robotiq's 2F-140 range
+    _SPEED_WINDOW = 10  # steps: speeds are averaged over 20 ms, past the linkage's ringing
+    _MAX_STEP_SPEED = 1.5 * 0.250  # m/s: a single step's ceiling, past ringing, at a real overshoot
     _MAX_SETTLED_MOTION = 1e-4  # m over the last 0.5 s of a move
-    _GRIP = 46.0  # N on each pad
-    _GRIP_TOLERANCE = 0.05
+    _GRIP = 50.0  # N on each pad: Geodude's hardware max_effort
+    _GRIP_TOLERANCE = 0.10
+    _PARALLEL_COUPLER = 0.01  # rad: a parallel finger's coupler stays this close to its lower limit
     _BEHIND_TIP = 0.010  # m: where the cylinder touches the pads, behind the fingertips
     _FINGER_LENGTH = 0.114  # m: grasp site to fingertip along the approach axis
 
@@ -1217,9 +1236,11 @@ class TestGripDrive:
             mujoco.mj_step(model, data)
             gaps.append(self._gap(model, data, hand))
         gaps = np.array(gaps)
-        speed = float(np.abs(np.diff(gaps)).max() / self._STEP / 2)  # each fingertip
+        steps = np.diff(gaps) / self._STEP / 2  # each fingertip's speed over each step
+        window = np.ones(self._SPEED_WINDOW) / self._SPEED_WINDOW
+        speed = float(np.abs(np.convolve(steps, window, mode="valid")).max())
         settled = float(np.ptp(gaps[-250:]))
-        return gaps[0], gaps[-1], speed, settled
+        return gaps[0], gaps[-1], speed, settled, float(np.abs(steps).max())
 
     @pytest.mark.parametrize("hand", ["left_ur5e", "right_ur5e"])
     def test_the_fingers_move_at_the_real_grippers_speed(self, hand, tmp_path):
@@ -1231,21 +1252,24 @@ class TestGripDrive:
             "close": {
                 "from_mm": 1e3 * closed[0],
                 "to_mm": 1e3 * closed[1],
-                "peak_fingertip_mm_s": 1e3 * closed[2],
+                "mean_20ms_fingertip_mm_s": 1e3 * closed[2],
+                "peak_step_fingertip_mm_s": 1e3 * closed[4],
                 "settled_motion_mm": 1e3 * closed[3],
             },
             "open": {
                 "from_mm": 1e3 * opened[0],
                 "to_mm": 1e3 * opened[1],
-                "peak_fingertip_mm_s": 1e3 * opened[2],
+                "mean_20ms_fingertip_mm_s": 1e3 * opened[2],
+                "peak_step_fingertip_mm_s": 1e3 * opened[4],
                 "settled_motion_mm": 1e3 * opened[3],
             },
             "half_open_command_gap_mm": 1e3 * half[1],
         }
         (tmp_path / "grip_drive.json").write_text(json.dumps(report, indent=2) + "\n")
         low, high = self._SPEED_RANGE
-        for name, (_, _, speed, settled) in (("closing", closed), ("opening", opened)):
+        for name, (_, _, speed, settled, step) in (("closing", closed), ("opening", opened)):
             assert low <= speed <= high, f"{hand} fingertips peak at {1e3 * speed:.0f} mm/s {name} ({report})"
+            assert step <= self._MAX_STEP_SPEED, f"{hand} a step moves at {1e3 * step:.0f} mm/s {name} ({report})"
             assert settled < self._MAX_SETTLED_MOTION, f"{hand} fingers still moving after {name} ({report})"
         assert closed[1] < half[1] < opened[1], f"{hand}: a half-open command is not part way ({report})"
 
@@ -1266,10 +1290,14 @@ class TestGripDrive:
         for _ in range(250):
             mujoco.mj_step(model, data)
         per_side = {"left": 0.0, "right": 0.0}
+        fingertips = {f"{hand}/gripper/left_follower", f"{hand}/gripper/right_follower"}
+        fingertips_touch = False
         force = np.zeros(6)
         for i in range(data.ncon):
             c = data.contact[i]
             bodies = (model.geom_bodyid[c.geom1], model.geom_bodyid[c.geom2])
+            if {mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) for b in bodies} == fingertips:
+                fingertips_touch = True
             if obj not in bodies:
                 continue
             other = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, bodies[1] if bodies[0] == obj else bodies[0])
@@ -1277,8 +1305,21 @@ class TestGripDrive:
             for side in per_side:
                 if other.startswith(f"{hand}/gripper/{side}_"):
                     per_side[side] += float(force[0])
-        report = {"hand": hand, "diameter_mm": 1e3 * diameter, "pad_force_N": per_side}
+        couplers = {}
+        for side in per_side:
+            joint = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, f"{hand}/gripper/{side}_coupler_joint")
+            couplers[side] = float(data.qpos[model.jnt_qposadr[joint]] - model.jnt_range[joint][0])
+        report = {
+            "hand": hand,
+            "diameter_mm": 1e3 * diameter,
+            "pad_force_N": per_side,
+            "coupler_above_lower_limit_rad": couplers,
+            "fingertips_touch": fingertips_touch,
+        }
         (tmp_path / "grip_drive.json").write_text(json.dumps(report, indent=2) + "\n")
+        for side, lift in couplers.items():
+            assert lift <= self._PARALLEL_COUPLER, f"{hand} {side} finger folded ({report})"
+        assert not fingertips_touch, f"{hand} fingertips closed on each other ({report})"
         for side, value in per_side.items():
             assert abs(value - self._GRIP) <= self._GRIP_TOLERANCE * self._GRIP, (
                 f"{hand} {side} pad grips a {1e3 * diameter:.0f} mm cylinder with {value:.1f} N ({report})"
