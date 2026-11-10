@@ -1186,8 +1186,8 @@ class TestGripDrive:
       commands (max_effort), well within Robotiq's 10-125 N for the 2F-140. It replaces
       46 N within 5 %, which was fitted to MuJoCo 3.4's single-point contact of the pad on
       each cylinder; MuJoCo 3.14 touches the 110 mm cylinder along a line across the pad's
-      27 mm width, as the real pad does, and measures 45.1, 47.0 and 53.6 N on the 40, 66
-      and 110 mm cylinders (personalrobotics/geodude_assets#49).
+      27 mm width, as the real pad does, and measures 45.6, 47.5 and 54.3 N on the 40, 66
+      and 110 mm cylinders at the drive's forcerange of 6.3 (personalrobotics/geodude_assets#49).
 
     Each case writes its measurements to grip_drive.json in its pytest tmp_path. To keep
     and inspect them: `uv run pytest tests/ -k TestGripDrive --basetemp=out`, then read

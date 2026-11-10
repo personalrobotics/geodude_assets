@@ -18,7 +18,7 @@
 # close, and a close on that 66 mm cylinder. Under MuJoCo 3.14 (personalrobotics/
 # geodude_assets#49): a dwell of 10 ms declares a stall before the fingers start; at
 # 20 ms an open that follows the empty close stalls as the fingers slow near its end; from
-# 30 ms up the outcomes are the same (reached, reached, stopped short at 0.451 to 0.463).
+# 30 ms up the outcomes are the same (reached, reached, stopped short at 0.450 to 0.463).
 # It is 100 ms, which was also consistent with the previous finger servo (80 ms and up).
 schema = "ssrobot.MujocoProfile"
 version = 2
