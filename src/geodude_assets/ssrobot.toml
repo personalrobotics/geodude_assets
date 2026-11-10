@@ -137,11 +137,23 @@ effort = 3300.0
 name = "left_gripper"
 frame = "left_ur5e/gripper/base"
 joints = ["left_ur5e/gripper/right_driver_joint", "left_ur5e/gripper/right_coupler_joint", "left_ur5e/gripper/right_spring_link_joint", "left_ur5e/gripper/right_follower_joint", "left_ur5e/gripper/left_driver_joint", "left_ur5e/gripper/left_coupler_joint", "left_ur5e/gripper/left_spring_link_joint", "left_ur5e/gripper/left_follower_joint"]
+# Where the joints settle commanded fully open and fully closed on nothing, measured by
+# ssrobot scripts/calibrate_gripper.py at ssrobot 90676c05772 on
+# personalrobotics/geodude_assets@b5f357186889; evidence/mujoco-gripper.json sha256
+# 7f3decaf1cc06cd622029a0ffc3c2193a472c400d51bc92c0ce3461ea3f2da03
+open_positions = [-0.002595255905840359, 0.0, -0.0042009067782812345, 0.007613277777109673, -0.0025958219896932513, 0.0, -0.004222976261506274, 0.007682535595140053]
+closed_positions = [-0.6997987260736517, 0.0, -0.7055877074101766, 0.7440314274095836, -0.6997983186456171, 0.0, -0.7066402785199484, 0.7448414478369894]
 
 [[semantics.grippers]]
 name = "right_gripper"
 frame = "right_ur5e/gripper/base"
 joints = ["right_ur5e/gripper/right_driver_joint", "right_ur5e/gripper/right_coupler_joint", "right_ur5e/gripper/right_spring_link_joint", "right_ur5e/gripper/right_follower_joint", "right_ur5e/gripper/left_driver_joint", "right_ur5e/gripper/left_coupler_joint", "right_ur5e/gripper/left_spring_link_joint", "right_ur5e/gripper/left_follower_joint"]
+# Where the joints settle commanded fully open and fully closed on nothing, measured by
+# ssrobot scripts/calibrate_gripper.py at ssrobot 90676c05772 on
+# personalrobotics/geodude_assets@b5f357186889; evidence/mujoco-gripper.json sha256
+# 7f3decaf1cc06cd622029a0ffc3c2193a472c400d51bc92c0ce3461ea3f2da03
+open_positions = [-0.002595255905866471, 0.0, -0.004200906817067038, 0.007613277882697344, -0.002595821989556511, 0.0, -0.004222976299688847, 0.007682535651568819]
+closed_positions = [-0.6997987260775397, 0.0, -0.7055877074053384, 0.7440314272698552, -0.6997983186518597, 0.0, -0.7066402785100027, 0.7448414479398411]
 
 [[semantics.manipulators]]
 name = "left_arm_with_lift"

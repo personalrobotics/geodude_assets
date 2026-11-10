@@ -1,0 +1,461 @@
+{
+  "robot": "geodude",
+  "provenance": {
+    "ssrobot_commit": "90676c05772488c1448decfc20a23ddab0adf9e1",
+    "ssrobot_clean": true,
+    "script": "scripts/calibrate_gripper.py",
+    "command": [
+      "python",
+      "scripts/calibrate_gripper.py",
+      "--out",
+      "/private/tmp/claude-501/-Users-siddh-code-robot-code/08af1f26-82ca-4f5a-8b09-af54dd5f4e9e/scratchpad/geo-main",
+      "--robot",
+      "geodude",
+      "--commit",
+      "geodude=b5f3571868893c1d016b03f919a6dc6abbea0fbe"
+    ],
+    "python": "3.14.7",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "mujoco": "3.14.0",
+    "package": {
+      "robot": "geodude",
+      "repository": "personalrobotics/geodude_assets",
+      "commit": "b5f3571868893c1d016b03f919a6dc6abbea0fbe",
+      "pinned": false,
+      "archive_sha256": "6ef01f7ec89dec139e6b736ef2bfda6bdc933639527f74641292b0773587fdcd",
+      "package_root": "src/geodude_assets",
+      "fingerprint": "de2c771f32d3438770e30a766aa17d34a3a0d20919281fc799af563a7f9a0157"
+    }
+  },
+  "procedure": {
+    "readings": [
+      {
+        "reading": "first_close",
+        "opening": 0.0
+      },
+      {
+        "reading": "open",
+        "opening": 1.0
+      },
+      {
+        "reading": "closed",
+        "opening": 0.0
+      }
+    ],
+    "hold_s": 1.0,
+    "read": "every gripper joint from a snapshot, once settled after the open (from closed) and after the second close (from open)",
+    "settled": "every gripper joint's range over the last dwell at most the tolerance, and the change in its mean from the dwell before, extrapolated over the horizon, too",
+    "settle_dwell_s": 0.2,
+    "settle_horizon_s": 10.0,
+    "settle_timeout_s": 20.0,
+    "limit_slack": 0.001,
+    "command_deadline_ticks": 5000,
+    "contacts": "outside the gripper, checked every tick of each command and settle",
+    "tolerance": 1e-06
+  },
+  "start": {
+    "keyframe": null,
+    "move": null,
+    "hold_s": 1.0
+  },
+  "grippers": {
+    "left_gripper": {
+      "joints": [
+        "left_ur5e/gripper/right_driver_joint",
+        "left_ur5e/gripper/right_coupler_joint",
+        "left_ur5e/gripper/right_spring_link_joint",
+        "left_ur5e/gripper/right_follower_joint",
+        "left_ur5e/gripper/left_driver_joint",
+        "left_ur5e/gripper/left_coupler_joint",
+        "left_ur5e/gripper/left_spring_link_joint",
+        "left_ur5e/gripper/left_follower_joint"
+      ],
+      "first_close": {
+        "opening": 0.0,
+        "state": "succeeded",
+        "termination": "reached_target",
+        "final_opening": 0.0038207507336126692,
+        "command_ns": 1252000000,
+        "settled": true,
+        "settle_ns": 2764000000,
+        "raw_positions": [
+          -0.6997987260623916,
+          -0.00014427145180993792,
+          -0.705587707726874,
+          0.7440314279771625,
+          -0.6997983186340396,
+          -0.00012038748617567612,
+          -0.7066402788193697,
+          0.7448414481805968
+        ],
+        "positions": [
+          -0.6997987260623916,
+          0.0,
+          -0.705587707726874,
+          0.7440314279771625,
+          -0.6997983186340396,
+          0.0,
+          -0.7066402788193697,
+          0.7448414481805968
+        ],
+        "clamped": [
+          {
+            "joint": "left_ur5e/gripper/right_coupler_joint",
+            "raw": -0.00014427145180993792,
+            "bound": 0.0,
+            "excess": 0.00014427145180993792
+          },
+          {
+            "joint": "left_ur5e/gripper/left_coupler_joint",
+            "raw": -0.00012038748617567612,
+            "bound": 0.0,
+            "excess": 0.00012038748617567612
+          }
+        ],
+        "first_contact": null
+      },
+      "open": {
+        "opening": 1.0,
+        "state": "succeeded",
+        "termination": "reached_target",
+        "final_opening": 0.996106456304559,
+        "command_ns": 994000000,
+        "settled": true,
+        "settle_ns": 4332000000,
+        "raw_positions": [
+          -0.002595255905840359,
+          -0.0006174163106976412,
+          -0.0042009067782812345,
+          0.007613277777109673,
+          -0.0025958219896932513,
+          -0.0006184677030697484,
+          -0.004222976261506274,
+          0.007682535595140053
+        ],
+        "positions": [
+          -0.002595255905840359,
+          0.0,
+          -0.0042009067782812345,
+          0.007613277777109673,
+          -0.0025958219896932513,
+          0.0,
+          -0.004222976261506274,
+          0.007682535595140053
+        ],
+        "clamped": [
+          {
+            "joint": "left_ur5e/gripper/right_coupler_joint",
+            "raw": -0.0006174163106976412,
+            "bound": 0.0,
+            "excess": 0.0006174163106976412
+          },
+          {
+            "joint": "left_ur5e/gripper/left_coupler_joint",
+            "raw": -0.0006184677030697484,
+            "bound": 0.0,
+            "excess": 0.0006184677030697484
+          }
+        ],
+        "first_contact": null
+      },
+      "closed": {
+        "opening": 0.0,
+        "state": "succeeded",
+        "termination": "reached_target",
+        "final_opening": 0.0038184263002972755,
+        "command_ns": 1252000000,
+        "settled": true,
+        "settle_ns": 2762000000,
+        "raw_positions": [
+          -0.6997987260736517,
+          -0.00014427321810231861,
+          -0.7055877074101766,
+          0.7440314274095836,
+          -0.6997983186456171,
+          -0.00012038926958998836,
+          -0.7066402785199484,
+          0.7448414478369894
+        ],
+        "positions": [
+          -0.6997987260736517,
+          0.0,
+          -0.7055877074101766,
+          0.7440314274095836,
+          -0.6997983186456171,
+          0.0,
+          -0.7066402785199484,
+          0.7448414478369894
+        ],
+        "clamped": [
+          {
+            "joint": "left_ur5e/gripper/right_coupler_joint",
+            "raw": -0.00014427321810231861,
+            "bound": 0.0,
+            "excess": 0.00014427321810231861
+          },
+          {
+            "joint": "left_ur5e/gripper/left_coupler_joint",
+            "raw": -0.00012038926958998836,
+            "bound": 0.0,
+            "excess": 0.00012038926958998836
+          }
+        ],
+        "first_contact": null
+      },
+      "open_positions": [
+        -0.002595255905840359,
+        0.0,
+        -0.0042009067782812345,
+        0.007613277777109673,
+        -0.0025958219896932513,
+        0.0,
+        -0.004222976261506274,
+        0.007682535595140053
+      ],
+      "closed_positions": [
+        -0.6997987260736517,
+        0.0,
+        -0.7055877074101766,
+        0.7440314274095836,
+        -0.6997983186456171,
+        0.0,
+        -0.7066402785199484,
+        0.7448414478369894
+      ],
+      "clamped": [
+        {
+          "reading": "open",
+          "joint": "left_ur5e/gripper/right_coupler_joint",
+          "raw": -0.0006174163106976412,
+          "bound": 0.0,
+          "excess": 0.0006174163106976412
+        },
+        {
+          "reading": "open",
+          "joint": "left_ur5e/gripper/left_coupler_joint",
+          "raw": -0.0006184677030697484,
+          "bound": 0.0,
+          "excess": 0.0006184677030697484
+        },
+        {
+          "reading": "closed",
+          "joint": "left_ur5e/gripper/right_coupler_joint",
+          "raw": -0.00014427321810231861,
+          "bound": 0.0,
+          "excess": 0.00014427321810231861
+        },
+        {
+          "reading": "closed",
+          "joint": "left_ur5e/gripper/left_coupler_joint",
+          "raw": -0.00012038926958998836,
+          "bound": 0.0,
+          "excess": 0.00012038926958998836
+        }
+      ],
+      "declarable": {
+        "ok": true
+      }
+    },
+    "right_gripper": {
+      "joints": [
+        "right_ur5e/gripper/right_driver_joint",
+        "right_ur5e/gripper/right_coupler_joint",
+        "right_ur5e/gripper/right_spring_link_joint",
+        "right_ur5e/gripper/right_follower_joint",
+        "right_ur5e/gripper/left_driver_joint",
+        "right_ur5e/gripper/left_coupler_joint",
+        "right_ur5e/gripper/left_spring_link_joint",
+        "right_ur5e/gripper/left_follower_joint"
+      ],
+      "first_close": {
+        "opening": 0.0,
+        "state": "succeeded",
+        "termination": "reached_target",
+        "final_opening": 0.0038207510804727928,
+        "command_ns": 1252000000,
+        "settled": true,
+        "settle_ns": 2762000000,
+        "raw_positions": [
+          -0.6997987260779627,
+          -0.00014427324523170993,
+          -0.7055877074046102,
+          0.7440314272571066,
+          -0.6997983186522931,
+          -0.00012038932196384423,
+          -0.7066402785094951,
+          0.7448414479495092
+        ],
+        "positions": [
+          -0.6997987260779627,
+          0.0,
+          -0.7055877074046102,
+          0.7440314272571066,
+          -0.6997983186522931,
+          0.0,
+          -0.7066402785094951,
+          0.7448414479495092
+        ],
+        "clamped": [
+          {
+            "joint": "right_ur5e/gripper/right_coupler_joint",
+            "raw": -0.00014427324523170993,
+            "bound": 0.0,
+            "excess": 0.00014427324523170993
+          },
+          {
+            "joint": "right_ur5e/gripper/left_coupler_joint",
+            "raw": -0.00012038932196384423,
+            "bound": 0.0,
+            "excess": 0.00012038932196384423
+          }
+        ],
+        "first_contact": null
+      },
+      "open": {
+        "opening": 1.0,
+        "state": "succeeded",
+        "termination": "reached_target",
+        "final_opening": 0.9961064247543381,
+        "command_ns": 994000000,
+        "settled": true,
+        "settle_ns": 4332000000,
+        "raw_positions": [
+          -0.002595255905866471,
+          -0.0006174163108654965,
+          -0.004200906817067038,
+          0.007613277882697344,
+          -0.002595821989556511,
+          -0.0006184677018262528,
+          -0.004222976299688847,
+          0.007682535651568819
+        ],
+        "positions": [
+          -0.002595255905866471,
+          0.0,
+          -0.004200906817067038,
+          0.007613277882697344,
+          -0.002595821989556511,
+          0.0,
+          -0.004222976299688847,
+          0.007682535651568819
+        ],
+        "clamped": [
+          {
+            "joint": "right_ur5e/gripper/right_coupler_joint",
+            "raw": -0.0006174163108654965,
+            "bound": 0.0,
+            "excess": 0.0006174163108654965
+          },
+          {
+            "joint": "right_ur5e/gripper/left_coupler_joint",
+            "raw": -0.0006184677018262528,
+            "bound": 0.0,
+            "excess": 0.0006184677018262528
+          }
+        ],
+        "first_contact": null
+      },
+      "closed": {
+        "opening": 0.0,
+        "state": "succeeded",
+        "termination": "reached_target",
+        "final_opening": 0.003818426643545921,
+        "command_ns": 1252000000,
+        "settled": true,
+        "settle_ns": 2762000000,
+        "raw_positions": [
+          -0.6997987260775397,
+          -0.000144273243034205,
+          -0.7055877074053384,
+          0.7440314272698552,
+          -0.6997983186518597,
+          -0.00012038931804309027,
+          -0.7066402785100027,
+          0.7448414479398411
+        ],
+        "positions": [
+          -0.6997987260775397,
+          0.0,
+          -0.7055877074053384,
+          0.7440314272698552,
+          -0.6997983186518597,
+          0.0,
+          -0.7066402785100027,
+          0.7448414479398411
+        ],
+        "clamped": [
+          {
+            "joint": "right_ur5e/gripper/right_coupler_joint",
+            "raw": -0.000144273243034205,
+            "bound": 0.0,
+            "excess": 0.000144273243034205
+          },
+          {
+            "joint": "right_ur5e/gripper/left_coupler_joint",
+            "raw": -0.00012038931804309027,
+            "bound": 0.0,
+            "excess": 0.00012038931804309027
+          }
+        ],
+        "first_contact": null
+      },
+      "open_positions": [
+        -0.002595255905866471,
+        0.0,
+        -0.004200906817067038,
+        0.007613277882697344,
+        -0.002595821989556511,
+        0.0,
+        -0.004222976299688847,
+        0.007682535651568819
+      ],
+      "closed_positions": [
+        -0.6997987260775397,
+        0.0,
+        -0.7055877074053384,
+        0.7440314272698552,
+        -0.6997983186518597,
+        0.0,
+        -0.7066402785100027,
+        0.7448414479398411
+      ],
+      "clamped": [
+        {
+          "reading": "open",
+          "joint": "right_ur5e/gripper/right_coupler_joint",
+          "raw": -0.0006174163108654965,
+          "bound": 0.0,
+          "excess": 0.0006174163108654965
+        },
+        {
+          "reading": "open",
+          "joint": "right_ur5e/gripper/left_coupler_joint",
+          "raw": -0.0006184677018262528,
+          "bound": 0.0,
+          "excess": 0.0006184677018262528
+        },
+        {
+          "reading": "closed",
+          "joint": "right_ur5e/gripper/right_coupler_joint",
+          "raw": -0.000144273243034205,
+          "bound": 0.0,
+          "excess": 0.000144273243034205
+        },
+        {
+          "reading": "closed",
+          "joint": "right_ur5e/gripper/left_coupler_joint",
+          "raw": -0.00012038931804309027,
+          "bound": 0.0,
+          "excess": 0.00012038931804309027
+        }
+      ],
+      "declarable": {
+        "ok": true
+      }
+    }
+  },
+  "ok": true,
+  "failures": [],
+  "result_sha256": "1b3dc846075357a316aaf2611e022f4b0d5b4fe0aa5ccae5668a181cf0b92b41"
+}
