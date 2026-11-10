@@ -15,8 +15,9 @@
 # close and an open end stopped_short at the 100 ms dwell: the fingers' approach slows to
 # less than 1/255 per 100 ms before it comes within 1/255 of where it settles (MuJoCo
 # 3.14, replaying the detector on each 2 ms tick: the empty close stops short at 1.376 s,
-# the open at 1.40 s). The settled positions belong in the gripper's declared finger
-# positions (personalrobotics/ssrobot#243), which the collision check uses. Closed on a
+# the open at 1.40 s). The settled positions are declared instead as the gripper's
+# open_positions and closed_positions in ssrobot.toml (personalrobotics/ssrobot#243),
+# which the collision check uses. Closed on a
 # 66 mm cylinder held across the fingers at the depths of sstsr's Robotiq2F140 side
 # grasp, the opening reads 0.451 to 0.463 (MuJoCo 3.14; personalrobotics/
 # geodude_assets#48, #49).

@@ -176,6 +176,8 @@ The twist a pad resists is its contact patch's, from geometry: sliding friction 
 
 These figures are the model's under MuJoCo 3.14, the version Geodude runs and this package's `uv.lock` pins; the package requires MuJoCo 3.12 or later: from 3.5 the model grips and moves this way (#49), and from 3.12 a hand closed on nothing settles (#48). Under 3.14 the model touches a large cylinder along a line across the pad's width, where MuJoCo 3.4 touched it at a single point, and its grip rises 19 % from the 40 mm to the 110 mm cylinder: 45.6 N to 54.3 N. That is the model's behaviour, not a measurement of the real gripper. The actuator's force range, 6.3, centres those grips in 50 N ± 10 %, a band chosen around Geodude's 50 N command. Under 3.4, from about 6.4 on the force range, the drive overpowered the finger's spring link and folded the finger on small objects (#36); under 3.14 a 40 mm grip stays parallel at 8.0 and folds at 10.0. `TestGripDrive` checks each grip stays parallel.
 
+Where each gripper's eight joints settle fully open and fully closed on nothing is declared in `ssrobot.toml` (`open_positions`, `closed_positions`), so a gripper command can be checked against the scene before it runs. They are MuJoCo's values; the real hand's are unmeasured. ssrobot's `scripts/calibrate_gripper.py` measures them; the evidence is `evidence/mujoco-gripper.json`.
+
 ### Force/Torque Sensors
 
 Each UR5e arm has a simulated 6-axis force/torque sensor at the tool flange, matching the built-in sensor on the real robot.
