@@ -25,7 +25,7 @@
       <general biastype="affine"/>
       <joint axis="1 0 0"/>
       <default class="driver">
-        <joint range="-0.8 0" armature="0.005" damping="0.1" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+        <joint range="-0.7 0" armature="0.005" damping="0.1" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
       </default>
       <default class="follower">
         <joint range="-0.8757 0.8757" armature="0.001" solimplimit="0.95 0.99 0.001" pos="0 0.005 -0.0175" solreflimit="0.005 1"/>
@@ -158,8 +158,9 @@
     <exclude body1="right_coupler" body2="right_spring_link"/>
     <exclude body1="left_coupler" body2="left_spring_link"/>
     <!-- The two fingers are not excluded from each other: closed on nothing, the pads meet
-         and stop the linkage; closed on an object near the palm, the linkage folds further
-         and the fingertips would otherwise pass through each other. -->
+         at the driver's 0.7 rad limit, the URDF's finger_joint limit, and rest against each
+         other (personalrobotics/geodude_assets#48); closed on an object near the palm, the
+         linkage folds further and the fingertips would otherwise pass through each other. -->
   </contact>
 
   <!--
@@ -185,10 +186,15 @@
   <!--
     The drive, as the real gripper's: a position target with a force limit, at a set speed.
     It is a position servo on the split tendon:
-      force = kp * 0.8 * ctrl / 255 - kp * length - kv * velocity, clamped to forcerange,
-    so ctrl 0-255 targets an opening from open (length 0) to closed (0.8), as the real
+      force = kp * 0.7 * ctrl / 255 - kp * length - kv * velocity, clamped to forcerange,
+    so ctrl 0-255 targets an opening from open (length 0) to closed (0.7), as the real
     gripper's position register does.
-    - kp = 1000 (gainprm 1000 * 0.8 / 255): stiff, so the drive pushes at its full force until
+    - 0.7 rad is the driver's travel, the URDF's finger_joint limit (lower 0, upper 0.7, in
+      ros-industrial robotiq_2f_140_gripper_visualization's robotiq_arg2f_140_model_macro.xacro).
+      The pads meet there, closed on nothing, so the drive comes to rest at them. With the
+      2F-85's 0.8 it kept pushing at its full force past the pads, and the squeezed fingers
+      buckled and slid apart and never settled (personalrobotics/geodude_assets#48).
+    - kp = 1000 (gainprm 1000 * 0.7 / 255): stiff, so the drive pushes at its full force until
       within a few thousandths of its target. Menagerie's kp 100 let the force fade to zero as
       the fingers neared full close.
     - forcerange 6.3: 45.6 to 54.3 N on each pad gripping a 40-110 mm object in parallel
@@ -203,18 +209,22 @@
       on a 40 mm object held 10 mm behind the fingertips (personalrobotics/geodude_assets#36).
       Under 3.14 that grip stays parallel at 8.0 (54.5 N per pad, its couplers on their
       limit) and folds at 10.0, so 6.3 is well clear of it (personalrobotics/geodude_assets#49).
-    - kv = 300: the fingertips close at up to 233 mm/s and open at up to 201 mm/s, averaged
+    - kv = 300: the fingertips close at up to 221 mm/s and open at up to 211 mm/s, averaged
       over 20 ms, within the 2F-140's 30-250 mm/s; 3 s after a command they are still to
-      within 0.023 mm over the last 0.5 s. Re-measured under MuJoCo 3.14, kv 300 passes both
-      with margin, so it is kept: kv 320 and 340 close at 227 and 221 mm/s but leave the
-      opening fingers creeping 0.037 and 0.061 mm, and kv 380 creeps 0.12 mm, past the 0.1 mm
-      a settled move allows (personalrobotics/geodude_assets#49).
+      within 0.022 mm over the last 0.5 s. Re-measured under MuJoCo 3.14, kv 300 passes both
+      with margin, so it is kept: with the 2F-85's 0.8 rad target, kv 320 and 340 closed at
+      227 and 221 mm/s but left the opening fingers creeping 0.037 and 0.061 mm, and kv 380
+      crept 0.12 mm, past the 0.1 mm a settled move allows (personalrobotics/geodude_assets#49).
+      Because kv damps the drive's approach to its target, a close on nothing ends
+      exponentially (kv / kp = 0.3 s) where the pads meet: they first touch about 1.5 s after
+      the command, and the hand comes to rest 2.83 s after it (#48). Below kv 250 the pads
+      would meet sooner, but the fingertips would close faster than 250 mm/s.
     Measured under MuJoCo 3.14 in tests/test_geodude_assets.py (TestGripDrive);
     personalrobotics/geodude_assets#37, #49.
   -->
   <actuator>
     <general class="2f140" name="fingers_actuator" tendon="split" forcerange="-6.3 6.3" ctrlrange="0 255"
-      gainprm="3.137255 0 0" biasprm="0 -1000 -300"/>
+      gainprm="2.745098 0 0" biasprm="0 -1000 -300"/>
   </actuator>
 
   <keyframe>

@@ -164,17 +164,17 @@ worktop_size = model.site_size[site_id]  # [0.6, 0.4, 0.005] (half-extents)
 | `left_ur5e/gripper/fingers_actuator` | 0-255 | Left gripper (0=open, 255=closed) |
 | `right_ur5e/gripper/fingers_actuator` | 0-255 | Right gripper |
 
-Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Measured in `TestGripDrive`:
+Each gripper's `fingers_actuator` works like the real 2F-140's drive: a position target with a force limit, at a set speed. The command 0–255 sets the target opening, from open to closed, and the fingers stop wherever an object blocks them. Fully closed targets the driver's 0.7 rad limit, the URDF's, where the pads meet: closed on nothing, the hand comes to rest with its pads together, symmetrically, 2.83 s after the command, and stays there (`TestClosedHandSettles`, #48). Measured in `TestGripDrive`:
 
 | | The model | Real 2F-140 (Robotiq) |
 |---|---|---|
 | Grip, per pad, on a 40–110 mm object held in parallel | 45.6–54.3 N | 10–125 N, set per command; Geodude's hardware commands 50 N |
-| Fingertip speed, averaged over 20 ms | Up to about 233 mm/s | 30–250 mm/s |
+| Fingertip speed, averaged over 20 ms | Up to about 221 mm/s | 30–250 mm/s |
 | A pad's resistance to twisting about its normal, at one contact point | 12.96 mm × the normal force: about 0.66 N·m at 51 N | Not published |
 
 The twist a pad resists is its contact patch's, from geometry: sliding friction 0.7 times the 18.5 mm mean distance of its 27 × 65 mm face from its centre, under uniform pressure (`TestPadTorsion`). A rigid pad touches a box edge or a sphere at a single point, which has nothing else to resist a twist, and MuJoCo's default of 5 mm let a box pinched that way pivot out of the grip under its weight (#36). A pad seated flat touches at its four corners, whose sliding friction resists more. `TestPadGrip` lifts and carries objects at full speed with both coefficients, including an overload, which slips.
 
-These figures are the model's under MuJoCo 3.14, the version Geodude runs and this package's `uv.lock` pins; the package requires MuJoCo 3.5 or later, the first release in which the model behaves this way (#49). Under 3.14 the model touches a large cylinder along a line across the pad's width, where MuJoCo 3.4 touched it at a single point, and its grip rises 19 % from the 40 mm to the 110 mm cylinder: 45.6 N to 54.3 N. That is the model's behaviour, not a measurement of the real gripper. The actuator's force range, 6.3, centres those grips in 50 N ± 10 %, a band chosen around Geodude's 50 N command. Under 3.4, from about 6.4 on the force range, the drive overpowered the finger's spring link and folded the finger on small objects (#36); under 3.14 a 40 mm grip stays parallel at 8.0 and folds at 10.0. `TestGripDrive` checks each grip stays parallel.
+These figures are the model's under MuJoCo 3.14, the version Geodude runs and this package's `uv.lock` pins; the package requires MuJoCo 3.12 or later: from 3.5 the model grips and moves this way (#49), and from 3.12 a hand closed on nothing settles (#48). Under 3.14 the model touches a large cylinder along a line across the pad's width, where MuJoCo 3.4 touched it at a single point, and its grip rises 19 % from the 40 mm to the 110 mm cylinder: 45.6 N to 54.3 N. That is the model's behaviour, not a measurement of the real gripper. The actuator's force range, 6.3, centres those grips in 50 N ± 10 %, a band chosen around Geodude's 50 N command. Under 3.4, from about 6.4 on the force range, the drive overpowered the finger's spring link and folded the finger on small objects (#36); under 3.14 a 40 mm grip stays parallel at 8.0 and folds at 10.0. `TestGripDrive` checks each grip stays parallel.
 
 ### Force/Torque Sensors
 

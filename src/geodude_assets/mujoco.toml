@@ -5,21 +5,33 @@
 # The 2F-140's driver joints travel their full range whether or not the fingers are
 # blocked: the spring links give way instead. So the actuator reads "closed" with an
 # object between the fingers, and each gripper's opening is measured from its spring-link
-# joint instead. Its position is -0.7019 rad closed on nothing, where the fingertips meet,
-# and -0.0278 rad open, the same on both grippers. Closed on a 66 mm cylinder held across
-# the fingers at the depths of sstsr's Robotiq2F140 side grasp, it reads 0.45 to 0.46
-# (MuJoCo 3.14, personalrobotics/geodude_assets#49; 0.45 to 0.48 under 3.4).
+# joint instead, the same on both grippers. Its closed and open values, -0.7019 and
+# -0.0278 rad, are the completion detector's calibration points: where a full close or
+# open counts as having reached its target under the 1/255 rule below. They are not where
+# the fingers settle. The drive approaches its target exponentially, and closed on nothing
+# the fingers come to rest slightly beyond, at -0.7056 rad with the pads together and at
+# -0.0042 rad open, so the opening reads about -0.005 closed and 1.035 open at rest
+# (ssrobot clamps it to 0 and 1). Declaring the settled positions instead makes an empty
+# close and an open end stopped_short at the 100 ms dwell: the fingers' approach slows to
+# less than 1/255 per 100 ms before it comes within 1/255 of where it settles (MuJoCo
+# 3.14, replaying the detector on each 2 ms tick: the empty close stops short at 1.376 s,
+# the open at 1.40 s). The settled positions belong in the gripper's declared finger
+# positions (personalrobotics/ssrobot#243), which the collision check uses. Closed on a
+# 66 mm cylinder held across the fingers at the depths of sstsr's Robotiq2F140 side
+# grasp, the opening reads 0.451 to 0.463 (MuJoCo 3.14; personalrobotics/
+# geodude_assets#48, #49).
 #
 # A gripper command ends when its fingers' motion ends (personalrobotics/ssrobot#219), by
 # each gripper's completion detector on that opening: it reached its target once within
 # goal_tolerance of it; it stopped short once its openings over stall_dwell_ns vary by
 # no more than stall_delta. Both tolerances are 1/255, the resolution of the 2F-140's
-# position register. The dwell was measured in MuJoCo over an unobstructed open, an empty
-# close, and a close on that 66 mm cylinder. Under MuJoCo 3.14 (personalrobotics/
-# geodude_assets#49): a dwell of 10 ms declares a stall before the fingers start; at
-# 20 ms an open that follows the empty close stalls as the fingers slow near its end; from
-# 30 ms up the outcomes are the same (reached, reached, stopped short at 0.450 to 0.463).
-# It is 100 ms, which was also consistent with the previous finger servo (80 ms and up).
+# position register. The dwell was measured in MuJoCo 3.14 over an empty close from the
+# ready pose, the unobstructed open that follows it, and closes on that 66 mm cylinder:
+# a dwell of 10 ms declares a stall before the fingers start; from 20 to 60 ms the empty
+# close stalls as its approach slows near the pads (at 20 ms the open does too); from
+# 80 ms up the outcomes are the same: reached at 1.252 s, reached at 1.004 s, and stopped
+# short at 0.451 to 0.463 (personalrobotics/geodude_assets#48). It is 100 ms, which was
+# also consistent with the previous finger servo (80 ms and up).
 schema = "ssrobot.MujocoProfile"
 version = 2
 keyframe = "ready"
@@ -47,16 +59,16 @@ completion = { goal_tolerance = 0.00392156862745098, stall_delta = 0.00392156862
 # and-backs through zero velocity, pauses, and single-joint moves, judged from each
 # trajectory's end. MuJoCo source's values; the hardware is unmeasured. Evidence:
 # evidence/mujoco-rest.json (sha256
-# ac218ea427cae251b5da4bb6d20d196f82183b17a1a6d0d7e19c26d506c50d1a), written by
-# ssrobot's scripts/calibrate_rest.py --robot geodude --commit geodude=e5f38a5f661b at
-# ssrobot a93a329afc1d on this repository at e5f38a5f661b, 14 of 14 judged trials
+# 75b282288f770b4e01685b31e2cd5568107bc4e902f243d8e81ddc78fdee1178), written by
+# ssrobot's scripts/calibrate_rest.py --robot geodude --commit geodude=40c38a05e7df at
+# ssrobot a93a329afc1d on this repository at 40c38a05e7df, 14 of 14 judged trials
 # passing; the criteria are those of the evidence it replaces, measured at e7be8b437cd9
-# before the drive's forcerange moved to 6.3 (personalrobotics/geodude_assets#49). No
-# payload trial runs on this arm: ssrobot's reference scenario holds its object with the
-# right arm.
+# before the drive's forcerange moved to 6.3 (personalrobotics/geodude_assets#49) and its
+# driver travel to 0.7 rad (#48). No payload trial runs on this arm: ssrobot's reference
+# scenario holds its object with the right arm.
 [[rest]]
 channel = "left_arm_with_lift_q"
-criteria = { max_gap_ns = 2000000, dwell_ns = 96000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@e5f38a5f661b; the hardware is unmeasured; evidence/mujoco-rest.json sha256 ac218ea427cae251b5da4bb6d20d196f82183b17a1a6d0d7e19c26d506c50d1a" }
+criteria = { max_gap_ns = 2000000, dwell_ns = 96000000, variation = [2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@40c38a05e7df; the hardware is unmeasured; evidence/mujoco-rest.json sha256 75b282288f770b4e01685b31e2cd5568107bc4e902f243d8e81ddc78fdee1178" }
 
 # When right_arm_with_lift_q counts as at rest in this simulation: every joint within
 # its variation for 106 ms, read every 2 ms control tick with none dropped. The
@@ -70,17 +82,18 @@ criteria = { max_gap_ns = 2000000, dwell_ns = 96000000, variation = [2e-06, 9.58
 # and single-joint moves, judged from each trajectory's end. MuJoCo source's values;
 # the hardware is unmeasured. Evidence:
 # evidence/mujoco-rest.json (sha256
-# ac218ea427cae251b5da4bb6d20d196f82183b17a1a6d0d7e19c26d506c50d1a), written by
-# ssrobot's scripts/calibrate_rest.py --robot geodude --commit geodude=e5f38a5f661b at
-# ssrobot a93a329afc1d on this repository at e5f38a5f661b, 14 of 14 judged trials
+# 75b282288f770b4e01685b31e2cd5568107bc4e902f243d8e81ddc78fdee1178), written by
+# ssrobot's scripts/calibrate_rest.py --robot geodude --commit geodude=40c38a05e7df at
+# ssrobot a93a329afc1d on this repository at 40c38a05e7df, 14 of 14 judged trials
 # passing; the criteria are those of the evidence it replaces, measured at e7be8b437cd9
-# before the drive's forcerange moved to 6.3 (personalrobotics/geodude_assets#49). These
-# valid unloaded trials alone set the dwell. No valid loaded trial exists: two of the
-# three motions carrying the reference cylinder are refused because the object held
-# would collide, and the deep grasp does not settle before the deadline in any of them.
+# before the drive's forcerange moved to 6.3 (personalrobotics/geodude_assets#49) and its
+# driver travel to 0.7 rad (#48). These valid unloaded trials alone set the dwell. No
+# valid loaded trial exists: two of the three motions carrying the reference cylinder are
+# refused because the object held would collide, and the deep grasp does not settle
+# before the deadline in any of them.
 # Loaded coverage is therefore not established; it is tracked by
 # personalrobotics/geodude_assets#42. Evidence before #47 judged a loaded trial measured
 # through a collision with the table, which is not valid evidence.
 [[rest]]
 channel = "right_arm_with_lift_q"
-criteria = { max_gap_ns = 2000000, dwell_ns = 106000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@e5f38a5f661b; the hardware is unmeasured; evidence/mujoco-rest.json sha256 ac218ea427cae251b5da4bb6d20d196f82183b17a1a6d0d7e19c26d506c50d1a" }
+criteria = { max_gap_ns = 2000000, dwell_ns = 106000000, variation = [1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05], source = "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@40c38a05e7df; the hardware is unmeasured; evidence/mujoco-rest.json sha256 75b282288f770b4e01685b31e2cd5568107bc4e902f243d8e81ddc78fdee1178" }

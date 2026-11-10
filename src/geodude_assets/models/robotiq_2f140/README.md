@@ -30,6 +30,11 @@ description](https://github.com/ros-industrial/robotiq/tree/kinetic-devel/roboti
 10. Set each pad's torsional friction to its contact patch's, 0.01296 m: sliding friction
     0.7 times the mean distance of its 27 × 65 mm face from its centre
     (personalrobotics/geodude_assets#36).
+11. Set the driver joints' range to the URDF's `finger_joint` limit, 0 to 0.7 rad
+    (`robotiq_arg2f_140_model_macro.xacro`), in place of the 2F-85's 0.8, and scaled the
+    drive's gain so that a full command targets 0.7 (`gainprm` 1000 × 0.7 / 255). The pads
+    meet at 0.7, so a hand closed on nothing comes to rest against them, symmetrically,
+    instead of squeezing past them until a finger buckles (personalrobotics/geodude_assets#48).
 
 ## License
 

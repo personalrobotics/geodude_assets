@@ -5,8 +5,8 @@
     "ssrobot_clean": true,
     "script": "scripts/calibrate_rest.py",
     "repository": "personalrobotics/geodude_assets",
-    "commit": "e5f38a5f661b6ff7084336c406d7cae1d4011aba",
-    "archive_sha256": "6b2f0cb00e6c3214954cd9a5e2a8af7bbe89c133db2e3a96f95a338991b95823",
+    "commit": "40c38a05e7dfc31598fcce84b6e44f089cbd0001",
+    "archive_sha256": "2ff04cebaf8d76d63b8b4c4e0e4814a62c180625edf14e4235667289844453f3",
     "python": "3.12.12",
     "platform": "macOS-26.6.2-arm64-arm-64bit",
     "machine": "arm64",
@@ -52,7 +52,7 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot c5c0d4040c73 on personalrobotics/geodude_assets@e7be8b437cd9; the hardware is unmeasured; evidence/mujoco-rest.json sha256 cefb519304e9130e6046e724df71659f82ca8f798fb47fd62dfe3d3c14bda85d"
+        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@e5f38a5f661b; the hardware is unmeasured; evidence/mujoco-rest.json sha256 ac218ea427cae251b5da4bb6d20d196f82183b17a1a6d0d7e19c26d506c50d1a"
       },
       "criteria": {
         "max_gap_ns": 2000000,
@@ -66,7 +66,7 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@e5f38a5f661b; the hardware is unmeasured"
+        "source": "MuJoCo source's values: variation declared per joint ([2e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 94000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@40c38a05e7df; the hardware is unmeasured"
       },
       "longest_false_still": {
         "span_ns": 94000000,
@@ -1014,7 +1014,7 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot c5c0d4040c73 on personalrobotics/geodude_assets@e7be8b437cd9; the hardware is unmeasured; evidence/mujoco-rest.json sha256 cefb519304e9130e6046e724df71659f82ca8f798fb47fd62dfe3d3c14bda85d"
+        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@e5f38a5f661b; the hardware is unmeasured; evidence/mujoco-rest.json sha256 ac218ea427cae251b5da4bb6d20d196f82183b17a1a6d0d7e19c26d506c50d1a"
       },
       "criteria": {
         "max_gap_ns": 2000000,
@@ -1028,7 +1028,7 @@
           9.587379924285257e-05,
           9.587379924285257e-05
         ],
-        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@e5f38a5f661b; the hardware is unmeasured"
+        "source": "MuJoCo source's values: variation declared per joint ([1e-06, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 0.00014381069886427886, 9.587379924285257e-05, 9.587379924285257e-05]), the bound on what counts as still; dwell one tick longer than the longest interval that looked still and then moved, 104000000 ns, judged from each trajectory's end; measured by ssrobot scripts/calibrate_rest.py at ssrobot a93a329afc1d on personalrobotics/geodude_assets@40c38a05e7df; the hardware is unmeasured"
       },
       "longest_false_still": {
         "span_ns": 104000000,
@@ -2024,13 +2024,13 @@
             ],
             "close": "stopped_short",
             "object_gripped": [
-              0.3497349314344476,
-              -0.3499305997483043,
-              0.8133611163961171,
-              0.9999928640315886,
-              -0.0014892310603912642,
-              -0.0017703693079112917,
-              -0.00298661501736158
+              0.34976577998563235,
+              -0.34988270282132977,
+              0.8133623531300197,
+              0.9999963416847167,
+              -0.001428428155724433,
+              -0.0017696024555639463,
+              -0.0014644853486593253
             ],
             "lift_plan": "succeeded",
             "lift_diagnostics": [
@@ -2040,8 +2040,8 @@
               }
             ],
             "lift_execution": "succeeded",
-            "object_raised_m": 0.09899332877100997,
-            "object_raised_to_m": 0.912354445167127,
+            "object_raised_m": 0.09900051672145249,
+            "object_raised_to_m": 0.9123628698514722,
             "lift_violation": null,
             "settle": {
               "evidence": "PRIVILEGED CALIBRATION EVIDENCE: the simulator's pose of the held object, observed to decide when the grip has settled before the attachment's reference is reset. It establishes loaded arm-rest criteria; it is not a runtime gripper-rest event.",
@@ -2053,14 +2053,14 @@
                 "source": "calibrate_rest.py: 1% of MujocoRuntime's attachment tolerances over 0.5 s"
               },
               "outcome": "deadline",
-              "started_ns": 5204000000,
-              "ended_ns": 125204000000,
+              "started_ns": 5284000000,
+              "ended_ns": 125284000000,
               "violation_while_settling": {
-                "stamp_ns": 15124000000,
-                "position_error_m": 0.01000104555987977,
-                "rotation_error_rad": 0.01695565722440973
+                "stamp_ns": 15444000000,
+                "position_error_m": 0.010000453159536347,
+                "rotation_error_rad": 0.01713922996304154
               },
-              "object_raised_m": 0.09134096550415038
+              "object_raised_m": 0.09078028684748107
             }
           },
           "validation": {
@@ -2073,19 +2073,19 @@
               "segment": 61,
               "fraction": 1.0,
               "configuration": [
-                3.8414730661505136,
-                -0.05890304336652727,
-                -1.1482374097736785,
-                0.8315868503897951,
-                -0.6678733012568585,
-                -1.0529036903878641
+                3.841480585619981,
+                -0.05890757265294294,
+                -1.1482410029109804,
+                0.8315718223311545,
+                -0.6678567905922729,
+                -1.0529250243277464
               ],
               "contacts": [
                 {
                   "kind": "robot_environment",
                   "first": "cylinder",
                   "second": "vention_base",
-                  "distance": -0.0011386584948239876
+                  "distance": -0.0001379132758198696
                 }
               ],
               "detail": "in collision"
@@ -2093,9 +2093,9 @@
           },
           "objects": {
             "cylinder": [
-              0.3238209630295478,
-              -0.3473357018785549,
-              0.904624123561731
+              0.3229824521301075,
+              -0.3587278927186442,
+              0.9040581265477263
             ]
           },
           "violations": {
@@ -2136,9 +2136,9 @@
           ],
           "execution": {
             "state": "succeeded",
-            "ended_ns": 132206000000
+            "ended_ns": 132286000000
           },
-          "end_ns": 132204000000,
+          "end_ns": 132284000000,
           "payload": {
             "lift": {
               "height": 0.1,
@@ -2178,13 +2178,13 @@
             ],
             "close": "stopped_short",
             "object_gripped": [
-              0.3497349314344476,
-              -0.3499305997483043,
-              0.8133611163961171,
-              0.9999928640315886,
-              -0.0014892310603912642,
-              -0.0017703693079112917,
-              -0.00298661501736158
+              0.34976577998563235,
+              -0.34988270282132977,
+              0.8133623531300197,
+              0.9999963416847167,
+              -0.001428428155724433,
+              -0.0017696024555639463,
+              -0.0014644853486593253
             ],
             "lift_plan": "succeeded",
             "lift_diagnostics": [
@@ -2194,8 +2194,8 @@
               }
             ],
             "lift_execution": "succeeded",
-            "object_raised_m": 0.09899332877100997,
-            "object_raised_to_m": 0.912354445167127,
+            "object_raised_m": 0.09900051672145249,
+            "object_raised_to_m": 0.9123628698514722,
             "lift_violation": null,
             "settle": {
               "evidence": "PRIVILEGED CALIBRATION EVIDENCE: the simulator's pose of the held object, observed to decide when the grip has settled before the attachment's reference is reset. It establishes loaded arm-rest criteria; it is not a runtime gripper-rest event.",
@@ -2207,14 +2207,14 @@
                 "source": "calibrate_rest.py: 1% of MujocoRuntime's attachment tolerances over 0.5 s"
               },
               "outcome": "deadline",
-              "started_ns": 5204000000,
-              "ended_ns": 125204000000,
+              "started_ns": 5284000000,
+              "ended_ns": 125284000000,
               "violation_while_settling": {
-                "stamp_ns": 15124000000,
-                "position_error_m": 0.01000104555987977,
-                "rotation_error_rad": 0.01695565722440973
+                "stamp_ns": 15444000000,
+                "position_error_m": 0.010000453159536347,
+                "rotation_error_rad": 0.01713922996304154
               },
-              "object_raised_m": 0.09134096550415038
+              "object_raised_m": 0.09078028684748107
             }
           },
           "validation": {
@@ -2226,16 +2226,16 @@
           },
           "objects": {
             "cylinder": [
-              0.33303472235160503,
-              -0.35033212647630657,
-              0.8962147615007003
+              0.3320981167199477,
+              -0.3617315713426696,
+              0.895727127687409
             ]
           },
           "violations": {
             "cylinder": {
-              "stamp_ns": 129302000000,
-              "position_error_m": 0.00016129273735049427,
-              "rotation_error_rad": 0.10003060544282785
+              "stamp_ns": 133868000000,
+              "position_error_m": 0.00036325494794393014,
+              "rotation_error_rad": 0.10001164639578795
             }
           },
           "invalid": [
@@ -2247,22 +2247,22 @@
           "judged": false,
           "longest_false_still": {
             "span_ns": 0,
-            "from_ns": 132208000000,
-            "to_ns": 132208000000
+            "from_ns": 132288000000,
+            "to_ns": 132288000000
           },
           "check": {
             "outcome": "at_rest",
-            "watched_from_ns": 132206000000,
-            "fired_ns": 132314000000,
+            "watched_from_ns": 132286000000,
+            "fired_ns": 132394000000,
             "delay_ns": 108000000,
             "range_after": [
-              1.3845135593548719e-09,
-              1.0048993854816501e-06,
-              1.7461769908355684e-06,
-              1.1666516412933703e-06,
-              1.2964684636962431e-06,
-              3.892681601502801e-07,
-              4.394840700250313e-07
+              1.3816257027343681e-09,
+              1.0049408785128833e-06,
+              1.7433346013451256e-06,
+              1.1673022721758741e-06,
+              1.3049961052891135e-06,
+              3.894149422922766e-07,
+              4.4061481507817746e-07
             ],
             "stays_within": true,
             "passed": true
@@ -2358,13 +2358,13 @@
             ],
             "close": "stopped_short",
             "object_gripped": [
-              0.3497349314344476,
-              -0.3499305997483043,
-              0.8133611163961171,
-              0.9999928640315886,
-              -0.0014892310603912642,
-              -0.0017703693079112917,
-              -0.00298661501736158
+              0.34976577998563235,
+              -0.34988270282132977,
+              0.8133623531300197,
+              0.9999963416847167,
+              -0.001428428155724433,
+              -0.0017696024555639463,
+              -0.0014644853486593253
             ],
             "lift_plan": "succeeded",
             "lift_diagnostics": [
@@ -2374,8 +2374,8 @@
               }
             ],
             "lift_execution": "succeeded",
-            "object_raised_m": 0.09899332877100997,
-            "object_raised_to_m": 0.912354445167127,
+            "object_raised_m": 0.09900051672145249,
+            "object_raised_to_m": 0.9123628698514722,
             "lift_violation": null,
             "settle": {
               "evidence": "PRIVILEGED CALIBRATION EVIDENCE: the simulator's pose of the held object, observed to decide when the grip has settled before the attachment's reference is reset. It establishes loaded arm-rest criteria; it is not a runtime gripper-rest event.",
@@ -2387,39 +2387,39 @@
                 "source": "calibrate_rest.py: 1% of MujocoRuntime's attachment tolerances over 0.5 s"
               },
               "outcome": "deadline",
-              "started_ns": 5204000000,
-              "ended_ns": 125204000000,
+              "started_ns": 5284000000,
+              "ended_ns": 125284000000,
               "violation_while_settling": {
-                "stamp_ns": 15124000000,
-                "position_error_m": 0.01000104555987977,
-                "rotation_error_rad": 0.01695565722440973
+                "stamp_ns": 15444000000,
+                "position_error_m": 0.010000453159536347,
+                "rotation_error_rad": 0.01713922996304154
               },
-              "object_raised_m": 0.09134096550415038
+              "object_raised_m": 0.09078028684748107
             }
           },
           "validation": {
             "valid": false,
-            "checks": 193,
+            "checks": 194,
             "validator": "sscbirrt 3.15.0 native",
             "policy": "Valid at states at most 0.05 apart (Euclidean, joint space, to a relative 1e-09) along each raw-linear motion, endpoints included; nothing is claimed between them. No collision clearance is added.",
             "witness": {
               "failure": "collision",
-              "segment": 190,
+              "segment": 191,
               "fraction": 1.0,
               "configuration": [
-                3.842235076720943,
-                -0.059665053936956515,
-                -1.1489994203441076,
-                0.8323488609602243,
-                -0.6686353118272877,
-                -1.0536657009582933
+                3.8407275352466916,
+                -0.058154522279653446,
+                -1.1474879525376909,
+                0.8308187719578649,
+                -0.6671037402189833,
+                -1.0521719739544568
               ],
               "contacts": [
                 {
                   "kind": "robot_environment",
                   "first": "cylinder",
                   "second": "vention_base",
-                  "distance": -0.0007494269363134487
+                  "distance": -0.0005142347917073852
                 }
               ],
               "detail": "in collision"
@@ -2427,9 +2427,9 @@
           },
           "objects": {
             "cylinder": [
-              0.3238209630295478,
-              -0.3473357018785549,
-              0.904624123561731
+              0.3229824521301075,
+              -0.3587278927186442,
+              0.9040581265477263
             ]
           },
           "violations": {
